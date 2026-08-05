@@ -186,7 +186,7 @@ class FormFieldRenderer
                 return \App\Generators\Utils\FileUtil::replaceStub('fields/textarea', [
                     '{{ name }}' => $fieldName,
                     '{{ label }}' => $fieldLabel,
-                    '{{ value }}' => "{{ \${$modelVar}->{$fieldName} ?? '' }}"
+                    '{{ value }}' => "\${$modelVar}->{$fieldName} ?? ''"
                 ]);
             case 'select':
                 $scriptsAndStyles[] = ['type' => 'select', 'id' => $fieldName];
