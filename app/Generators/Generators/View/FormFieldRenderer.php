@@ -146,7 +146,8 @@ class FormFieldRenderer
     public function getFormInputForField($field, &$scriptsAndStyles = []): string
     {
         $fieldName = $field->name;
-        $fieldLabel = ucfirst(str_replace('_', ' ', $fieldName));
+        $cleanName = preg_replace('/_id$/i', '', $fieldName);
+        $fieldLabel = ucwords(str_replace('_', ' ', $cleanName));
         $modelVar = $this->commandData->modelNameCamel;
 
         if ($field->enumData) {
