@@ -1,125 +1,179 @@
 # Laravel CRUD Generator
 
-A modern Laravel CRUD generator similar to webcore but updated for Laravel 12 with Tailwind CSS support.
+A modern Laravel admin template with a powerful CRUD generator, built for **Laravel 13** with **Tailwind CSS v4**, **Livewire PowerGrid v6**, and **Spatie Laravel Permission**.
 
-**Unified Command**: All functionality is accessible via `generate:scaffold` command!
+**Unified Command**: All functionality is accessible via `generate:scaffold` (and reversible via `revert:scaffold`).
 
 ## Features
 
--   Generate complete CRUD operations with a single command
--   **Interactive mode** - Enter fields one by one with step-by-step prompts
--   Support for various field types (text, textarea, select, checkbox, date, email, password, number, file)
--   Modern Tailwind CSS templates
--   **Livewire PowerGrid integration** - Highly reactive, modern tables with server-side processing
--   JSON schema support for complex field definitions
--   Validation rules generation
--   Optional migration generation (use `--migration` flag)
--   Model, Controller, Request, View, and PowerGrid Table generation
--   **Automatic unit test generation** (enabled by default)
--   Route registration
--   **Highly Optimized**: Compiles views statically (no runtime loops) and injects modular traits (e.g. `HasFileUpload`) for thin and readable controllers.
--   **Security**: Automatically injects Spatie Laravel Permission middleware directly into controllers.
--   **Native Enum Support (PHP 8.1+)**: Generates Enums, validation rules (`Rule::enum`), and frontend `<x-select>` elements natively.
--   **BelongsTo Relationships**: Generates `$this->belongsTo()` on models and auto-injects foreign data into views.
--   **Soft Deletes**: Automatically injects `SoftDeletes` traits and migrations via the `--soft-deletes` flag.
+### CRUD Generator
 
-## What's New in v2.1 (Core Refactor)
+- Generate complete CRUD operations with a single command
+- **Interactive mode** — enter fields one by one with step-by-step prompts
+- **Generate from existing database tables** — auto-detect columns, types, enums, and foreign keys
+- **JSON schema support** — define complex field structures in JSON
+- **API generation** — use `--api` to generate both web CMS + RESTful API controllers simultaneously
+- **Selective scaffolding** — `--only=...` and `--except=...` flags to generate exactly what you need
+- **Automatic rollback** — if any generator fails, all previously generated files are rolled back
+- **Revert command** — `revert:scaffold {Model}` to cleanly remove all generated files and database entries
+- Support for various field types (text, textarea, select, checkbox, date, email, password, number, file, currency, tags)
+- Validation rules generation with separate `CreateRequest` and `UpdateRequest` classes
+- Optional migration generation (use `--migration` flag)
+- Model, Controller, Request, Views, PowerGrid Table, Enum, Factory, Seeder, and Unit Test generation
+- Route registration with automatic injection into `routes/web.php`
+- Menu and permission auto-registration via `config/menu.php` and Spatie Permission
 
-This version introduces a massive refactor to the generator architecture, making it highly modular and maintainable for your team:
-- **Modular Generators**: The bloated `ViewGenerator` (which was previously over 46KB) has been broken down into single-responsibility components: `FormFieldRenderer`, `TableRenderer`, `ComponentRenderer`, and `ImportExportRenderer`.
-- **Livewire PowerGrid**: Replaced the legacy Livewire PowerGrid with the highly reactive **Livewire PowerGrid**. The old `DataTableGenerator` has been replaced by `PowerGridTableGenerator`.
-- **Admin View Organization**: Generated views are now cleanly placed inside `resources/views/admin/{module_name}` to separate them from public-facing views.
-- **Javascript Decoupling**: Large inline Javascript chunks (for password strength, filepond, Dropify, tagify, slug generation) have been extracted to their own files inside `resources/stubs/js/` and are included cleanly via Vite/Blade directives.
-- **Controller Thinning**: Repetitive logic like File Uploads and Import/Export logic are now injected dynamically via modular traits (`HasFileUpload`, `HasImportExport`) instead of cluttering every Controller.
-- **Selective Scaffolding**: Added new `--only=...` and `--except=...` flags so you can generate exactly what you need (e.g. `--only=model,migration`).
+### Generator Architecture (Modular)
 
-## Built-in Admin Features
+The generator is built with a highly modular, single-responsibility architecture:
 
-Beyond the CRUD Generator, this template comes pre-packaged with a suite of enterprise-grade features that you can control directly from the Admin Panel's **Settings** menu:
+| Component | Location | Purpose |
+|-----------|----------|---------|
+| `GenerateScaffoldCommand` | `Commands/` | Main entry point, orchestrates all generators |
+| `RevertScaffoldCommand` | `Commands/` | Reverses scaffold generation |
+| `CommandData` | `Common/` | Shared data object for all generators |
+| `GeneratorField` | `Common/` | Field definition and type mapping |
+| `FieldParser` | `Services/` | Parses interactive/CLI field input |
+| `SchemaIntrospector` | `Services/` | Reads existing DB table structure |
+| `RouteInjector` | `Services/` | Injects routes into `web.php` |
+| `ModelGenerator` | `Generators/` | Generates Eloquent model |
+| `ControllerGenerator` | `Generators/` | Generates web/API controller |
+| `CreateRequestGenerator` | `Generators/` | Generates create form request |
+| `UpdateRequestGenerator` | `Generators/` | Generates update form request |
+| `MigrationGenerator` | `Generators/` | Generates database migration |
+| `ViewGenerator` | `Generators/` | Orchestrates view generation |
+| `FormFieldRenderer` | `Generators/View/` | Renders form input fields |
+| `TableRenderer` | `Generators/View/` | Renders table columns/display |
+| `ComponentRenderer` | `Generators/View/` | Renders Blade components |
+| `ImportExportRenderer` | `Generators/View/` | Renders import/export views |
+| `PowerGridTableGenerator` | `Generators/` | Generates Livewire PowerGrid table class |
+| `EnumGenerator` | `Generators/` | Generates PHP 8.3 native Enum class |
+| `FactoryGenerator` | `Generators/` | Generates model factory |
+| `SeederGenerator` | `Generators/` | Generates database seeder |
+| `UnitTestGenerator` | `Generators/` | Generates feature tests |
+| `MenuGenerator` | `Generators/` | Registers menu in `config/menu.php` |
+| `PermissionGenerator` | `Generators/` | Registers Spatie permissions |
 
-- **Dynamic Theme & Appearance:**
-  - Let users or administrators choose between **Light Mode**, **Dark Mode**, or **System Default**.
-  - Theme choices are saved persistently to the database and sync seamlessly across the guest pages (like Login) and the main admin dashboard without screen flickering.
-  - Dynamically upload and swap the Application Logo via the UI.
+### Optimizations
 
-- **Dynamic SMTP Configuration:**
-  - No need to hardcode email credentials in your `.env` file for production.
-  - Configure SMTP Host, Port, Username, Password, and Encryption directly from the Admin Settings UI.
-  - The application automatically intercepts and uses these settings whenever dispatching emails.
+- **Statically compiled views** — no runtime loops; form fields and table columns are rendered at generation time
+- **Modular traits** — `HasFileUpload` and `HasImportExport` traits keep controllers thin and readable
+- **Security** — Spatie Laravel Permission middleware is automatically injected into generated controllers
+- **Native Enum support (PHP 8.3+)** — generates Enum classes, `Rule::enum()` validation, and `<x-select>` dropdowns
+- **BelongsTo relationships** — auto-generates `belongsTo()` on models and injects foreign data into views
+- **Soft Deletes** — `--soft-deletes` flag adds trait and migration column automatically
+- **Glassmorphism UI** — generated views use floating input components (`x-input-floating`, `x-select-floating`, `x-textarea-floating`) with dark mode support
 
-- **Advanced Two-Factor OTP Login:**
-  - Toggleable via the `.env` file (`ENABLE_OTP_LOGIN=true`).
-  - Instead of standard password-only login, users receive a secure 6-digit OTP code to their email.
-  - **Spam Protection:** "Resend OTP" button features a 30-second JavaScript countdown stored in browser session to prevent abuse.
-  - **Efficient Data Handling:** OTPs expire securely after 5 minutes using Laravel Cache (no database bloat). Re-requesting an OTP within 5 minutes safely resends the existing active code.
+### Built-in Admin Panel Features
 
-- **Elegant Maintenance Mode:**
-  - Flip a switch in the Settings menu to activate Maintenance Mode.
-  - All standard users will be locked out and presented with a highly attractive, fully-responsive "Under Maintenance" 3D splash page featuring an abstract background.
-  - Administrators are intelligently bypassed based on IP allow-listing, allowing developers to continue working unhindered.
+Beyond the CRUD Generator, this template comes pre-packaged with enterprise-grade features:
 
-- **Centralized Toast Notifications:**
-  - Clean `<x-toast>` Blade components handle all session success, error, and warning flashes automatically.
-  - Replaces bloated HTML alerts across all stubs and views.
+| Module | Description |
+|--------|-------------|
+| **Dashboard** | Admin overview dashboard |
+| **Users** | Full user CRUD with avatar upload |
+| **Roles** | Role management (Spatie) |
+| **Permissions** | Permission management (Spatie) |
+| **Activity Logs** | Track all user activities |
+| **Server Logs** | Browse, view, and clear Laravel log files directly from UI |
+| **Settings** | Dynamic app configuration (see below) |
+| **Profile** | User profile with password change and avatar |
+| **OTP Login** | Optional two-factor OTP authentication via email |
+| **Maintenance Mode** | Toggle maintenance mode with elegant 3D splash page |
+| **Custom Error Pages** | Styled 403, 404, 419, 500, 503 error pages |
+
+#### Dynamic Settings (from Admin UI)
+
+- **Theme & Appearance** — Light/Dark/System theme toggle, persistent per-user; dynamic logo and favicon upload
+- **Dynamic SMTP** — configure SMTP host, port, username, password, encryption from the UI (no `.env` editing needed in production)
+- **Maintenance Mode** — flip a switch to lock out users; admins bypass via IP allow-list
+
+#### Two-Factor OTP Login
+
+- Toggle via `.env` (`ENABLE_OTP_LOGIN=true`)
+- Secure 6-digit OTP code sent to user's email
+- 30-second resend cooldown (client-side)
+- OTP expires after 5 minutes via Laravel Cache (no database bloat)
+
+#### Centralized Notifications
+
+- `<x-toast>` Blade component handles all session success/error/warning flashes automatically
+
+### Blade Components
+
+Pre-built reusable Blade components:
+
+| Component | File |
+|-----------|------|
+| `<x-input-floating>` | Floating label text input |
+| `<x-textarea-floating>` | Floating label textarea |
+| `<x-select-floating>` | Floating label select dropdown |
+| `<x-input>` | Standard text input |
+| `<x-textarea>` | Standard textarea |
+| `<x-select>` | Standard select |
+| `<x-modern-input>` | Modern styled input |
+| `<x-modern-select>` | Modern styled select |
+| `<x-modern-textarea>` | Modern styled textarea |
+| `<x-toggle>` | Toggle switch for booleans |
+| `<x-button>` | Styled button |
+| `<x-datetime>` | Date/time picker |
+| `<x-filepond>` | FilePond file upload |
+| `<x-toast>` | Toast notification |
+| `<x-confirm-delete-modal>` | SweetAlert2 delete confirmation |
+
+## Tech Stack
+
+| Technology | Version |
+|-----------|---------|
+| PHP | ^8.3 |
+| Laravel | ^13.0 |
+| Tailwind CSS | ^4.1 (via `@tailwindcss/vite`) |
+| Livewire | ^4.3 |
+| Livewire PowerGrid | ^6.10 |
+| Spatie Laravel Permission | ^8.0 |
+| Vite | ^7.0 |
+| SweetAlert2 | ^11.26 |
+| PHPUnit | ^12.0 |
+| Blade Heroicons | ^2.7 |
+| OpenSpout | ^4.0 (Excel import/export) |
+
+**Optional (suggested):**
+- `doctrine/dbal` ^4.4 — for `--fromTable` schema introspection
+- `phpoffice/phpspreadsheet` ^5.2 — for robust Excel import/export
 
 ## Installation
 
 ### Prerequisites
 
-Before installing, make sure you have the following installed on your system:
+- **PHP** 8.3 or higher
+- **Composer** (PHP dependency manager)
+- **Node.js** 18+ and **npm** (for frontend assets)
+- **Database** (MySQL, PostgreSQL, or SQLite)
 
--   **PHP** 8.2 or higher
--   **Composer** (PHP dependency manager)
--   **Node.js** 18+ and **npm** (for frontend assets)
--   **Database** (MySQL, PostgreSQL, or SQLite)
--   **Git** (optional, for cloning the repository)
-
-### Step 1: Clone or Download the Project
+### Step 1: Clone the Repository
 
 ```bash
-# Clone the repository
 git clone <repository-url>
-cd admin-template
-
-# Or download and extract the project files
+cd base-code-admin
 ```
 
-### Step 2: Install PHP Dependencies
+### Step 2: Install Dependencies
 
 ```bash
 composer install
-```
-
-This will install all required PHP packages including Laravel framework and Livewire PowerGrid.
-
-### Step 3: Install Node.js Dependencies
-
-```bash
 npm install
 ```
 
-This will install Tailwind CSS, Vite, and other frontend dependencies.
-
-### Step 4: Environment Configuration
-
-Create a `.env` file from the example (if available) or create one manually:
+### Step 3: Environment Configuration
 
 ```bash
-# If .env.example exists
 cp .env.example .env
-
-# Or create .env manually
+php artisan key:generate
 ```
 
-Configure your database and application settings in the `.env` file:
+Configure your database in `.env`:
 
 ```env
-APP_NAME="Laravel Admin Template"
-APP_ENV=local
-APP_KEY=
-APP_DEBUG=true
-APP_URL=http://localhost
-
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
@@ -128,117 +182,37 @@ DB_USERNAME=your_database_username
 DB_PASSWORD=your_database_password
 ```
 
-### Step 5: Generate Application Key
+> **Note:** Default locale is `id` (Indonesian) with `Asia/Jakarta` timezone. Adjust `APP_LOCALE`, `APP_TIMEZONE` in `.env` as needed.
 
-```bash
-php artisan key:generate
-```
-
-This will generate a unique application encryption key.
-
-### Step 6: Database Setup
-
-Create your database (if not already created):
-
-```bash
-# For MySQL
-mysql -u root -p
-CREATE DATABASE your_database_name;
-
-# For PostgreSQL
-createdb your_database_name
-
-# For SQLite (creates database/database.sqlite automatically)
-```
-
-### Step 7: Run Migrations
+### Step 4: Run Migrations & Seed
 
 ```bash
 php artisan migrate
-```
-
-This will create all necessary database tables.
-
-### Step 8: Seed Database (Optional)
-
-If you have seeders, run them to populate initial data:
-
-```bash
 php artisan db:seed
 ```
 
-### Step 9: Build Frontend Assets
+### Step 5: Build & Run
 
 ```bash
-# For development
-npm run dev
-
-# For production
-npm run build
-```
-
-### Step 10: Start Development Server
-
-```bash
-# Option 1: Using Laravel's built-in server
-php artisan serve
-
-# Option 2: Using the dev script (includes queue, logs, and vite)
+# Development (starts server + queue + vite concurrently)
 composer run dev
+
+# Or manually
+php artisan serve
+npm run dev
 ```
 
-The application will be available at `http://localhost:8000` (or the port specified).
+The app will be available at `http://localhost:8000`.
 
 ### Quick Setup (All-in-One)
-
-If you want to set up everything at once, you can use the setup script:
 
 ```bash
 composer run setup
 ```
 
-This will:
+This will: install Composer deps → create `.env` → generate key → run migrations → install npm deps → build frontend.
 
--   Install Composer dependencies
--   Create `.env` file (if it doesn't exist)
--   Generate application key
--   Run migrations
--   Install npm dependencies
--   Build frontend assets
-
-### Troubleshooting
-
-**Permission Issues:**
-
-```bash
-# Fix storage and cache permissions
-chmod -R 775 storage bootstrap/cache
-chown -R www-data:www-data storage bootstrap/cache
-```
-
-**Clear Cache:**
-
-```bash
-php artisan config:clear
-php artisan cache:clear
-php artisan view:clear
-php artisan route:clear
-```
-
-**Reinstall Dependencies:**
-
-```bash
-# Remove vendor and node_modules
-rm -rf vendor node_modules
-
-# Reinstall
-composer install
-npm install
-```
-
-### Docker Installation (Alternative)
-
-If you prefer using Docker, you can use the provided Dockerfile:
+### Docker Deployment
 
 ```bash
 # Build the image
@@ -248,312 +222,241 @@ docker build -t admin-template .
 docker run -p 80:80 admin-template
 ```
 
----
+The Dockerfile uses a multi-stage build (Node → Composer → PHP 8.3 FPM + Nginx Alpine) and is production-ready.
 
-**Note:** The CRUD generator is already integrated into this Laravel project. No additional installation is required for the generator itself.
+Kubernetes manifests are available in the `kubernetes/` directory (`deployment.yaml`, `pvc.yaml`).
+
+### Troubleshooting
+
+```bash
+# Fix permissions
+chmod -R 775 storage bootstrap/cache
+
+# Clear all caches
+php artisan config:clear && php artisan cache:clear && php artisan view:clear && php artisan route:clear
+
+# Reinstall dependencies
+rm -rf vendor node_modules && composer install && npm install
+```
 
 ## Usage
 
 ### Quick Start
 
-**Interactive Mode (Easiest - Recommended for beginners):**
+**Interactive Mode (Recommended):**
 
 ```bash
-# Start interactive mode - will prompt for model name and fields one by one
+# Start interactive mode — prompts for model name and fields
 php artisan generate:scaffold
 
-# Or with model name - will prompt for fields only
-php artisan generate:scaffold {ModelName}
+# Or with model name — prompts for fields only
+php artisan generate:scaffold Product
 ```
 
 **From Existing Database Table:**
 
 ```bash
-php artisan generate:scaffold {ModelName} --fromTable --tableName={table_name}
+php artisan generate:scaffold Blog --fromTable --tableName=blog
 ```
 
 **From Field Definitions:**
 
 ```bash
-php artisan generate:scaffold {ModelName} --fields="field1:type:htmlType:options"
+php artisan generate:scaffold Product --fields="name:string:text:required,price:decimal:number:required"
 ```
 
 **From JSON Schema:**
 
 ```bash
-php artisan generate:scaffold {ModelName} --schema=path/to/schema.json
+php artisan generate:scaffold Product --schema=resources/schemas/product.json
 ```
 
-Replace `{ModelName}` and placeholders with your actual values.
-
----
-
-### Generate from Existing Database Table
-
-Generate CRUD from an existing database table:
+**Generate API + Web CMS simultaneously:**
 
 ```bash
-php artisan generate:scaffold Blog --fromTable --tableName=blog
+php artisan generate:scaffold Product --fields="name:string:text:required" --api
 ```
 
-**Format:**
-
-```bash
-php artisan generate:scaffold {ModelName} --fromTable --tableName={table_name}
-```
-
-**Example with MySQL:**
-
-```bash
-# 1. Update .env with your database credentials
-DB_CONNECTION=mysql
-DB_HOST=your_database_host
-DB_PORT=3306
-DB_DATABASE=your_database_name
-DB_USERNAME=your_database_username
-DB_PASSWORD=your_database_password
-
-# 2. Connect to your database and generate from existing tables
-php artisan generate:scaffold Blog --fromTable --tableName=blog
-php artisan generate:scaffold Post --fromTable --tableName=posts
-php artisan generate:scaffold Category --fromTable --tableName=categories
-
-# Replace {ModelName} and {table_name} with your actual model and table names
-```
-
-**Example with SQLite:**
-
-```bash
-# SQLite uses .env or database/database.sqlite
-DB_CONNECTION=sqlite
-# DB_DATABASE is optional for SQLite
-
-# Generate from existing SQLite tables
-php artisan generate:scaffold User --fromTable --tableName=users
-```
-
-**Note:**
-
--   Replace placeholders with your actual database credentials
--   The `{ModelName}` will be used for generated class names (Blog, Post, etc.)
--   The `{table_name}` should match your actual database table name
--   Works with MySQL, PostgreSQL, and SQLite
-
-This will:
-
--   Read the table structure from the database
--   Automatically detect column types (int, varchar, text, json, date, etc.)
--   **Detect ENUM fields and generate select dropdowns with proper options**
--   Generate Model with proper fillable and casts
--   Generate Controller, Request, Views
--   **Skip migration generation by default** (use `--migration` flag to generate migration)
--   Skip Menu/Permissions if tables don't exist
-
-**Migration Generation:**
-
-Migration files are **not generated by default**. To generate a migration file, use the `--migration` flag:
-
-```bash
-# Generate migration from existing table
-php artisan generate:scaffold Blog --fromTable --tableName=blog --migration
-
-# Generate migration from fields
-php artisan generate:scaffold Product --fields="name:string:text:required" --migration
-```
-
-This is useful when you want to:
-
--   Document existing table structure with a migration file
--   Create migrations for tables that were created manually
--   Keep your migrations up-to-date with database schema
-
-**ENUM Support:**
-The generator fully supports PHP 8.1+ Native Enums! You can generate an Enum class, apply it in your database migration (as string or enum), and cast it in your model.
-- Format: `status:string:enum=App\Enums\StatusEnum(draft,published)`
-- Automatically generates the Enum file at `app/Enums/StatusEnum.php`
-- Uses `Rule::enum()` in the FormRequest validation.
-- Automatically maps Enum cases to dropdown options in `<x-select>`.
-
-**BelongsTo Relations:**
-The generator supports defining BelongsTo relationships directly from the command.
-- Format: `category_id:foreignId:belongsTo(Category)`
-- Automatically adds the `belongsTo()` relationship method to the Model.
-- Automatically queries the related Model in the Controller (`Category::pluck('name', 'id')`) and injects it into the view.
-- Automatically generates `<x-select>` mapped to the relationship data.
-
-**Soft Deletes:**
-You can add the `--soft-deletes` flag to the command.
-- Automatically adds `$table->softDeletes()` to the generated Migration.
-- Automatically adds `use SoftDeletes` trait to the Eloquent Model.
-
-**Rich Text Editor:**
-For `text` and `textarea` fields, the generator automatically includes:
-
--   TinyMCE rich text editor
--   Full toolbar with formatting options
--   Image upload and media support
--   Clean, modern interface
-
-**Switch Components:**
-For `boolean` fields, the generator creates:
-
--   Modern toggle switch instead of checkbox
--   Smooth animations and transitions
--   Proper form handling (hidden input for false values)
--   Accessible design with proper labels
-
-**DataTables Integration:**
-The generator automatically creates Livewire PowerGrid service classes for AJAX-powered tables:
-
--   Server-side processing for better performance
--   Automatic column generation from model fields
--   Built-in search, sort, and pagination
--   Clean, reusable code structure
--   DataTable files are created in `app/DataTables/`
-
-**Note:** Make sure to install Livewire PowerGrid package:
-
-```bash
-composer require power-components/livewire-powergrid
-```
-
-**Currency Input:**
-For currency/numeric fields, you can use currency input with automatic formatting:
-
--   AutoNumeric.js v4.6.0 integration for currency formatting
--   Indonesian Rupiah format (Rp 1.000.000)
--   Auto-format while typing with prefix "Rp "
--   Automatic unformat on form submit (sends numeric value to server)
--   Support for dark mode
--   Automatically handles existing values from database
-
-The `data-currency` attribute automatically enables currency formatting. The prefix "Rp " is automatically added by AutoNumeric.js.
-
-### Generate from Fields
-
-Generate CRUD for a model with field definitions:
-
-```bash
-php artisan generate:scaffold {ModelName} --fields="field1:type:htmlType:options,field2:type:htmlType:options"
-```
-
-**Example:**
-
-```bash
-php artisan generate:scaffold Product --fields="name:string:text:required,description:text:textarea:nullable,price:decimal:number:required"
-```
-
-### Interactive Mode (New!)
-
-You can now generate CRUD interactively by entering fields one by one. This is useful when you want to define fields step-by-step without typing everything in one command.
-
-**Start interactive mode:**
-
-```bash
-# Without model name - will prompt for model name first
-php artisan generate:scaffold
-
-# With model name - will prompt for fields only
-php artisan generate:scaffold Product
-```
-
-**How it works:**
-
-1. If model name is not provided, you'll be asked to enter it first
-2. The command will display format instructions and examples
-3. You'll be prompted to enter fields one by one:
-    - `Field 1 (or press Enter to finish/continue without fields):`
-    - `Field 2 (or press Enter to finish/continue without fields):`
-    - And so on...
-4. Press Enter with empty input to finish adding fields
-5. **You can press Enter immediately** (without entering any field) to generate CRUD with basic structure (id, created_at, updated_at only)
-6. The generator will show confirmation after each field is added
-
-**Example interactive session:**
+### Interactive Mode
 
 ```bash
 $ php artisan generate:scaffold Product
 
-Model name (e.g., Product, User, Order): Product
 No fields provided. Starting interactive mode...
 Format: name:dbType:htmlType:options
-Example: name:string:text:nullable
-Example: email:string:email:required,email
-Example: status:string:select:options=active,inactive
 
-Enter fields one by one. Press Enter with empty input to finish.
-You can also press Enter immediately to generate CRUD with basic structure (id, timestamps only).
-
-Field 1 (or press Enter to finish/continue without fields): name:string:text:required
+Field 1 (or press Enter to finish): name:string:text:required
 ✓ Added field: name (string, text)
-Field 2 (or press Enter to finish/continue without fields): description:text:textarea:nullable
-✓ Added field: description (text, textarea)
-Field 3 (or press Enter to finish/continue without fields): price:decimal:number:required
+Field 2 (or press Enter to finish): price:decimal:number:required
 ✓ Added field: price (decimal, number)
-Field 4 (or press Enter to finish/continue without fields): status:string:select:options=active,inactive
-✓ Added field: status (string, select)
-Field 5 (or press Enter to finish/continue without fields): [Enter]
+Field 3 (or press Enter to finish): [Enter]
 
 Generating CRUD for Product...
+✓ Generated: ModelGenerator
+✓ Generated: EnumGenerator
+✓ Generated: ControllerGenerator
+✓ Generated: PowerGridTableGenerator
+✓ Generated: CreateRequestGenerator
+✓ Generated: UpdateRequestGenerator
 ...
 ```
 
-**Example: Generate CRUD without additional fields:**
+Press Enter immediately (without any field) to generate CRUD with basic structure only (id, timestamps).
+
+### Generate from Existing Database Table
 
 ```bash
-$ php artisan generate:scaffold Log
-
-Model name (e.g., Product, User, Order): Log
-No fields provided. Starting interactive mode...
-Format: name:dbType:htmlType:options
-Example: name:string:text:nullable
-Example: email:string:email:required,email
-Example: status:string:select:options=active,inactive
-Note: You can press Enter without entering any field to generate CRUD with basic structure (id, timestamps only)
-
-Enter fields one by one. Press Enter with empty input to finish.
-You can also press Enter immediately to generate CRUD with basic structure (id, timestamps only).
-
-Field 1 (or press Enter to finish/continue without fields): [Enter immediately]
-
-⚠ No additional fields provided. Will generate CRUD with basic structure (id, created_at, updated_at only).
-
-Generating CRUD for Log...
-✓ Generated: App\Generators\Generators\ModelGenerator
-✓ Generated: App\Generators\Generators\ControllerGenerator
-...
+php artisan generate:scaffold Blog --fromTable --tableName=blog
 ```
 
-**What gets generated when fields are empty:**
+This will:
+- Read the table structure from the database
+- Auto-detect column types (int, varchar, text, json, date, etc.)
+- **Detect ENUM fields and generate select dropdowns with proper options**
+- **Detect foreign keys and generate BelongsTo relationships**
+- Generate Model, Controller, Requests, Views, PowerGrid Table
+- Skip migration by default (use `--migration` to generate)
 
-When you generate CRUD without additional fields, you'll get:
+### Field Syntax
 
--   ✅ **Model** - With only `id`, `created_at`, and `updated_at` fields
--   ✅ **Controller** - Full CRUD operations (index, create, store, show, edit, update, destroy)
--   ✅ **Views** - Index page with DataTable showing only ID column, create/edit forms with minimal structure
--   ✅ **Requests** - Basic validation (can be customized later)
--   ✅ **Routes** - All resource routes registered
--   ✅ **DataTable** - AJAX-powered table with ID column only
--   ✅ **Tests** - Unit tests for all CRUD operations (if not disabled)
+**Format:** `name:dbType:htmlType:options`
 
-This is useful for:
+**Enum Fields:**
+```bash
+--fields="status:string:enum=App\Enums\StatusEnum(draft,published)"
+```
+Generates: Enum class, `Rule::enum()` validation, `<x-select>` dropdown.
 
--   Creating placeholder CRUD that you'll customize later
--   Generating basic structure for models that only need timestamps
--   Quick prototyping without defining fields upfront
+**BelongsTo Relations:**
+```bash
+--fields="category_id:foreignId:belongsTo(Category)"
+```
+Generates: `belongsTo()` relationship, controller data injection, `<x-select>` dropdown.
 
-**Benefits of interactive mode:**
+**Currency Input:**
+```bash
+--fields="price:decimal:currency:required"
+```
+Integrates AutoNumeric.js with Indonesian Rupiah (Rp) formatting.
 
--   ✅ No need to remember complex field syntax upfront
--   ✅ See confirmation after each field is added
--   ✅ Easy to correct mistakes (invalid format won't increment field number)
--   ✅ Can stop anytime by pressing Enter
--   ✅ **Can generate CRUD with basic structure only** (id, timestamps) by pressing Enter immediately
--   ✅ Great for beginners or when exploring field options
+### Field Types
 
-### Generate from JSON Schema
+#### Database Types
 
-Create a schema file in `resources/schemas/` with your field definitions:
+| Type | SQL Equivalent |
+|------|---------------|
+| `string` | VARCHAR |
+| `text` | TEXT |
+| `integer` | INTEGER |
+| `decimal` | DECIMAL |
+| `boolean` | BOOLEAN |
+| `date` | DATE |
+| `datetime` | DATETIME |
+| `timestamp` | TIMESTAMP |
+| `json` | JSON |
+| `foreignId` | UNSIGNED BIGINT |
+
+#### HTML Types
+
+| Type | Component |
+|------|-----------|
+| `text` | `<x-input-floating>` |
+| `textarea` | `<x-textarea-floating>` (with TinyMCE) |
+| `select` | `<x-select-floating>` |
+| `checkbox` / `boolean` | `<x-toggle>` switch |
+| `date` | `<x-datetime>` |
+| `email` | `<x-input-floating type="email">` |
+| `password` | `<x-input-floating type="password">` |
+| `number` | `<x-input-floating type="number">` |
+| `file` | `<x-filepond>` |
+| `currency` | AutoNumeric.js formatted input |
+| `tags` | Tagify input |
+
+### Field Options
+
+| Option | Description |
+|--------|-------------|
+| `nullable` | Make field nullable |
+| `required` | Make field required |
+| `searchable` | Enable search in PowerGrid |
+| `sortable` | Enable sorting in PowerGrid |
+| `options=a,b,c` | Options for select fields |
+| `default:value` | Default value |
+| `validation:rule1,rule2` | Custom validation rules |
+
+### Command Options
+
+```
+php artisan generate:scaffold {model?}
+    --fromTable            Generate from existing table
+    --tableName=           Existing database table name
+    --fields=              Field definitions
+    --schema=              Path to JSON schema file
+    --api                  Generate API controller alongside web CMS
+    --migration            Generate migration file (off by default)
+    --soft-deletes         Add SoftDeletes trait and migration column
+    --with-factory         Generate factory
+    --with-seeder          Generate seeder
+    --with-import          Generate import/export feature
+    --section-title=       Menu section title
+    --only=                Comma-separated: model,migration,controller,view,datatable,request,factory,seeder,test,menu,permission,enum
+    --except=              Comma-separated generators to skip
+    --no-controller        Skip controller
+    --no-model             Skip model
+    --no-views             Skip views
+    --no-request           Skip request
+    --no-routes            Skip routes
+    --no-menu              Skip menu
+    --no-permissions       Skip permissions
+    --no-test              Skip test (tests generated by default)
+    --skip-db              Skip inserting permissions to database
+    --force                Overwrite existing files
+```
+
+### Revert Scaffold
+
+Remove all generated files for a model:
+
+```bash
+php artisan revert:scaffold Product
+
+# Skip confirmation prompt
+php artisan revert:scaffold Product --force
+```
+
+This removes: Model, Controller, API Controller, Requests, Views, PowerGrid Table, Migration, Factory, Seeder, Test, Menu entries, Permissions, and Route entries.
+
+### Examples
+
+```bash
+# Interactive mode
+php artisan generate:scaffold
+
+# Simple blog post
+php artisan generate:scaffold Post \
+    --fields="title:string:text:required,content:text:textarea:required,status:string:select:options=published,draft" \
+    --migration
+
+# With enum and belongs-to
+php artisan generate:scaffold Article \
+    --fields="title:string:text:required,category_id:foreignId:belongsTo(Category),status:string:enum=App\Enums\ArticleStatus(draft,published,archived)" \
+    --migration --soft-deletes
+
+# From existing table with API
+php artisan generate:scaffold Product --fromTable --tableName=products --api
+
+# Only model and migration
+php artisan generate:scaffold Setting --fields="key:string:text:required,value:text:textarea" --only=model,migration
+
+# With factory, seeder, and import/export
+php artisan generate:scaffold User \
+    --fields="name:string:text:required,email:string:email:required" \
+    --with-factory --with-seeder --with-import
+```
+
+### JSON Schema
+
+Create a schema file (e.g. `resources/schemas/product.json`):
 
 ```json
 {
@@ -568,12 +471,6 @@ Create a schema file in `resources/schemas/` with your field definitions:
             "sortable": true
         },
         {
-            "name": "description",
-            "dbType": "text",
-            "htmlType": "textarea",
-            "validation": ["nullable", "string"]
-        },
-        {
             "name": "price",
             "dbType": "decimal",
             "htmlType": "number",
@@ -584,7 +481,7 @@ Create a schema file in `resources/schemas/` with your field definitions:
             "dbType": "string",
             "htmlType": "select",
             "validation": ["required", "string"],
-            "options": ["Electronics", "Clothing", "Books", "Home", "Sports"]
+            "options": ["Electronics", "Clothing", "Books"]
         },
         {
             "name": "is_active",
@@ -597,297 +494,160 @@ Create a schema file in `resources/schemas/` with your field definitions:
 }
 ```
 
-Then generate using the schema:
-
-```bash
-php artisan generate:scaffold {ModelName} --schema=resources/schemas/your_schema.json
-```
-
-**Example:**
+Then generate:
 
 ```bash
 php artisan generate:scaffold Product --schema=resources/schemas/product.json
 ```
 
-### Field Types
-
-#### Database Types
-
--   `string` - VARCHAR
--   `text` - TEXT
--   `integer` - INTEGER
--   `decimal` - DECIMAL
--   `boolean` - BOOLEAN
--   `date` - DATE
--   `datetime` - DATETIME
--   `timestamp` - TIMESTAMP
--   `json` - JSON
-
-#### HTML Types
-
--   `text` - Text input
--   `textarea` - Textarea
--   `select` - Select dropdown
--   `checkbox` - Checkbox
--   `date` - Date input
--   `email` - Email input
--   `password` - Password input
--   `number` - Number input
--   `file` - File input
-
-### Field Options
-
--   `nullable` - Make field nullable
--   `searchable` - Enable search functionality
--   `sortable` - Enable sorting
--   `required` - Make field required
--   `validation:rule1,rule2` - Custom validation rules
--   `options:option1,option2` - Options for select fields
--   `default:value` - Default value
-
-### Command Options
-
--   `--migration` - Generate migration file (migration is **not generated by default**)
--   `--no-migration` - Skip migration generation (default behavior)
--   `--no-controller` - Skip controller generation
--   `--no-model` - Skip model generation
--   `--no-views` - Skip views generation
--   `--no-request` - Skip request generation
--   `--no-routes` - Skip routes generation
--   `--no-menu` - Skip menu generation
--   `--no-permissions` - Skip permissions generation
--   `--no-test` - Skip test generation (tests are **generated by default**)
--   `--with-factory` - Generate factory
--   `--with-seeder` - Generate seeder
--   `--with-test` - Generate test (default behavior)
--   `--soft-deletes` - Inject soft deletes trait and migration
--   `--section-title=` - Section title for the menu
-
-### Examples
-
-**Generate using interactive mode:**
-
-```bash
-# Start interactive mode
-php artisan generate:scaffold
-
-# Or with model name
-php artisan generate:scaffold Product
-
-# Then follow the prompts to enter fields one by one
-# Field 1: name:string:text:required
-# Field 2: price:decimal:number:required
-# Field 3: [Enter to finish]
-```
-
-**Generate CRUD with basic structure only (no additional fields):**
-
-```bash
-# Start interactive mode and press Enter immediately when asked for fields
-php artisan generate:scaffold Log
-
-# When prompted for Field 1, just press Enter
-# This will generate CRUD with only id, created_at, updated_at
-# Useful for creating placeholder CRUD or models that only need timestamps
-```
-
-**Generate a simple blog post:**
-
-```bash
-php artisan generate:scaffold Post --fields="title:string:text:required,max:255,content:text:textarea:required,status:string:select:required,options:published,draft,featured_at:datetime:date:nullable"
-```
-
-**Generate a user model with factory and seeder:**
-
-```bash
-php artisan generate:scaffold User --fields="name:string:text:required,email:string:email:required,unique:users,password:string:password:required,min:8,is_admin:boolean:checkbox:default:false" --with-factory --with-seeder
-```
-
-**Generate from existing database table (without migration):**
-
-```bash
-# For MySQL
-php artisan generate:scaffold Blog --fromTable --tableName=blog
-
-# For PostgreSQL
-php artisan generate:scaffold Article --fromTable --tableName=articles
-
-# For SQLite
-php artisan generate:scaffold Product --fromTable --tableName=products
-```
-
-**Generate from existing database table with migration:**
-
-```bash
-# Generate migration based on existing table structure
-php artisan generate:scaffold Blog --fromTable --tableName=blog --migration
-
-# For PostgreSQL
-php artisan generate:scaffold Article --fromTable --tableName=articles --migration
-
-# For SQLite
-php artisan generate:scaffold Product --fromTable --tableName=products --migration
-```
-
-**Generate only Controller, Model, and Request (skip views and permissions):**
-
-```bash
-# Useful when fields are combined into one view or permissions are not needed
-php artisan generate:scaffold ModelName --fromTable --tableName=table_name --no-views --no-permissions
-
-# Or with fields
-php artisan generate:scaffold ModelName --fields="name:string:text:required,price:integer:number" --no-views --no-permissions
-```
-
-**Generate with migration from fields:**
-
-```bash
-php artisan generate:scaffold Product --fields="name:string:text:required,price:decimal:number:required" --migration
-```
-
-**Generate without test (skip test generation):**
-
-```bash
-php artisan generate:scaffold Product --fields="name:string:text:required,price:decimal:number:required" --no-test
-```
-
 ## Generated Files
 
-The generator creates the following files:
-
--   **Model**: `app/Models/{ModelName}.php`
--   **Controller**: `app/Http/Controllers/{ModelName}Controller.php`
--   **DataTable**: `app/DataTables/{ModelName}DataTable.php` (automatically generated with controller)
--   **Request**: `app/Http/Requests/{ModelName}Request.php`
--   **Migration**: `database/migrations/{timestamp}_create_{table_name}_table.php` (only if `--migration` flag is used)
--   **Views**: `resources/views/{model_name}s/index.blade.php`, `create.blade.php`, `edit.blade.php`, `show.blade.php`, `datatables_actions.blade.php`
--   **Test**: `tests/Feature/{ModelName}Test.php` (generated by default, use `--no-test` to skip)
--   **Routes**: Added to `routes/web.php`
+| File | Location |
+|------|----------|
+| Model | `app/Models/{Model}.php` |
+| Controller | `app/Http/Controllers/{Model}Controller.php` |
+| API Controller | `app/Http/Controllers/Api/{Model}ApiController.php` (with `--api`) |
+| Create Request | `app/Http/Requests/Create{Model}Request.php` |
+| Update Request | `app/Http/Requests/Update{Model}Request.php` |
+| PowerGrid Table | `app/Livewire/Tables/{Model}Table.php` |
+| Migration | `database/migrations/{ts}_create_{table}_table.php` (with `--migration`) |
+| Views | `resources/views/admin/{model_snake_plural}/` (index, create, edit, show) |
+| Enum | `app/Enums/{EnumName}.php` (when enum fields are defined) |
+| Factory | `database/factories/{Model}Factory.php` (with `--with-factory`) |
+| Seeder | `database/seeders/{Model}Seeder.php` (with `--with-seeder`) |
+| Test | `tests/Feature/{Model}Test.php` (generated by default) |
+| Menu | Injected into `config/menu.php` |
+| Permissions | Seeded into `permissions` table via Spatie |
+| Routes | Injected into `routes/web.php` |
 
 ## Unit Testing
 
-The generator automatically creates comprehensive unit tests for all CRUD operations. Tests are generated by default to help minimize errors and ensure code quality.
-
-### Running Tests
-
-**Run all tests:**
+Tests are generated by default for all CRUD operations.
 
 ```bash
+# Run all tests
 php artisan test
-```
 
-**Run tests for a specific model:**
-
-```bash
-php artisan test --filter {ModelName}Test
-```
-
-**Example:**
-
-```bash
-# Run all Product tests
+# Run specific model tests
 php artisan test --filter ProductTest
 
-# Run all Blog tests
-php artisan test --filter BlogTest
-```
-
-**Run tests with coverage:**
-
-```bash
+# Run with coverage
 php artisan test --coverage
-```
-
-**Run a specific test method:**
-
-```bash
-php artisan test --filter test_index_page_is_accessible
 ```
 
 ### Generated Test Coverage
 
-The generated tests include:
+- ✅ Index page accessibility
+- ✅ Create page accessibility
+- ✅ Store method with validation
+- ✅ Show page
+- ✅ Edit page accessibility
+- ✅ Update method with validation
+- ✅ Destroy method
+- ✅ Required field validation
+- ✅ Authorization checks
 
--   ✅ **Index page** - Tests that the index page is accessible
--   ✅ **Create page** - Tests that the create page is accessible
--   ✅ **Store method** - Tests creating new records with validation
--   ✅ **Show page** - Tests displaying record details
--   ✅ **Edit page** - Tests that the edit page is accessible
--   ✅ **Update method** - Tests updating records with validation
--   ✅ **Destroy method** - Tests deleting records
--   ✅ **Validation** - Tests required field validation
--   ✅ **Authorization** - Tests unauthorized access is denied
-
-### Customizing Tests
-
-After generation, you can customize the test file at `tests/Feature/{ModelName}Test.php`. You'll need to:
-
-1. **Fill in test data** - Update `getValidCreateData()` and `getValidUpdateData()` methods with actual field values
-2. **Add custom assertions** - Add additional test cases specific to your model
-3. **Update database assertions** - Modify `getDatabaseAssertionData()` if needed
-
-**Example test data:**
-
-```php
-protected function getValidCreateData(): array
-{
-    return [
-        'name' => 'Test Product',
-        'price' => 100000,
-        'description' => 'Test description',
-        'status' => 'active',
-    ];
-}
-```
-
-### Skipping Test Generation
-
-To skip test generation, use the `--no-test` flag:
-
-```bash
-php artisan generate:scaffold Product --fields="name:string:text:required" --no-test
-```
+Skip test generation with `--no-test`.
 
 ## Customization
 
-### Templates
+### Stub Templates
 
-You can customize the generated templates by modifying the stub files in `resources/stubs/`:
+Customize generated code by modifying stubs in `resources/stubs/`:
 
--   `model.stub` - Model template
--   `controller.stub` - Controller template
--   `datatable.stub` - DataTable service class template
--   `request.stub` - Request template
--   `migration.stub` - Migration template
--   `test.stub` - Unit test template
--   `view/index.stub` - Index view template (uses DataTables)
--   `view/create.stub` - Create view template
--   `view/edit.stub` - Edit view template
--   `view/show.stub` - Show view template
--   `view/datatables_actions.stub` - DataTable action buttons template
+| Stub | Purpose |
+|------|---------|
+| `model.stub` | Eloquent model |
+| `controller.stub` | Web controller |
+| `controller-api.stub` | API controller |
+| `powergrid-table.stub` | Livewire PowerGrid table |
+| `request/create.stub` | Create form request |
+| `request/update.stub` | Update form request |
+| `migration.stub` | Database migration |
+| `enum.stub` | PHP Enum class |
+| `factory.stub` | Model factory |
+| `seeder.stub` | Database seeder |
+| `service.stub` | Service class |
+| `test.stub` | Feature test |
+| `view/index.stub` | Index page (with PowerGrid) |
+| `view/create.stub` | Create form |
+| `view/edit.stub` | Edit form |
+| `view/show.stub` | Detail page |
+| `view/import.stub` | Import/export page |
+| `view/datatables_actions.stub` | Table action buttons |
+| `fields/*.stub` | Individual field type stubs |
+| `js/*.stub` | JavaScript stubs (password strength, tagify) |
 
 ### Adding New Field Types
 
-To add new field types, modify the `GeneratorField` class in `app/Generators/Common/GeneratorField.php` and add the appropriate HTML generation logic in the `getFormInput()` method.
+Modify `GeneratorField` in `app/Generators/Common/GeneratorField.php` and add HTML generation logic in `FormFieldRenderer`.
 
-## Requirements
+## Project Structure
 
--   Laravel 12+
--   PHP 8.2+
--   Tailwind CSS (for styling)
--   Livewire PowerGrid (for table functionality)
-
-### Installing Livewire PowerGrid
-
-```bash
-composer require power-components/livewire-powergrid
+```
+base-code-admin/
+├── app/
+│   ├── Console/               # Console kernel
+│   ├── DataTables/            # (legacy, unused)
+│   ├── Enums/                 # PHP Enums (HttpStatusCode, ResponseStatus)
+│   ├── Generators/            # ⭐ CRUD Generator engine
+│   │   ├── Commands/          # generate:scaffold, revert:scaffold
+│   │   ├── Common/            # CommandData, GeneratorField
+│   │   ├── Generators/        # All generator classes
+│   │   │   └── View/          # FormFieldRenderer, TableRenderer, etc.
+│   │   ├── Services/          # FieldParser, RouteInjector, SchemaIntrospector
+│   │   └── Utils/             # FileUtil, GeneratorFieldsInputUtil
+│   ├── Helpers/               # MenuHelper, ApiResponseHelper
+│   ├── Http/
+│   │   ├── Controllers/       # Admin controllers (Auth, User, Role, etc.)
+│   │   │   ├── Admin/         # (for generated admin controllers)
+│   │   │   └── Api/           # (for generated API controllers)
+│   │   └── Requests/          # Form request classes
+│   ├── Jobs/                  # ExportJob (async export)
+│   ├── Livewire/
+│   │   ├── Tables/            # PowerGrid table components
+│   │   └── PowerGridTheme.php # Custom PowerGrid theme
+│   ├── Mail/                  # LoginOtpMail
+│   ├── Models/                # User, Role, Permission, Setting, ActivityLog
+│   ├── Providers/             # AppServiceProvider, GeneratorServiceProvider
+│   ├── Services/              # ActivityLogService, FileUploadService, LaravelLogService
+│   └── Traits/                # HasFileUpload, HasImportExport
+├── config/
+│   ├── menu.php               # Sidebar menu configuration
+│   ├── permission.php         # Spatie permission config
+│   └── livewire-powergrid.php # PowerGrid config
+├── database/migrations/       # Base migrations (users, permissions, settings, etc.)
+├── kubernetes/                # K8s deployment & PVC manifests
+├── resources/
+│   ├── stubs/                 # ⭐ Code generation templates
+│   ├── views/
+│   │   ├── admin/             # Admin panel views
+│   │   │   ├── auth/          # Login, OTP pages
+│   │   │   ├── layouts/       # Admin layout
+│   │   │   ├── pages/         # Dashboard, users, roles, settings, etc.
+│   │   │   ├── partials/      # Sidebar, header, etc.
+│   │   │   └── emails/        # Email templates
+│   │   ├── components/        # ⭐ Reusable Blade components
+│   │   ├── errors/            # Custom error pages (403, 404, 419, 500, 503)
+│   │   └── maintenance.blade.php
+│   └── css/, js/              # Frontend assets
+├── routes/
+│   ├── web.php                # Web routes (with ADMIN_ROUTES_MARKER)
+│   └── console.php            # Console routes
+├── server/                    # Nginx config for Docker
+├── tests/                     # Feature & Unit tests
+├── Dockerfile                 # Multi-stage production build
+├── .redtech-ci.yaml           # CI/CD pipeline config
+└── vite.config.js             # Vite + Tailwind CSS v4
 ```
 
-After installation, publish the config file (optional):
+## Composer Scripts
 
-```bash
-php artisan powergrid:publish
-```
+| Command | Description |
+|---------|-------------|
+| `composer run setup` | Full project setup (install deps, env, migrate, build) |
+| `composer run dev` | Start dev server + queue worker + Vite concurrently |
+| `composer run test` | Clear config cache and run tests |
 
 ## License
 
