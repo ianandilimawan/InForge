@@ -26,7 +26,7 @@ spec:
             - mountPath: /var/www/webcore-2/storage
               name: ${K8S_STORAGES}
       imagePullSecrets:
-        - name: docker-registry-redtech-new
+        - name: docker-registry-intechstudio-new
       restartPolicy: Always
       volumes:
         - name: ${K8S_STORAGES}

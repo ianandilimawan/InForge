@@ -175,7 +175,7 @@
                 <div class="text-center mt-10">
                     <p class="text-xs font-medium text-zinc-500 dark:text-zinc-400">
                         © {{ date('Y') }} {{ isset($settings) ? $settings->app_name : 'Admin Panel' }}. Created By
-                        <a class="text-blue-600 dark:text-blue-400" href="#">Redtech</a>
+                        <a class="text-blue-600 dark:text-blue-400" href="#">Intech Studio</a>
                     </p>
                 </div>
             </div>

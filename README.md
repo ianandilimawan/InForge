@@ -1,4 +1,4 @@
-# Laravel CRUD Generator
+# InForge — Enterprise Laravel Starter Kit & CRUD Engine
 
 A modern Laravel admin template with a powerful CRUD generator, built for **Laravel 13** with **Tailwind CSS v4**, **Livewire PowerGrid v6**, and **Spatie Laravel Permission**.
 
@@ -27,32 +27,32 @@ A modern Laravel admin template with a powerful CRUD generator, built for **Lara
 
 The generator is built with a highly modular, single-responsibility architecture:
 
-| Component | Location | Purpose |
-|-----------|----------|---------|
-| `GenerateScaffoldCommand` | `Commands/` | Main entry point, orchestrates all generators |
-| `RevertScaffoldCommand` | `Commands/` | Reverses scaffold generation |
-| `CommandData` | `Common/` | Shared data object for all generators |
-| `GeneratorField` | `Common/` | Field definition and type mapping |
-| `FieldParser` | `Services/` | Parses interactive/CLI field input |
-| `SchemaIntrospector` | `Services/` | Reads existing DB table structure |
-| `RouteInjector` | `Services/` | Injects routes into `web.php` |
-| `ModelGenerator` | `Generators/` | Generates Eloquent model |
-| `ControllerGenerator` | `Generators/` | Generates web/API controller |
-| `CreateRequestGenerator` | `Generators/` | Generates create form request |
-| `UpdateRequestGenerator` | `Generators/` | Generates update form request |
-| `MigrationGenerator` | `Generators/` | Generates database migration |
-| `ViewGenerator` | `Generators/` | Orchestrates view generation |
-| `FormFieldRenderer` | `Generators/View/` | Renders form input fields |
-| `TableRenderer` | `Generators/View/` | Renders table columns/display |
-| `ComponentRenderer` | `Generators/View/` | Renders Blade components |
-| `ImportExportRenderer` | `Generators/View/` | Renders import/export views |
-| `PowerGridTableGenerator` | `Generators/` | Generates Livewire PowerGrid table class |
-| `EnumGenerator` | `Generators/` | Generates PHP 8.3 native Enum class |
-| `FactoryGenerator` | `Generators/` | Generates model factory |
-| `SeederGenerator` | `Generators/` | Generates database seeder |
-| `UnitTestGenerator` | `Generators/` | Generates feature tests |
-| `MenuGenerator` | `Generators/` | Registers menu in `config/menu.php` |
-| `PermissionGenerator` | `Generators/` | Registers Spatie permissions |
+| Component                 | Location           | Purpose                                       |
+| ------------------------- | ------------------ | --------------------------------------------- |
+| `GenerateScaffoldCommand` | `Commands/`        | Main entry point, orchestrates all generators |
+| `RevertScaffoldCommand`   | `Commands/`        | Reverses scaffold generation                  |
+| `CommandData`             | `Common/`          | Shared data object for all generators         |
+| `GeneratorField`          | `Common/`          | Field definition and type mapping             |
+| `FieldParser`             | `Services/`        | Parses interactive/CLI field input            |
+| `SchemaIntrospector`      | `Services/`        | Reads existing DB table structure             |
+| `RouteInjector`           | `Services/`        | Injects routes into `web.php`                 |
+| `ModelGenerator`          | `Generators/`      | Generates Eloquent model                      |
+| `ControllerGenerator`     | `Generators/`      | Generates web/API controller                  |
+| `CreateRequestGenerator`  | `Generators/`      | Generates create form request                 |
+| `UpdateRequestGenerator`  | `Generators/`      | Generates update form request                 |
+| `MigrationGenerator`      | `Generators/`      | Generates database migration                  |
+| `ViewGenerator`           | `Generators/`      | Orchestrates view generation                  |
+| `FormFieldRenderer`       | `Generators/View/` | Renders form input fields                     |
+| `TableRenderer`           | `Generators/View/` | Renders table columns/display                 |
+| `ComponentRenderer`       | `Generators/View/` | Renders Blade components                      |
+| `ImportExportRenderer`    | `Generators/View/` | Renders import/export views                   |
+| `PowerGridTableGenerator` | `Generators/`      | Generates Livewire PowerGrid table class      |
+| `EnumGenerator`           | `Generators/`      | Generates PHP 8.3 native Enum class           |
+| `FactoryGenerator`        | `Generators/`      | Generates model factory                       |
+| `SeederGenerator`         | `Generators/`      | Generates database seeder                     |
+| `UnitTestGenerator`       | `Generators/`      | Generates feature tests                       |
+| `MenuGenerator`           | `Generators/`      | Registers menu in `config/menu.php`           |
+| `PermissionGenerator`     | `Generators/`      | Registers Spatie permissions                  |
 
 ### Optimizations
 
@@ -68,19 +68,19 @@ The generator is built with a highly modular, single-responsibility architecture
 
 Beyond the CRUD Generator, this template comes pre-packaged with enterprise-grade features:
 
-| Module | Description |
-|--------|-------------|
-| **Dashboard** | Admin overview dashboard |
-| **Users** | Full user CRUD with avatar upload |
-| **Roles** | Role management (Spatie) |
-| **Permissions** | Permission management (Spatie) |
-| **Activity Logs** | Track all user activities |
-| **Server Logs** | Browse, view, and clear Laravel log files directly from UI |
-| **Settings** | Dynamic app configuration (see below) |
-| **Profile** | User profile with password change and avatar |
-| **OTP Login** | Optional two-factor OTP authentication via email |
-| **Maintenance Mode** | Toggle maintenance mode with elegant 3D splash page |
-| **Custom Error Pages** | Styled 403, 404, 419, 500, 503 error pages |
+| Module                 | Description                                                |
+| ---------------------- | ---------------------------------------------------------- |
+| **Dashboard**          | Admin overview dashboard                                   |
+| **Users**              | Full user CRUD with avatar upload                          |
+| **Roles**              | Role management (Spatie)                                   |
+| **Permissions**        | Permission management (Spatie)                             |
+| **Activity Logs**      | Track all user activities                                  |
+| **Server Logs**        | Browse, view, and clear Laravel log files directly from UI |
+| **Settings**           | Dynamic app configuration (see below)                      |
+| **Profile**            | User profile with password change and avatar               |
+| **OTP Login**          | Optional two-factor OTP authentication via email           |
+| **Maintenance Mode**   | Toggle maintenance mode with elegant 3D splash page        |
+| **Custom Error Pages** | Styled 403, 404, 419, 500, 503 error pages                 |
 
 #### Dynamic Settings (from Admin UI)
 
@@ -103,41 +103,42 @@ Beyond the CRUD Generator, this template comes pre-packaged with enterprise-grad
 
 Pre-built reusable Blade components:
 
-| Component | File |
-|-----------|------|
-| `<x-input-floating>` | Floating label text input |
-| `<x-textarea-floating>` | Floating label textarea |
-| `<x-select-floating>` | Floating label select dropdown |
-| `<x-input>` | Standard text input |
-| `<x-textarea>` | Standard textarea |
-| `<x-select>` | Standard select |
-| `<x-modern-input>` | Modern styled input |
-| `<x-modern-select>` | Modern styled select |
-| `<x-modern-textarea>` | Modern styled textarea |
-| `<x-toggle>` | Toggle switch for booleans |
-| `<x-button>` | Styled button |
-| `<x-datetime>` | Date/time picker |
-| `<x-filepond>` | FilePond file upload |
-| `<x-toast>` | Toast notification |
+| Component                  | File                            |
+| -------------------------- | ------------------------------- |
+| `<x-input-floating>`       | Floating label text input       |
+| `<x-textarea-floating>`    | Floating label textarea         |
+| `<x-select-floating>`      | Floating label select dropdown  |
+| `<x-input>`                | Standard text input             |
+| `<x-textarea>`             | Standard textarea               |
+| `<x-select>`               | Standard select                 |
+| `<x-modern-input>`         | Modern styled input             |
+| `<x-modern-select>`        | Modern styled select            |
+| `<x-modern-textarea>`      | Modern styled textarea          |
+| `<x-toggle>`               | Toggle switch for booleans      |
+| `<x-button>`               | Styled button                   |
+| `<x-datetime>`             | Date/time picker                |
+| `<x-filepond>`             | FilePond file upload            |
+| `<x-toast>`                | Toast notification              |
 | `<x-confirm-delete-modal>` | SweetAlert2 delete confirmation |
 
 ## Tech Stack
 
-| Technology | Version |
-|-----------|---------|
-| PHP | ^8.3 |
-| Laravel | ^13.0 |
-| Tailwind CSS | ^4.1 (via `@tailwindcss/vite`) |
-| Livewire | ^4.3 |
-| Livewire PowerGrid | ^6.10 |
-| Spatie Laravel Permission | ^8.0 |
-| Vite | ^7.0 |
-| SweetAlert2 | ^11.26 |
-| PHPUnit | ^12.0 |
-| Blade Heroicons | ^2.7 |
-| OpenSpout | ^4.0 (Excel import/export) |
+| Technology                | Version                        |
+| ------------------------- | ------------------------------ |
+| PHP                       | ^8.3                           |
+| Laravel                   | ^13.0                          |
+| Tailwind CSS              | ^4.1 (via `@tailwindcss/vite`) |
+| Livewire                  | ^4.3                           |
+| Livewire PowerGrid        | ^6.10                          |
+| Spatie Laravel Permission | ^8.0                           |
+| Vite                      | ^7.0                           |
+| SweetAlert2               | ^11.26                         |
+| PHPUnit                   | ^12.0                          |
+| Blade Heroicons           | ^2.7                           |
+| OpenSpout                 | ^4.0 (Excel import/export)     |
 
 **Optional (suggested):**
+
 - `doctrine/dbal` ^4.4 — for `--fromTable` schema introspection
 - `phpoffice/phpspreadsheet` ^5.2 — for robust Excel import/export
 
@@ -310,6 +311,7 @@ php artisan generate:scaffold Blog --fromTable --tableName=blog
 ```
 
 This will:
+
 - Read the table structure from the database
 - Auto-detect column types (int, varchar, text, json, date, etc.)
 - **Detect ENUM fields and generate select dropdowns with proper options**
@@ -322,67 +324,73 @@ This will:
 **Format:** `name:dbType:htmlType:options`
 
 **Enum Fields:**
+
 ```bash
 --fields="status:string:enum=App\Enums\StatusEnum(draft,published)"
 ```
+
 Generates: Enum class, `Rule::enum()` validation, `<x-select>` dropdown.
 
 **BelongsTo Relations:**
+
 ```bash
 --fields="category_id:foreignId:belongsTo(Category)"
 ```
+
 Generates: `belongsTo()` relationship, controller data injection, `<x-select>` dropdown.
 
 **Currency Input:**
+
 ```bash
 --fields="price:decimal:currency:required"
 ```
+
 Integrates AutoNumeric.js with Indonesian Rupiah (Rp) formatting.
 
 ### Field Types
 
 #### Database Types
 
-| Type | SQL Equivalent |
-|------|---------------|
-| `string` | VARCHAR |
-| `text` | TEXT |
-| `integer` | INTEGER |
-| `decimal` | DECIMAL |
-| `boolean` | BOOLEAN |
-| `date` | DATE |
-| `datetime` | DATETIME |
-| `timestamp` | TIMESTAMP |
-| `json` | JSON |
+| Type        | SQL Equivalent  |
+| ----------- | --------------- |
+| `string`    | VARCHAR         |
+| `text`      | TEXT            |
+| `integer`   | INTEGER         |
+| `decimal`   | DECIMAL         |
+| `boolean`   | BOOLEAN         |
+| `date`      | DATE            |
+| `datetime`  | DATETIME        |
+| `timestamp` | TIMESTAMP       |
+| `json`      | JSON            |
 | `foreignId` | UNSIGNED BIGINT |
 
 #### HTML Types
 
-| Type | Component |
-|------|-----------|
-| `text` | `<x-input-floating>` |
-| `textarea` | `<x-textarea-floating>` (with TinyMCE) |
-| `select` | `<x-select-floating>` |
-| `checkbox` / `boolean` | `<x-toggle>` switch |
-| `date` | `<x-datetime>` |
-| `email` | `<x-input-floating type="email">` |
-| `password` | `<x-input-floating type="password">` |
-| `number` | `<x-input-floating type="number">` |
-| `file` | `<x-filepond>` |
-| `currency` | AutoNumeric.js formatted input |
-| `tags` | Tagify input |
+| Type                   | Component                              |
+| ---------------------- | -------------------------------------- |
+| `text`                 | `<x-input-floating>`                   |
+| `textarea`             | `<x-textarea-floating>` (with TinyMCE) |
+| `select`               | `<x-select-floating>`                  |
+| `checkbox` / `boolean` | `<x-toggle>` switch                    |
+| `date`                 | `<x-datetime>`                         |
+| `email`                | `<x-input-floating type="email">`      |
+| `password`             | `<x-input-floating type="password">`   |
+| `number`               | `<x-input-floating type="number">`     |
+| `file`                 | `<x-filepond>`                         |
+| `currency`             | AutoNumeric.js formatted input         |
+| `tags`                 | Tagify input                           |
 
 ### Field Options
 
-| Option | Description |
-|--------|-------------|
-| `nullable` | Make field nullable |
-| `required` | Make field required |
-| `searchable` | Enable search in PowerGrid |
-| `sortable` | Enable sorting in PowerGrid |
-| `options=a,b,c` | Options for select fields |
-| `default:value` | Default value |
-| `validation:rule1,rule2` | Custom validation rules |
+| Option                   | Description                 |
+| ------------------------ | --------------------------- |
+| `nullable`               | Make field nullable         |
+| `required`               | Make field required         |
+| `searchable`             | Enable search in PowerGrid  |
+| `sortable`               | Enable sorting in PowerGrid |
+| `options=a,b,c`          | Options for select fields   |
+| `default:value`          | Default value               |
+| `validation:rule1,rule2` | Custom validation rules     |
 
 ### Command Options
 
@@ -502,23 +510,23 @@ php artisan generate:scaffold Product --schema=resources/schemas/product.json
 
 ## Generated Files
 
-| File | Location |
-|------|----------|
-| Model | `app/Models/{Model}.php` |
-| Controller | `app/Http/Controllers/{Model}Controller.php` |
-| API Controller | `app/Http/Controllers/Api/{Model}ApiController.php` (with `--api`) |
-| Create Request | `app/Http/Requests/Create{Model}Request.php` |
-| Update Request | `app/Http/Requests/Update{Model}Request.php` |
-| PowerGrid Table | `app/Livewire/Tables/{Model}Table.php` |
-| Migration | `database/migrations/{ts}_create_{table}_table.php` (with `--migration`) |
-| Views | `resources/views/admin/{model_snake_plural}/` (index, create, edit, show) |
-| Enum | `app/Enums/{EnumName}.php` (when enum fields are defined) |
-| Factory | `database/factories/{Model}Factory.php` (with `--with-factory`) |
-| Seeder | `database/seeders/{Model}Seeder.php` (with `--with-seeder`) |
-| Test | `tests/Feature/{Model}Test.php` (generated by default) |
-| Menu | Injected into `config/menu.php` |
-| Permissions | Seeded into `permissions` table via Spatie |
-| Routes | Injected into `routes/web.php` |
+| File            | Location                                                                  |
+| --------------- | ------------------------------------------------------------------------- |
+| Model           | `app/Models/{Model}.php`                                                  |
+| Controller      | `app/Http/Controllers/{Model}Controller.php`                              |
+| API Controller  | `app/Http/Controllers/Api/{Model}ApiController.php` (with `--api`)        |
+| Create Request  | `app/Http/Requests/Create{Model}Request.php`                              |
+| Update Request  | `app/Http/Requests/Update{Model}Request.php`                              |
+| PowerGrid Table | `app/Livewire/Tables/{Model}Table.php`                                    |
+| Migration       | `database/migrations/{ts}_create_{table}_table.php` (with `--migration`)  |
+| Views           | `resources/views/admin/{model_snake_plural}/` (index, create, edit, show) |
+| Enum            | `app/Enums/{EnumName}.php` (when enum fields are defined)                 |
+| Factory         | `database/factories/{Model}Factory.php` (with `--with-factory`)           |
+| Seeder          | `database/seeders/{Model}Seeder.php` (with `--with-seeder`)               |
+| Test            | `tests/Feature/{Model}Test.php` (generated by default)                    |
+| Menu            | Injected into `config/menu.php`                                           |
+| Permissions     | Seeded into `permissions` table via Spatie                                |
+| Routes          | Injected into `routes/web.php`                                            |
 
 ## Unit Testing
 
@@ -555,28 +563,28 @@ Skip test generation with `--no-test`.
 
 Customize generated code by modifying stubs in `resources/stubs/`:
 
-| Stub | Purpose |
-|------|---------|
-| `model.stub` | Eloquent model |
-| `controller.stub` | Web controller |
-| `controller-api.stub` | API controller |
-| `powergrid-table.stub` | Livewire PowerGrid table |
-| `request/create.stub` | Create form request |
-| `request/update.stub` | Update form request |
-| `migration.stub` | Database migration |
-| `enum.stub` | PHP Enum class |
-| `factory.stub` | Model factory |
-| `seeder.stub` | Database seeder |
-| `service.stub` | Service class |
-| `test.stub` | Feature test |
-| `view/index.stub` | Index page (with PowerGrid) |
-| `view/create.stub` | Create form |
-| `view/edit.stub` | Edit form |
-| `view/show.stub` | Detail page |
-| `view/import.stub` | Import/export page |
-| `view/datatables_actions.stub` | Table action buttons |
-| `fields/*.stub` | Individual field type stubs |
-| `js/*.stub` | JavaScript stubs (password strength, tagify) |
+| Stub                           | Purpose                                      |
+| ------------------------------ | -------------------------------------------- |
+| `model.stub`                   | Eloquent model                               |
+| `controller.stub`              | Web controller                               |
+| `controller-api.stub`          | API controller                               |
+| `powergrid-table.stub`         | Livewire PowerGrid table                     |
+| `request/create.stub`          | Create form request                          |
+| `request/update.stub`          | Update form request                          |
+| `migration.stub`               | Database migration                           |
+| `enum.stub`                    | PHP Enum class                               |
+| `factory.stub`                 | Model factory                                |
+| `seeder.stub`                  | Database seeder                              |
+| `service.stub`                 | Service class                                |
+| `test.stub`                    | Feature test                                 |
+| `view/index.stub`              | Index page (with PowerGrid)                  |
+| `view/create.stub`             | Create form                                  |
+| `view/edit.stub`               | Edit form                                    |
+| `view/show.stub`               | Detail page                                  |
+| `view/import.stub`             | Import/export page                           |
+| `view/datatables_actions.stub` | Table action buttons                         |
+| `fields/*.stub`                | Individual field type stubs                  |
+| `js/*.stub`                    | JavaScript stubs (password strength, tagify) |
 
 ### Adding New Field Types
 
@@ -637,17 +645,17 @@ base-code-admin/
 ├── server/                    # Nginx config for Docker
 ├── tests/                     # Feature & Unit tests
 ├── Dockerfile                 # Multi-stage production build
-├── .redtech-ci.yaml           # CI/CD pipeline config
+├── .intechstudio-ci.yaml           # CI/CD pipeline config
 └── vite.config.js             # Vite + Tailwind CSS v4
 ```
 
 ## Composer Scripts
 
-| Command | Description |
-|---------|-------------|
+| Command              | Description                                            |
+| -------------------- | ------------------------------------------------------ |
 | `composer run setup` | Full project setup (install deps, env, migrate, build) |
-| `composer run dev` | Start dev server + queue worker + Vite concurrently |
-| `composer run test` | Clear config cache and run tests |
+| `composer run dev`   | Start dev server + queue worker + Vite concurrently    |
+| `composer run test`  | Clear config cache and run tests                       |
 
 ## License
 
