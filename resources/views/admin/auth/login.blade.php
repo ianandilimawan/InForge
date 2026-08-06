@@ -88,20 +88,28 @@
                 <form class="space-y-5" action="{{ route('admin.login.post') }}" method="POST" id="loginForm">
                     @csrf
 
+                    <!-- Single Error Message Banner -->
+                    @if ($errors->any())
+                        <div
+                            class="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-xl p-4 shadow-sm animate-fade-in-up">
+                            <div class="flex items-start">
+                                <svg class="w-5 h-5 text-red-600 dark:text-red-400 mt-0.5 mr-2 flex-shrink-0"
+                                    fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                <p class="text-sm font-medium text-red-800 dark:text-red-300">
+                                    {{ $errors->first() }}
+                                </p>
+                            </div>
+                        </div>
+                    @endif
+
                     <!-- Email Field -->
                     <div>
                         <x-input-floating type="email" name="email" label="Email address" value="{{ old('email') }}"
-                            required="true" />
-                        @error('email')
-                            <p class="mt-1 text-sm font-medium text-red-600 dark:text-red-400 flex items-center">
-                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd"
-                                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                                {{ $message }}
-                            </p>
-                        @enderror
+                            required="true" :show-error="false" />
                     </div>
 
                     <!-- Password Field -->
@@ -132,16 +140,6 @@
                                 </svg>
                             </button>
                         </div>
-                        @error('password')
-                            <p class="mt-1 text-sm font-medium text-red-600 dark:text-red-400 flex items-center">
-                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd"
-                                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                                {{ $message }}
-                            </p>
-                        @enderror
                     </div>
 
                     <!-- Remember Me -->
@@ -155,24 +153,6 @@
                             </label>
                         </div>
                     </div>
-
-                    <!-- Error Messages -->
-                    @if ($errors->any())
-                        <div
-                            class="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-xl p-4 shadow-sm animate-fade-in-up">
-                            <div class="flex items-start">
-                                <svg class="w-5 h-5 text-red-600 dark:text-red-400 mt-0.5 mr-2 flex-shrink-0"
-                                    fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd"
-                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                                <p class="text-sm font-medium text-red-800 dark:text-red-300">
-                                    {{ $errors->first() }}
-                                </p>
-                            </div>
-                        </div>
-                    @endif
 
                     <!-- Submit Button -->
                     <div class="pt-4">
@@ -195,7 +175,7 @@
                 <div class="text-center mt-10">
                     <p class="text-xs font-medium text-zinc-500 dark:text-zinc-400">
                         © {{ date('Y') }} {{ isset($settings) ? $settings->app_name : 'Admin Panel' }}. Created By
-                        <a class="text-blue-600 dark:text-blue-400" href="https://intechstudio.id">Intech Studio</a>
+                        <a class="text-blue-600 dark:text-blue-400" href="#">Redtech</a>
                     </p>
                 </div>
             </div>
