@@ -23,7 +23,7 @@ spec:
             - containerPort: ${K8S_CONTAINER_PORT}
           resources: {}
           volumeMounts:
-            - mountPath: /var/www/webcore-2/storage
+            - mountPath: /var/www/intechstudio/storage
               name: ${K8S_STORAGES}
       imagePullSecrets:
         - name: docker-registry-intechstudio-new
