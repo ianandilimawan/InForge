@@ -19,6 +19,9 @@ class GeneratorField
     public ?array $foreignKey = null;
     public ?array $enumData = null;
     public ?string $belongsTo = null;
+    public ?string $hasMany = null;
+    public ?string $belongsToMany = null;
+    public ?string $pivotTable = null;
 
     public function __construct(
         string $name,
@@ -98,11 +101,33 @@ class GeneratorField
                 case 'belongsTo':
                     $this->belongsTo = $value;
                     break;
+                case 'hasMany':
+                    $this->hasMany = $value;
+                    $this->fillable = false;
+                    break;
+                case 'belongsToMany':
+                    $this->belongsToMany = $value;
+                    $this->pivotTable = $this->calculatePivotTable($value);
+                    $this->fillable = false;
+                    break;
             }
         } else {
             // Handle functions without value, e.g., belongsTo(Category)
             if (preg_match('/^belongsTo\((.*?)\)$/', $key, $matches)) {
                 $this->belongsTo = $matches[1];
+                return;
+            }
+
+            if (preg_match('/^hasMany\((.*?)\)$/', $key, $matches)) {
+                $this->hasMany = $matches[1];
+                $this->fillable = false;
+                return;
+            }
+
+            if (preg_match('/^belongsToMany\((.*?)\)$/', $key, $matches)) {
+                $this->belongsToMany = $matches[1];
+                $this->pivotTable = $this->calculatePivotTable($matches[1]);
+                $this->fillable = false;
                 return;
             }
 
@@ -119,6 +144,15 @@ class GeneratorField
                     break;
             }
         }
+    }
+
+    private function calculatePivotTable(string $relatedModel): string
+    {
+        // Get the "current" model name from field context — not available here,
+        // so we use the field name as a hint. The actual pivot table will be
+        // recalculated in MigrationGenerator with proper model context.
+        // For now, store just the related model; pivot is set by the generator.
+        return $relatedModel;
     }
 
     public function getMigrationDefinition(): string

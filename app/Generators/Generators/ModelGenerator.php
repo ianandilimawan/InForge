@@ -129,12 +129,20 @@ class ModelGenerator extends BaseGenerator
 
                 // Generate belongsTo relationship
                 $relationships[] = "    public function {$relationName}()\n    {\n        return \$this->belongsTo(\\App\\Models\\{$relatedModelName}::class, '{$column}');\n    }";
+            } elseif ($field->hasMany) {
+                $relatedModel = $field->hasMany;
+                $relationName = \Illuminate\Support\Str::camel(\Illuminate\Support\Str::plural($relatedModel));
+                $foreignKey = \Illuminate\Support\Str::snake($this->commandData->modelName) . '_id';
+                $relationships[] = "    public function {$relationName}()\n    {\n        return \$this->hasMany(\\App\\Models\\{$relatedModel}::class, '{$foreignKey}');\n    }";
+            } elseif ($field->belongsToMany) {
+                $relatedModel = $field->belongsToMany;
+                $relationName = \Illuminate\Support\Str::camel(\Illuminate\Support\Str::plural($relatedModel));
+                $models = [$this->commandData->modelName, $relatedModel];
+                sort($models);
+                $pivotTable = strtolower(\Illuminate\Support\Str::snake($models[0])) . '_' . strtolower(\Illuminate\Support\Str::snake($models[1]));
+                $relationships[] = "    public function {$relationName}()\n    {\n        return \$this->belongsToMany(\\App\\Models\\{$relatedModel}::class, '{$pivotTable}');\n    }";
             }
         }
-
-        // Also check for reverse relationships (hasMany, hasOne)
-        // This would require checking other tables for foreign keys pointing to this table
-        // For now, we'll focus on belongsTo relationships from detected foreign keys
 
         if (empty($relationships)) {
             return '';

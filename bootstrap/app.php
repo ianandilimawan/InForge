@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__ . '/../routes/web.php',
+        api: __DIR__ . '/../routes/api.php',
         commands: __DIR__ . '/../routes/console.php',
         health: '/up',
     )
@@ -18,6 +19,12 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\CheckMaintenanceMode::class,
             \App\Http\Middleware\AjaxFormResponseMiddleware::class,
         ]);
+
+        $middleware->api(prepend: [
+            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+        ]);
+
+        $middleware->throttleApi('60,1');
         
         $middleware->alias([
             'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,

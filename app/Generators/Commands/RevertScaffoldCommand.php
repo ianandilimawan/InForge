@@ -158,6 +158,26 @@ class RevertScaffoldCommand extends Command
             }
         }
 
+        // 8b. Delete API Resource
+        $resourcePath = app_path("Http/Resources/{$modelName}Resource.php");
+        if (file_exists($resourcePath)) {
+            if (unlink($resourcePath)) {
+                $filesDeleted[] = "API Resource: {$resourcePath}";
+            } else {
+                $errors[] = "Failed to delete API Resource: {$resourcePath}";
+            }
+        }
+
+        // 8c. Delete Policy
+        $policyPath = app_path("Policies/{$modelName}Policy.php");
+        if (file_exists($policyPath)) {
+            if (unlink($policyPath)) {
+                $filesDeleted[] = "Policy: {$policyPath}";
+            } else {
+                $errors[] = "Failed to delete Policy: {$policyPath}";
+            }
+        }
+
         // 9. Find and optionally delete Migration
         $tableName = Str::snake(Str::pluralStudly($modelName));
         $migrationFiles = glob(database_path("migrations/*_create_{$tableName}_table.php"));

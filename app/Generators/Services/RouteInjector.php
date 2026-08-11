@@ -40,13 +40,13 @@ class RouteInjector
         $apiRoutesPath = base_path('routes/api.php');
 
         if (!file_exists($apiRoutesPath)) {
-            $defaultContent = "<?php\n\nuse Illuminate\\Http\\Request;\nuse Illuminate\\Support\\Facades\\Route;\n\nRoute::prefix('v1')->group(function () {\n    " . self::API_MARKER . "\n});\n";
+            $defaultContent = "<?php\n\nuse Illuminate\\Http\\Request;\nuse Illuminate\\Support\\Facades\\Route;\n\nRoute::prefix('v1')->middleware(['auth:sanctum'])->group(function () {\n    " . self::API_MARKER . "\n});\n";
             file_put_contents($apiRoutesPath, $defaultContent);
         }
 
         $routes = "// {$modelNameTitle} routes\n    Route::apiResource('{$routePath}', {$controllerClass});\n    " . self::API_MARKER;
 
-        $this->injectMarkerRoute($apiRoutesPath, self::API_MARKER, "Route::prefix('v1')->group(function () {\n    " . self::API_MARKER . "\n});", "Route::apiResource('{$routePath}'", $routes, "API routes for {$routePath}");
+        $this->injectMarkerRoute($apiRoutesPath, self::API_MARKER, "Route::prefix('v1')->middleware(['auth:sanctum'])->group(function () {\n    " . self::API_MARKER . "\n});", "Route::apiResource('{$routePath}'", $routes, "API routes for {$routePath}");
     }
 
     private function addWebRoutes(CommandData $commandData): void

@@ -58,6 +58,12 @@ class ControllerGenerator extends BaseGenerator
                 $relatedFetch .= "        \$displayCol = \Illuminate\Support\Facades\Schema::hasColumn((new \App\Models\\{$relatedModel})->getTable(), 'name') ? 'name' : (\Illuminate\Support\Facades\Schema::hasColumn((new \App\Models\\{$relatedModel})->getTable(), 'title') ? 'title' : 'id');\n";
                 $relatedFetch .= "        \${$varName} = \App\Models\\{$relatedModel}::pluck(\$displayCol, 'id');\n";
                 $relatedCompact .= ", '{$varName}'";
+            } elseif ($field->belongsToMany) {
+                $relatedModel = $field->belongsToMany;
+                $varName = \Illuminate\Support\Str::camel(\Illuminate\Support\Str::plural($relatedModel));
+                $relatedFetch .= "        \$displayCol = \Illuminate\Support\Facades\Schema::hasColumn((new \App\Models\\{$relatedModel})->getTable(), 'name') ? 'name' : (\Illuminate\Support\Facades\Schema::hasColumn((new \App\Models\\{$relatedModel})->getTable(), 'title') ? 'title' : 'id');\n";
+                $relatedFetch .= "        \${$varName} = \App\Models\\{$relatedModel}::pluck(\$displayCol, 'id');\n";
+                $relatedCompact .= ", '{$varName}'";
             } elseif ($field->foreignKey) {
                 $referencedTable = $field->foreignKey['referenced_table'];
                 $relatedModel = \Illuminate\Support\Str::studly(\Illuminate\Support\Str::singular($referencedTable));

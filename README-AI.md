@@ -4,7 +4,7 @@
 If you are reading this, you are working on a codebase derived from the "Admin Template Base". To save maximum tokens and ensure absolute consistency in UI/UX, you **MUST** follow these rules strictly:
 
 ## 1. CRUD & Scaffolding (MOST IMPORTANT)
-- **STRICTLY PROHIBITED to create modules, Controllers, or Views manually! Everything MUST be generated through the generator command (`crud:generate` or `generate:scaffold`) to be 100% compliant with the admin-template.** 
+- **STRICTLY PROHIBITED to create modules, Controllers, or Views manually! Everything MUST be generated through the generator command (`generate:scaffold`) to be 100% compliant with the admin-template.** 
 - NEVER create Models, Controllers, Migrations, or Views manually from scratch when the user asks for a new CRUD feature.
 - **ALWAYS** use the custom scaffold generator command:
   ```bash

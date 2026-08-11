@@ -14,11 +14,13 @@ use App\Generators\Generators\MigrationGenerator;
 use App\Generators\Generators\ViewGenerator;
 use App\Generators\Generators\MenuGenerator;
 use App\Generators\Generators\PermissionGenerator;
+use App\Generators\Generators\PolicyGenerator;
 use App\Generators\Generators\SeederGenerator;
 use App\Generators\Generators\UnitTestGenerator;
 use App\Generators\Generators\FactoryGenerator;
 use App\Generators\Generators\PowerGridTableGenerator;
 use App\Generators\Generators\EnumGenerator;
+use App\Generators\Generators\ApiResourceGenerator;
 use App\Generators\Services\FieldParser;
 use App\Generators\Services\SchemaIntrospector;
 use App\Generators\Services\RouteInjector;
@@ -204,6 +206,7 @@ class GenerateScaffoldCommand extends Command
         return [
             'model' => ['class' => ModelGenerator::class, 'flag' => 'withModel'],
             'enum' => ['class' => EnumGenerator::class, 'flag' => null],
+            'resource' => ['class' => ApiResourceGenerator::class, 'flag' => null],
             'controller' => ['class' => ControllerGenerator::class, 'flag' => 'withController'],
             'datatable' => ['class' => PowerGridTableGenerator::class, 'flag' => 'withController'],
             'request' => ['class' => RequestGenerator::class, 'flag' => 'withRequest'],
@@ -213,7 +216,8 @@ class GenerateScaffoldCommand extends Command
             'factory' => ['class' => FactoryGenerator::class, 'flag' => 'withFactory'],
             'test' => ['class' => UnitTestGenerator::class, 'flag' => 'withTest'],
             'menu' => ['class' => MenuGenerator::class, 'flag' => 'withMenu'],
-            'permission' => ['class' => PermissionGenerator::class, 'flag' => 'withPermissions']
+            'permission' => ['class' => PermissionGenerator::class, 'flag' => 'withPermissions'],
+            'policy' => ['class' => PolicyGenerator::class, 'flag' => null],
         ];
     }
 
@@ -314,6 +318,10 @@ class GenerateScaffoldCommand extends Command
 
         if ($sectionTitleOption !== null && $sectionTitleOption !== '') {
             return $sectionTitleOption;
+        }
+
+        if ($this->option('no-interaction')) {
+            return null;
         }
 
         $existingSections = array_keys(config('menu', []));

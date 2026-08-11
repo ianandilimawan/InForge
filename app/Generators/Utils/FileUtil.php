@@ -111,6 +111,11 @@ class FileUtil
         return app_path("Livewire/Tables/{$tableName}.php");
     }
 
+    public static function getResourcePath(string $modelName): string
+    {
+        return app_path("Http/Resources/{$modelName}Resource.php");
+    }
+
     public static function delete(string $path): bool
     {
         return File::delete($path);

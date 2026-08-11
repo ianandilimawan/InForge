@@ -15,7 +15,60 @@ class MigrationGenerator extends BaseGenerator
             '{{MIGRATION_FIELDS}}' => $this->getMigrationFields(),
         ]);
 
-        return $this->generateFile($template, $outputPath, $replacements);
+        $result = $this->generateFile($template, $outputPath, $replacements);
+
+        // Generate pivot migrations for belongsToMany fields
+        foreach ($this->commandData->fields as $field) {
+            if ($field->belongsToMany) {
+                $this->generatePivotMigration($field->belongsToMany);
+            }
+        }
+
+        return $result;
+    }
+
+    private function generatePivotMigration(string $relatedModel): void
+    {
+        $models = [$this->commandData->modelName, $relatedModel];
+        sort($models);
+        $pivotTable = strtolower(\Illuminate\Support\Str::snake($models[0])) . '_' . strtolower(\Illuminate\Support\Str::snake($models[1]));
+        $model1Fk = \Illuminate\Support\Str::snake($this->commandData->modelName) . '_id';
+        $model2Fk = \Illuminate\Support\Str::snake($relatedModel) . '_id';
+
+        $timestamp = date('Y_m_d_His', time() + 1);
+        $pivotPath = database_path("migrations/{$timestamp}_create_{$pivotTable}_table.php");
+
+        if (\Illuminate\Support\Facades\File::exists($pivotPath)) {
+            return;
+        }
+
+        $content = "<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('{$pivotTable}', function (Blueprint \$table) {
+            \$table->id();
+            \$table->foreignId('{$model1Fk}')->constrained()->cascadeOnDelete();
+            \$table->foreignId('{$model2Fk}')->constrained()->cascadeOnDelete();
+            \$table->timestamps();
+
+            \$table->unique(['{$model1Fk}', '{$model2Fk}']);
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('{$pivotTable}');
+    }
+};
+";
+        FileUtil::createFile($pivotPath, $content);
     }
 
     public function rollback(): bool
