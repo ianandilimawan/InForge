@@ -155,7 +155,7 @@ Pre-built reusable Blade components:
 
 ```bash
 git clone <repository-url>
-cd base-code-admin
+cd inforge
 ```
 
 ### Step 2: Install Dependencies
@@ -593,7 +593,7 @@ Modify `GeneratorField` in `app/Generators/Common/GeneratorField.php` and add HT
 ## Project Structure
 
 ```
-base-code-admin/
+inforge/
 ├── app/
 │   ├── Console/               # Console kernel
 │   ├── DataTables/            # (legacy, unused)

@@ -56,7 +56,7 @@ deploy kubernetes staging:
     - export KUBECONFIG=k8s.config
     - kubectl version --client
     - kubectl apply -f pvc.yaml
-    - kubectl delete deployment webcore-2-deployment -n staging || true
+    - kubectl delete deployment intechstudio-deployment -n staging || true
     - kubectl apply -f deployment.yaml
   when: on_success
   only:
