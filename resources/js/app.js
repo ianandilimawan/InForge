@@ -1,6 +1,13 @@
 import "./bootstrap";
 import Swal from "sweetalert2";
 
+// FontAwesome (bundled instead of CDN)
+import "@fortawesome/fontawesome-free/css/all.min.css";
+
+// ApexCharts (bundled instead of CDN)
+import ApexCharts from "apexcharts";
+window.ApexCharts = ApexCharts;
+
 window.Swal = Swal;
 
 // Toast configuration for SweetAlert2

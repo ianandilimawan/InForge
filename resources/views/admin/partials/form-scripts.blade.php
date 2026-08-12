@@ -1,18 +1,6 @@
 @once
-    <!-- Form Component Libraries (Lazy Loaded) -->
-    <!-- TinyMCE Rich Text Editor (Free Version) -->
-    <script src="https://cdn.jsdelivr.net/npm/tinymce@7/tinymce.min.js"></script>
-
-    <!-- TomSelect -->
-    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.default.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
-
-    <!-- Tagify -->
-    <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify@4.17.9/dist/tagify.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify@4.17.9/dist/tagify.css" rel="stylesheet" type="text/css" />
-
-    <!-- AutoNumeric.js (Currency Formatting) -->
-    <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.6.0/dist/autoNumeric.min.js"></script>
+    <!-- Form Component Libraries (bundled via Vite instead of CDN) -->
+    @vite('resources/js/form-libs.js')
 @endonce
 
 <script>
