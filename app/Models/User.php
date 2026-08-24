@@ -49,9 +49,19 @@ class User extends Authenticatable
         ];
     }
 
-    // Compatibility wrapper for existing code
+    /**
+     * Check if user has permission (bypassed for administrator/admin, safe fallback if permission record does not exist).
+     */
     public function hasPermission($permission): bool
     {
-        return $this->hasPermissionTo($permission);
+        if ($this->hasRole(['administrator', 'admin'])) {
+            return true;
+        }
+
+        try {
+            return $this->hasPermissionTo($permission);
+        } catch (\Throwable $e) {
+            return false;
+        }
     }
 }

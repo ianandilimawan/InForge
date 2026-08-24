@@ -20,12 +20,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
     // Public routes (login)
     Route::middleware('guest')->group(function () {
         Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-        Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+        Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:10,1')->name('login.post');
         
         // OTP routes
         Route::get('/login/otp', [AuthController::class, 'showOtpForm'])->name('login.otp');
-        Route::post('/login/otp', [AuthController::class, 'verifyOtp'])->name('login.otp.post');
-        Route::post('/login/otp/resend', [AuthController::class, 'resendOtp'])->name('login.otp.resend');
+        Route::post('/login/otp', [AuthController::class, 'verifyOtp'])->middleware('throttle:10,1')->name('login.otp.post');
+        Route::post('/login/otp/resend', [AuthController::class, 'resendOtp'])->middleware('throttle:5,1')->name('login.otp.resend');
     });
 
     // Protected admin routes

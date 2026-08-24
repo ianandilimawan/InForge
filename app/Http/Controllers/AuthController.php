@@ -91,10 +91,23 @@ class AuthController extends Controller
         }
 
         $userId = $request->session()->get('otp_user_id');
+        $attemptsKey = 'login_otp_attempts_' . $userId;
         $cachedOtp = Cache::get('login_otp_' . $userId);
 
-        if (!$cachedOtp || $cachedOtp !== $request->otp) {
-            return back()->withErrors(['otp' => 'Invalid or expired OTP code.']);
+        $attempts = (int) Cache::get($attemptsKey, 0);
+
+        if ($attempts >= 5) {
+            // Invalidate OTP on too many failed attempts
+            Cache::forget('login_otp_' . $userId);
+            Cache::forget($attemptsKey);
+            $request->session()->forget(['otp_user_id', 'otp_remember']);
+            return redirect()->route('admin.login')->with('error', 'Too many failed OTP attempts. Please login again.');
+        }
+
+        if (!$cachedOtp || !hash_equals((string) $cachedOtp, (string) $request->otp)) {
+            Cache::put($attemptsKey, $attempts + 1, now()->addMinutes(5));
+            $remaining = 5 - ($attempts + 1);
+            return back()->withErrors(['otp' => "Invalid or expired OTP code. ({$remaining} attempts remaining)"]);
         }
 
         // OTP is correct
@@ -106,6 +119,8 @@ class AuthController extends Controller
         
         // Clean up
         Cache::forget('login_otp_' . $userId);
+        Cache::forget($attemptsKey);
+        Cache::forget('login_otp_cooldown_' . $userId);
         $request->session()->forget(['otp_user_id', 'otp_remember']);
 
         ActivityLogService::logCustom([
@@ -127,8 +142,13 @@ class AuthController extends Controller
         }
 
         $userId = $request->session()->get('otp_user_id');
-        $user = User::find($userId);
 
+        // 60-second cooldown protection against email flooding
+        if (Cache::has('login_otp_cooldown_' . $userId)) {
+            return back()->with('error', 'Please wait 60 seconds before requesting another OTP code.');
+        }
+
+        $user = User::find($userId);
         $this->generateAndSendOtp($user);
 
         return back()->with('success', 'A new OTP has been sent to your email.');
@@ -137,6 +157,7 @@ class AuthController extends Controller
     private function generateAndSendOtp(User $user)
     {
         $cacheKey = 'login_otp_' . $user->id;
+        $cooldownKey = 'login_otp_cooldown_' . $user->id;
         
         // Reuse existing active OTP or generate a new one
         if (Cache::has($cacheKey)) {
@@ -146,6 +167,9 @@ class AuthController extends Controller
             // Cache OTP for 5 minutes
             Cache::put($cacheKey, $otp, now()->addMinutes(5));
         }
+
+        // Set 60-second cooldown
+        Cache::put($cooldownKey, true, now()->addSeconds(60));
 
         try {
             Mail::to($user->email)->send(new LoginOtpMail($otp));

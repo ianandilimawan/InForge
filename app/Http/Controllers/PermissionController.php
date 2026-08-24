@@ -7,6 +7,37 @@ use App\Models\Permission;
 
 class PermissionController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $user = auth()->user();
+
+            if (!$user) {
+                abort(403);
+            }
+
+            // Administrator role has access to all actions
+            if ($user->hasRole('administrator') || $user->hasRole('admin')) {
+                return $next($request);
+            }
+
+            $routeName = $request->route()?->getName() ?? '';
+            $modelNameSnake = 'permission';
+
+            if (str_contains($routeName, '.index') || str_contains($routeName, '.show')) {
+                abort_unless($user->can("view-{$modelNameSnake}s"), 403);
+            } elseif (str_contains($routeName, '.create') || str_contains($routeName, '.store')) {
+                abort_unless($user->can("create-{$modelNameSnake}s"), 403);
+            } elseif (str_contains($routeName, '.edit') || str_contains($routeName, '.update')) {
+                abort_unless($user->can("edit-{$modelNameSnake}s"), 403);
+            } elseif (str_contains($routeName, '.destroy')) {
+                abort_unless($user->can("delete-{$modelNameSnake}s"), 403);
+            }
+
+            return $next($request);
+        });
+    }
+
     public function index()
     {
         return view('admin.pages.permissions.index');

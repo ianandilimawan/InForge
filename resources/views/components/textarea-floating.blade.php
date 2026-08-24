@@ -22,7 +22,7 @@
 
 <div class="relative">
     <textarea name="{{ $name }}" id="{{ $id }}" rows="{{ $rows }}" {{ $required ? 'required' : '' }}
-        placeholder=" " {{ $isReadonly ? 'readonly' : '' }} {{ $attributes->merge(['class' => $mergedClasses]) }}>{!! $value !!}</textarea>
+        placeholder=" " {{ $isReadonly ? 'readonly' : '' }} {{ $attributes->merge(['class' => $mergedClasses]) }}>{{ old($name, $value) }}</textarea>
     <label for="{{ $id }}" class="{{ $mergedLabelClasses }}">{{ $label }}</label>
     @error($name)
         <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>

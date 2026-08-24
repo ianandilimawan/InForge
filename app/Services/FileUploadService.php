@@ -346,6 +346,14 @@ class FileUploadService
     }
 
     /**
+     * Dangerous executable extensions that should never be stored directly
+     */
+    protected static array $blockedExtensions = [
+        'php', 'phtml', 'phar', 'php3', 'php4', 'php5', 'php7', 'php8', 'pht', 'phps',
+        'exe', 'sh', 'bash', 'pl', 'py', 'cgi', 'htm', 'html', 'js', 'jsp', 'asp', 'aspx', 'bat', 'cmd',
+    ];
+
+    /**
      * Generate a unique filename
      *
      * @param UploadedFile $file
@@ -354,7 +362,15 @@ class FileUploadService
      */
     protected function generateUniqueFilename(UploadedFile $file, bool $isImage = false): string
     {
-        $extension = $isImage ? 'webp' : $file->getClientOriginalExtension();
+        $rawExtension = strtolower($file->getClientOriginalExtension());
+
+        // ponytail: Block executable scripts from being stored in public storage to prevent arbitrary script execution.
+        if (in_array($rawExtension, self::$blockedExtensions, true)) {
+            $extension = 'bin';
+        } else {
+            $extension = $isImage ? 'webp' : $rawExtension;
+        }
+
         $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
 
         // Sanitize filename
