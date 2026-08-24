@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
-            $table->string('app_name')->default('Admin Panel');
+            $table->string('app_name')->default('InForge');
             $table->string('app_logo')->nullable();
             $table->enum('logo_type', ['text', 'image'])->default('text');
             $table->timestamps();

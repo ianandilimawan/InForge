@@ -64,7 +64,7 @@ The generator is built with a highly modular, single-responsibility architecture
 - **Soft Deletes** — `--soft-deletes` flag adds trait and migration column automatically
 - **Glassmorphism UI** — generated views use floating input components (`x-input-floating`, `x-select-floating`, `x-textarea-floating`) with dark mode support
 
-### Built-in Admin Panel Features
+### Built-in InForge Features
 
 Beyond the CRUD Generator, this template comes pre-packaged with enterprise-grade features:
 
@@ -629,7 +629,7 @@ inforge/
 ├── resources/
 │   ├── stubs/                 # ⭐ Code generation templates
 │   ├── views/
-│   │   ├── admin/             # Admin panel views
+│   │   ├── admin/             # Admin InForge views
 │   │   │   ├── auth/          # Login, OTP pages
 │   │   │   ├── layouts/       # Admin layout
 │   │   │   ├── pages/         # Dashboard, users, roles, settings, etc.

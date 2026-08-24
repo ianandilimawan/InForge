@@ -18,7 +18,7 @@ class LaravelLogTest extends TestCase
     {
         parent::setUp();
 
-        $role = Role::create(['name' => 'admin']);
+        $role = Role::create(['name' => 'super-admin']);
         $this->admin = User::factory()->create();
         $this->admin->assignRole($role);
     }

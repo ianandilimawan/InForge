@@ -19,8 +19,8 @@ class UserController extends Controller
                 abort(403);
             }
 
-            // Administrator role has access to all actions
-            if ($user->hasRole('administrator') || $user->hasRole('admin')) {
+            // Super admin role has access to all actions
+            if ($user->hasRole('super-admin')) {
                 return $next($request);
             }
 

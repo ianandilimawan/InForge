@@ -17,8 +17,8 @@ class LaravelLogController extends Controller
                 abort(403);
             }
 
-            // Administrator role has access to all actions
-            if ($user->hasRole('administrator') || $user->hasRole('admin')) {
+            // Super admin role has access to all actions
+            if ($user->hasRole('super-admin')) {
                 return $next($request);
             }
 
@@ -78,10 +78,10 @@ class LaravelLogController extends Controller
      */
     public function destroy(Request $request, string $fileName)
     {
-        // Only administrators can delete log files
+        // Only super administrators can delete log files
         $user = Auth::user();
-        if (!$user->hasRole('administrator') && !$user->hasRole('admin')) {
-            abort(403, 'Only administrators can delete log files');
+        if (!$user->hasRole('super-admin')) {
+            abort(403, 'Only super admin can delete log files');
         }
 
         $deleted = LaravelLogService::deleteLogFile($fileName);
@@ -92,7 +92,7 @@ class LaravelLogController extends Controller
         }
 
         return redirect()->route('admin.laravel-logs.index')
-            ->with('error', 'Failed to delete log file');
+                ->with('error', 'Failed to delete log file');
     }
 
     /**
@@ -100,10 +100,10 @@ class LaravelLogController extends Controller
      */
     public function clear(Request $request, string $fileName)
     {
-        // Only administrators can clear log files
+        // Only super administrators can clear log files
         $user = Auth::user();
-        if (!$user->hasRole('administrator') && !$user->hasRole('admin')) {
-            abort(403, 'Only administrators can clear log files');
+        if (!$user->hasRole('super-admin')) {
+            abort(403, 'Only super admin can clear log files');
         }
 
         $cleared = LaravelLogService::clearLogFile($fileName);

@@ -22,8 +22,8 @@ class ActivityLogTest extends TestCase
     {
         parent::setUp();
 
-        // Create admin user
-        $role = Role::create(['name' => 'admin']);
+        // Create super admin user
+        $role = Role::create(['name' => 'super-admin']);
         $this->admin = User::factory()->create();
         $this->admin->assignRole($role);
     }

@@ -3,7 +3,7 @@
 return [
     /*
     |--------------------------------------------------------------------------
-    | Admin Panel Menu Configuration
+    | InForge Menu Configuration
     |--------------------------------------------------------------------------
     |
     | Here you can define the menus that will be displayed in the admin sidebar.

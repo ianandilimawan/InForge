@@ -22,7 +22,7 @@ class SecurityAuditTest extends TestCase
     {
         parent::setUp();
 
-        $adminRole = Role::create(['name' => 'admin']);
+        $adminRole = Role::create(['name' => 'super-admin']);
         $this->admin = User::factory()->create();
         $this->admin->assignRole($adminRole);
 

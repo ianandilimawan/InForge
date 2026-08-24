@@ -50,7 +50,7 @@
 
                     <h1 class="text-4xl font-extrabold tracking-tight mb-4 drop-shadow-sm dark:drop-shadow-md">
                         Welcome to<br>
-                        {{ isset($settings) && $settings->logo_text ? $settings->logo_text : (isset($settings) ? $settings->app_name : 'Admin Panel') }}
+                        {{ isset($settings) && $settings->logo_text ? $settings->logo_text : (isset($settings) ? $settings->app_name : 'InForge') }}
                     </h1>
                     <p
                         class="text-zinc-600 dark:text-blue-100/90 text-lg max-w-sm drop-shadow-none dark:drop-shadow-sm transition-colors duration-500">
@@ -174,8 +174,8 @@
                 <!-- Footer Info -->
                 <div class="text-center mt-10">
                     <p class="text-xs font-medium text-zinc-500 dark:text-zinc-400">
-                        © {{ date('Y') }} {{ isset($settings) ? $settings->app_name : 'Admin Panel' }}. Created By
-                        <a class="text-blue-600 dark:text-blue-400" href="#">Intech Studio</a>
+                        © {{ date('Y') }} {{ isset($settings) ? $settings->app_name : 'InForge' }}. Created By
+                        <a class="text-blue-600 dark:text-blue-400" href="https://intechstudio.id">Intech Studio</a>
                     </p>
                 </div>
             </div>

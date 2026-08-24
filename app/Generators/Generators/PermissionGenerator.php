@@ -67,7 +67,10 @@ class PermissionGenerator extends BaseGenerator
                     $char = $content[$i];
                     if ($char === ']') $depth++;
                     elseif ($char === '[') {
-                        if ($depth === 0) { $startPos = $i; break; }
+                        if ($depth === 0) {
+                            $startPos = $i;
+                            break;
+                        }
                         $depth--;
                     }
                 }
@@ -80,7 +83,10 @@ class PermissionGenerator extends BaseGenerator
                     if ($char === '[') $depth++;
                     elseif ($char === ']') {
                         $depth--;
-                        if ($depth === 0) { $endPos = $i; break; }
+                        if ($depth === 0) {
+                            $endPos = $i;
+                            break;
+                        }
                     }
                 }
                 if ($endPos === -1) break;
@@ -152,14 +158,14 @@ class PermissionGenerator extends BaseGenerator
             return;
         }
 
-        // Find administrator role by name
-        $administratorRole = \App\Models\Role::where('name', 'admin')->first();
+        // Find super admin role by name
+        $superAdminRole = \App\Models\Role::where('name', 'super-admin')->first();
 
-        if ($administratorRole) {
+        if ($superAdminRole) {
             // Spatie method to give permissions
             // We need to fetch the permission models first
             $permissions = \App\Models\Permission::whereIn('id', $permissionIds)->get();
-            $administratorRole->givePermissionTo($permissions);
+            $superAdminRole->givePermissionTo($permissions);
         }
     }
 

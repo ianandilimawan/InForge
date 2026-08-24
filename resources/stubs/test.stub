@@ -19,10 +19,10 @@ class {{TEST_NAME}} extends TestCase
     {
         parent::setUp();
 
-        // Create admin role
+        // Create super admin role
         $adminRole = Role::create([
-            'name' => 'Administrator',
-            'slug' => 'admin',
+            'name' => 'super-admin',
+            'display_name' => 'Super Admin',
             'description' => 'Full system access',
             'is_active' => true,
         ]);

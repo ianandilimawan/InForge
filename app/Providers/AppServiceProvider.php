@@ -57,7 +57,7 @@ class AppServiceProvider extends ServiceProvider
                     if (!$user) {
                         return false;
                     }
-                    if ($user->hasRole(['administrator', 'admin'])) {
+                    if ($user->hasRole('super-admin')) {
                         return true;
                     }
                     if (!empty($item['permission'])) {

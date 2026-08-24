@@ -5,7 +5,7 @@
 @section('content')
     <div id="loginContainer"
         class="min-h-screen flex items-center justify-center bg-zinc-50 dark:bg-zinc-950 transition-all duration-500 relative overflow-hidden">
-        
+
         <!-- Animated Background Gradients (Glassmorphism) -->
         <div class="absolute inset-0 overflow-hidden pointer-events-none">
             <div class="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] rounded-full bg-blue-500/20 dark:bg-blue-600/10 blur-[120px] animate-pulse" style="animation-duration: 8s;"></div>
@@ -13,7 +13,7 @@
         </div>
 
         <div class="w-full max-w-5xl flex flex-col lg:flex-row bg-white/70 dark:bg-zinc-900/70 backdrop-blur-2xl rounded-3xl shadow-2xl shadow-zinc-200/50 dark:shadow-black/50 border border-white/50 dark:border-zinc-800/50 overflow-hidden m-4 relative z-10 animate-fade-in-up">
-            
+
             <!-- Left Side / Branding (Hidden on mobile) -->
             <div class="hidden lg:flex lg:w-1/2 flex-col justify-between p-12 bg-gradient-to-br from-blue-600/90 to-purple-700/90 dark:from-blue-900/80 dark:to-purple-900/80 text-white relative overflow-hidden">
                 <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4IiBoZWlnaHQ9IjgiPgo8cmVjdCB3aWR0aD0iOCIgaGVpZ2h0PSI4IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMDUiLz4KPC9zdmc+')] opacity-20"></div>
@@ -28,7 +28,7 @@
                             </svg>
                         </div>
                     @endif
-                    
+
                     <h1 class="text-4xl font-extrabold tracking-tight mb-4 drop-shadow-md">
                         Two-Factor<br>
                         Authentication
@@ -94,7 +94,7 @@
                         </button>
                     </div>
                 </form>
-                
+
                 <form action="{{ route('admin.login.otp.resend') }}" method="POST" class="text-center mt-6" id="resendForm">
                     @csrf
                     <button type="submit" id="resendBtn" disabled class="text-sm font-medium text-zinc-400 dark:text-zinc-500 transition-colors cursor-not-allowed">
@@ -110,7 +110,7 @@
                 <!-- Footer Info -->
                 <div class="text-center mt-10">
                     <p class="text-xs font-medium text-zinc-500 dark:text-zinc-400">
-                        © {{ date('Y') }} {{ isset($settings) ? $settings->app_name : 'Admin Panel' }}. All rights reserved.
+                        © {{ date('Y') }} {{ isset($settings) ? $settings->app_name : 'InForge' }}. All rights reserved.
                     </p>
                 </div>
             </div>
@@ -121,7 +121,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Background Theme setup
             const html = document.getElementById('adminHtml') || document.documentElement;
-            
+
             const dbTheme = '{{ \App\Models\Setting::getSettings()->theme_default ?? "light" }}';
             let savedTheme = localStorage.getItem('adminTheme');
             if (!savedTheme) {
@@ -147,13 +147,13 @@
             const resendBtn = document.getElementById('resendBtn');
             const countdownSpan = document.getElementById('countdown');
             const resendForm = document.getElementById('resendForm');
-            
+
             function startCountdown(duration) {
                 let timer = duration;
                 resendBtn.disabled = true;
                 resendBtn.classList.remove('text-blue-600', 'dark:text-blue-400', 'hover:text-blue-800', 'dark:hover:text-blue-300');
                 resendBtn.classList.add('text-zinc-400', 'dark:text-zinc-500', 'cursor-not-allowed');
-                
+
                 const interval = setInterval(function () {
                     countdownSpan.textContent = `(${timer}s)`;
                     if (--timer < 0) {
@@ -169,7 +169,7 @@
             // Check session storage for existing timer
             let availableAt = sessionStorage.getItem('otpResendAvailableAt');
             const now = Math.floor(Date.now() / 1000);
-            
+
             if (availableAt && parseInt(availableAt) > now) {
                 startCountdown(parseInt(availableAt) - now);
             } else {

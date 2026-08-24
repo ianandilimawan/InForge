@@ -176,15 +176,14 @@
                                 $groupedPermissions = $permissions->groupBy('module');
                                 $userPermissionIds = $user->permissions->pluck('id')->toArray();
                                 $userRole = $user->roles->first();
-                                $isAdministrator =
-                                    $userRole && ($userRole->slug === 'administrator' || $userRole->slug === 'admin');
+                                $isSuperAdmin = $userRole && ($userRole->name === 'super-admin');
                                 $allPermissionIds = $permissions->pluck('id')->toArray();
                             @endphp
-                            @if ($isAdministrator)
+                            @if ($isSuperAdmin)
                                 <div
                                     class="mb-4 p-4 bg-blue-50 dark:bg-blue-900 border-2 border-blue-600 dark:border-blue-600 shadow-sm rounded-lg">
                                     <p class="text-sm text-blue-600 dark:text-blue-400">
-                                        <strong>Administrator Role:</strong> This user has full system access. All
+                                        <strong>Super Admin Role:</strong> This user has full system access. All
                                         permissions are automatically granted and cannot be modified.
                                     </p>
                                 </div>

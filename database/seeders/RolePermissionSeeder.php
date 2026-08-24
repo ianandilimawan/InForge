@@ -16,17 +16,17 @@ class RolePermissionSeeder extends Seeder
         // Reset cached roles and permissions
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
-        // Create Admin User
+        // Create Super Admin User
         $admin = User::firstOrCreate(
             ['email' => 'admin@intechstudio.id'],
             [
-                'name' => 'Administrator',
+                'name' => 'Super Admin',
                 'password' => Hash::make('intechstudio.id'),
                 'email_verified_at' => now(),
             ]
         );
 
-        $this->command->info('Admin user created: admin@intechstudio.id / intechstudio.id');
+        $this->command->info('Super Admin user created: admin@intechstudio.id / intechstudio.id');
 
 
 
@@ -207,12 +207,12 @@ class RolePermissionSeeder extends Seeder
 
 
 
-        // Create Administrator Role
-        $administratorRole = Role::updateOrCreate(
-            ['name' => 'admin', 'guard_name' => 'web'],
+        // Create Super Admin Role
+        $superAdminRole = Role::updateOrCreate(
+            ['name' => 'super-admin', 'guard_name' => 'web'],
             [
-                'display_name' => 'Administrator',
-                'name' => 'admin',
+                'display_name' => 'Super Admin',
+                'name' => 'super-admin',
                 'description' => 'Full system access',
                 'is_active' => true,
                 'created_at' => $now,
@@ -220,19 +220,19 @@ class RolePermissionSeeder extends Seeder
             ]
         );
 
-        $this->command->info('Administrator role created');
+        $this->command->info('Super Admin role created');
 
-        // Assign all permissions to Administrator role
+        // Assign all permissions to Super Admin role
         $allPermissions = Permission::all();
         if ($allPermissions->count() > 0) {
-            $administratorRole->syncPermissions($allPermissions);
-            $this->command->info('All permissions assigned to Administrator role');
+            $superAdminRole->syncPermissions($allPermissions);
+            $this->command->info('All permissions assigned to Super Admin role');
         }
 
-        // Assign Administrator role to admin user
-        if ($administratorRole) {
-            $admin->assignRole($administratorRole);
-            $this->command->info('Admin user assigned to Administrator role');
+        // Assign Super Admin role to admin user
+        if ($superAdminRole) {
+            $admin->assignRole($superAdminRole);
+            $this->command->info('Admin user assigned to Super Admin role');
         }
 
         // Create Developer Role
