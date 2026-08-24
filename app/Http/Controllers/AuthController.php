@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
 use App\Models\Setting;
 use App\Models\User;
-use App\Models\ActivityLog;
+use App\Services\ActivityLogService;
 use App\Mail\LoginOtpMail;
 
 class AuthController extends Controller
@@ -24,29 +24,28 @@ class AuthController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
-            'password' => 'required|min:6',
+            'password' => 'required|string',
         ]);
 
         if ($validator->fails()) {
-            return back()
-                ->withErrors($validator)
-                ->withInput();
+            return back()->withErrors($validator)->withInput($request->only('email', 'remember'));
         }
 
         $credentials = $request->only('email', 'password');
-        $remember = $request->filled('remember');
+        $remember = $request->has('remember');
 
         // Check if credentials are valid without logging in
         if (Auth::validate($credentials)) {
-            $user = User::where('email', $credentials['email'])->first();
+            $user = User::where('email', $request->email)->first();
 
             // Check if OTP is enabled in env
             if (env('ENABLE_OTP_LOGIN', false)) {
                 $this->generateAndSendOtp($user);
                 
+                // Store user id in session for OTP verification
                 $request->session()->put('otp_user_id', $user->id);
                 $request->session()->put('otp_remember', $remember);
-                
+
                 return redirect()->route('admin.login.otp')->with('success', 'Please check your email for the OTP code.');
             }
 
@@ -54,7 +53,7 @@ class AuthController extends Controller
             Auth::login($user, $remember);
             $request->session()->regenerate();
 
-            ActivityLog::create([
+            ActivityLogService::logCustom([
                 'action' => 'Login',
                 'model_type' => User::class,
                 'model_id' => $user->id,
@@ -109,7 +108,7 @@ class AuthController extends Controller
         Cache::forget('login_otp_' . $userId);
         $request->session()->forget(['otp_user_id', 'otp_remember']);
 
-        ActivityLog::create([
+        ActivityLogService::logCustom([
             'action' => 'Login',
             'model_type' => User::class,
             'model_id' => $user->id,
@@ -160,7 +159,7 @@ class AuthController extends Controller
     {
         $user = Auth::user();
         if ($user) {
-            ActivityLog::create([
+            ActivityLogService::logCustom([
                 'action' => 'Logout',
                 'model_type' => User::class,
                 'model_id' => $user->id,

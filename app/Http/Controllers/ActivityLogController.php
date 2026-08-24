@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\ActivityLog;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class ActivityLogController extends Controller
 {
@@ -52,34 +53,31 @@ class ActivityLogController extends Controller
             $query->where('user_id', $request->user_id);
         }
 
-        // Search by description, model_id, or user name
+        // Search by description or exact model_id
         if ($request->filled('search')) {
-            $search = $request->search;
+            $search = trim($request->search);
             $query->where(function ($q) use ($search) {
-                $q->where('description', 'like', '%' . $search . '%')
-                    ->orWhere('model_id', 'like', '%' . $search . '%')
-                    ->orWhereHas('user', function ($u) use ($search) {
-                        $u->where('name', 'like', '%' . $search . '%');
-                    });
+                $q->where('description', 'like', '%' . $search . '%');
+                if (is_numeric($search)) {
+                    $q->orWhere('model_id', $search);
+                }
             });
         }
 
-        $activityLogs = $query->paginate(20)->withQueryString();
+        // ponytail: simplePaginate avoids costly COUNT(*) queries on massive log tables.
+        $activityLogs = $query->simplePaginate(20)->withQueryString();
 
-        // Get unique model types for filter
-        // We need the full class name for the value, but we can display the basename
-        $modelTypes = ActivityLog::select('model_type')
-            ->distinct()
-            ->orderBy('model_type')
-            ->pluck('model_type')
-            ->unique()
-            ->values();
+        // ponytail: Cache distinct model types for 24h to avoid full-table scans on every page load.
+        $modelTypes = Cache::remember('activity_log_distinct_models', now()->addDay(), function () {
+            return ActivityLog::select('model_type')
+                ->distinct()
+                ->orderBy('model_type')
+                ->pluck('model_type')
+                ->values();
+        });
 
-        // Get unique actions for filter
-        $actions = ActivityLog::select('action')
-            ->distinct()
-            ->orderBy('action')
-            ->pluck('action');
+        // Static list of actions to avoid heavy distinct table scans
+        $actions = collect(['create', 'update', 'delete', 'Login', 'Logout']);
 
         return view('admin.pages.activity_logs.index', compact('activityLogs', 'modelTypes', 'actions'));
     }

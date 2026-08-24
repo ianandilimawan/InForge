@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Jobs\LogActivityJob;
 use App\Models\ActivityLog;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
@@ -14,11 +15,11 @@ class ActivityLogService
      *
      * @param Model $model The model that was created
      * @param string|null $description Custom description
-     * @return ActivityLog|null
+     * @return void
      */
-    public static function logCreate(Model $model, ?string $description = null): ?ActivityLog
+    public static function logCreate(Model $model, ?string $description = null): void
     {
-        return self::log('create', $model, null, $model->getAttributes(), $description);
+        self::log('create', $model, null, $model->getAttributes(), $description);
     }
 
     /**
@@ -27,16 +28,16 @@ class ActivityLogService
      * @param Model $model The model that was updated
      * @param array|null $oldValues Old values before update
      * @param string|null $description Custom description
-     * @return ActivityLog|null
+     * @return void
      */
-    public static function logUpdate(Model $model, ?array $oldValues = null, ?string $description = null): ?ActivityLog
+    public static function logUpdate(Model $model, ?array $oldValues = null, ?string $description = null): void
     {
         // If oldValues not provided, get from model's original attributes
         if ($oldValues === null && $model->exists) {
             $oldValues = $model->getOriginal();
         }
 
-        return self::log('update', $model, $oldValues, $model->getChanges(), $description);
+        self::log('update', $model, $oldValues, $model->getChanges(), $description);
     }
 
     /**
@@ -44,22 +45,22 @@ class ActivityLogService
      *
      * @param Model $model The model that was deleted
      * @param string|null $description Custom description
-     * @return ActivityLog|null
+     * @return void
      */
-    public static function logDelete(Model $model, ?string $description = null): ?ActivityLog
+    public static function logDelete(Model $model, ?string $description = null): void
     {
-        return self::log('delete', $model, $model->getAttributes(), null, $description);
+        self::log('delete', $model, $model->getAttributes(), null, $description);
     }
 
     /**
-     * Generic log method
+     * Generic log method (dispatched asynchronously after response)
      *
      * @param string $action Action type (create, update, delete)
      * @param Model $model The model being logged
      * @param array|null $oldValues Old values
      * @param array|null $newValues New values
      * @param string|null $description Custom description
-     * @return ActivityLog|null
+     * @return void
      */
     protected static function log(
         string $action,
@@ -67,7 +68,7 @@ class ActivityLogService
         ?array $oldValues = null,
         ?array $newValues = null,
         ?string $description = null
-    ): ?ActivityLog {
+    ): void {
         try {
             // Get current user
             $user = Auth::user();
@@ -101,8 +102,8 @@ class ActivityLogService
                 }, ARRAY_FILTER_USE_KEY);
             }
 
-            // Create activity log
-            return ActivityLog::create([
+            // ponytail: Dispatching afterResponse provides zero-latency synchronous responses. If distributed queue workers are active, it automatically pushes to queue.
+            LogActivityJob::dispatch([
                 'action' => $action,
                 'model_type' => get_class($model),
                 'model_id' => $model->id ?? null,
@@ -110,15 +111,13 @@ class ActivityLogService
                 'old_values' => !empty($oldValues) ? $oldValues : null,
                 'new_values' => !empty($newValues) ? $newValues : null,
                 'description' => $description,
-            ]);
+            ])->afterResponse();
         } catch (\Exception $e) {
-            // Log error but don't break the application
-            Log::error('ActivityLogService: Failed to log activity', [
+            Log::error('ActivityLogService: Failed to dispatch activity log', [
                 'error' => $e->getMessage(),
                 'action' => $action,
                 'model' => get_class($model),
             ]);
-            return null;
         }
     }
 
@@ -169,14 +168,32 @@ class ActivityLogService
     }
 
     /**
+     * Log a custom action
+     *
+     * @param array $data Custom log data
+     * @return void
+     */
+    public static function logCustom(array $data): void
+    {
+        try {
+            LogActivityJob::dispatch($data)->afterResponse();
+        } catch (\Exception $e) {
+            Log::error('ActivityLogService: Failed to dispatch custom activity log', [
+                'error' => $e->getMessage(),
+                'data' => $data,
+            ]);
+        }
+    }
+
+    /**
      * Log a bulk import action
      *
      * @param string $modelClass The model class name (e.g., Brand::class)
      * @param int $count Number of records imported
      * @param string|null $description Custom description
-     * @return ActivityLog|null
+     * @return void
      */
-    public static function logBulkImport(string $modelClass, int $count, ?string $description = null): ?ActivityLog
+    public static function logBulkImport(string $modelClass, int $count, ?string $description = null): void
     {
         try {
             // Get current user
@@ -194,8 +211,7 @@ class ActivityLogService
                 );
             }
 
-            // Create activity log
-            return ActivityLog::create([
+            LogActivityJob::dispatch([
                 'action' => 'create',
                 'model_type' => $modelClass,
                 'model_id' => null, // Bulk import doesn't have a specific model_id
@@ -203,15 +219,13 @@ class ActivityLogService
                 'old_values' => null,
                 'new_values' => ['count' => $count],
                 'description' => $description,
-            ]);
+            ])->afterResponse();
         } catch (\Exception $e) {
-            // Log error but don't break the application
-            Log::error('ActivityLogService: Failed to log bulk import activity', [
+            Log::error('ActivityLogService: Failed to dispatch bulk import activity', [
                 'error' => $e->getMessage(),
                 'model' => $modelClass,
                 'count' => $count,
             ]);
-            return null;
         }
     }
 
@@ -222,9 +236,9 @@ class ActivityLogService
      * @param int $count Number of records deleted
      * @param array $ids The IDs of the records deleted
      * @param string|null $description Custom description
-     * @return ActivityLog|null
+     * @return void
      */
-    public static function logBulkDelete(string $modelClass, int $count, array $ids = [], ?string $description = null): ?ActivityLog
+    public static function logBulkDelete(string $modelClass, int $count, array $ids = [], ?string $description = null): void
     {
         try {
             // Get current user
@@ -242,8 +256,7 @@ class ActivityLogService
                 );
             }
 
-            // Create activity log
-            return ActivityLog::create([
+            LogActivityJob::dispatch([
                 'action' => 'delete',
                 'model_type' => $modelClass,
                 'model_id' => null, // Bulk delete doesn't have a specific model_id
@@ -251,15 +264,13 @@ class ActivityLogService
                 'old_values' => ['ids' => $ids, 'count' => $count],
                 'new_values' => null,
                 'description' => $description,
-            ]);
+            ])->afterResponse();
         } catch (\Exception $e) {
-            // Log error but don't break the application
-            Log::error('ActivityLogService: Failed to log bulk delete activity', [
+            Log::error('ActivityLogService: Failed to dispatch bulk delete activity', [
                 'error' => $e->getMessage(),
                 'model' => $modelClass,
                 'count' => $count,
             ]);
-            return null;
         }
     }
 }
