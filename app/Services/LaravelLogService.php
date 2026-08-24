@@ -125,7 +125,9 @@ class LaravelLogService
         ?string $level = null,
         ?string $search = null
     ): array {
-        $logPath = storage_path('logs/' . $fileName);
+        // Sanitize filename against directory traversal
+        $sanitizedName = basename($fileName);
+        $logPath = storage_path('logs/' . $sanitizedName);
 
         if (!File::exists($logPath)) {
             return [
@@ -137,11 +139,8 @@ class LaravelLogService
             ];
         }
 
-        // Read file content
-        $content = File::get($logPath);
-
-        // Parse log entries
-        $entries = self::parseLogContent($content, $level, $search);
+        // ponytail: Stream lines sequentially with fgets to eliminate OOM on large log files (>50MB).
+        $entries = self::parseLogFileStream($logPath, $level, $search);
 
         // Reverse to show newest first
         $entries = array_reverse($entries);
@@ -163,37 +162,33 @@ class LaravelLogService
     }
 
     /**
-     * Parse log content into structured entries
-     *
-     * @param string $content
-     * @param string|null $level
-     * @param string|null $search
-     * @return array
+     * Parse log file using a memory-efficient stream handle
      */
-    protected static function parseLogContent(string $content, ?string $level = null, ?string $search = null): array
+    protected static function parseLogFileStream(string $filePath, ?string $level = null, ?string $search = null): array
     {
+        $handle = @fopen($filePath, 'r');
+        if (!$handle) {
+            return [];
+        }
+
         $entries = [];
-        $lines = explode("\n", $content);
         $currentEntry = null;
         $buffer = [];
 
-        foreach ($lines as $line) {
-            // Check if this is a new log entry (starts with date pattern)
-            // Laravel log format: [2024-01-01 12:00:00] local.ERROR: message
-            // Also handle: [2024-01-01 12:00:00] production.ERROR: message
+        while (($line = fgets($handle)) !== false) {
+            $line = rtrim($line, "\r\n");
+
+            // Check if this is a new log entry
             if (preg_match('/^\[(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})\]\s+(.+?)\.(\w+):\s*(.*)$/', $line, $matches)) {
-                // Save previous entry if exists
                 if ($currentEntry !== null) {
                     $currentEntry['stack'] = trim(implode("\n", $buffer));
                     $buffer = [];
 
-                    // Apply filters
                     if (self::shouldIncludeEntry($currentEntry, $level, $search)) {
                         $entries[] = $currentEntry;
                     }
                 }
 
-                // Create new entry
                 $currentEntry = [
                     'timestamp' => $matches[1],
                     'environment' => $matches[2],
@@ -202,15 +197,14 @@ class LaravelLogService
                     'stack' => '',
                 ];
             } elseif ($currentEntry !== null) {
-                // Continuation of current entry (stack trace, etc.)
-                // Skip empty lines at the start of stack trace
                 if (!empty(trim($line)) || !empty($buffer)) {
                     $buffer[] = $line;
                 }
             }
         }
 
-        // Don't forget the last entry
+        fclose($handle);
+
         if ($currentEntry !== null) {
             $currentEntry['stack'] = trim(implode("\n", $buffer));
             if (self::shouldIncludeEntry($currentEntry, $level, $search)) {
@@ -251,32 +245,15 @@ class LaravelLogService
     }
 
     /**
-     * Get available log levels from a file
+     * Get available log levels
      *
      * @param string $fileName
      * @return array
      */
     public static function getLogLevels(string $fileName): array
     {
-        $logPath = storage_path('logs/' . $fileName);
-
-        if (!File::exists($logPath)) {
-            return [];
-        }
-
-        $content = File::get($logPath);
-        $entries = self::parseLogContent($content);
-
-        $levels = [];
-        foreach ($entries as $entry) {
-            $level = $entry['level'];
-            if (!in_array($level, $levels)) {
-                $levels[] = $level;
-            }
-        }
-
-        sort($levels);
-        return $levels;
+        // ponytail: Return standard PSR-3/Monolog log levels directly to avoid re-parsing multi-megabyte files twice.
+        return ['DEBUG', 'INFO', 'NOTICE', 'WARNING', 'ERROR', 'CRITICAL', 'ALERT', 'EMERGENCY'];
     }
 
     /**

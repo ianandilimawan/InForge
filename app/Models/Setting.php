@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 
 class Setting extends Model
 {
+    const CACHE_KEY = 'app_settings';
+
     protected $fillable = [
         'app_name',
         'app_logo',
@@ -26,25 +29,34 @@ class Setting extends Model
 
     protected $casts = [
         'logo_type' => 'string',
+        'maintenance_mode' => 'boolean',
     ];
 
-    /**
-     * Get the current settings (singleton pattern)
-     */
-    public static function getSettings()
+    protected static function booted(): void
     {
-        $settings = self::first();
+        static::saved(fn () => Cache::forget(self::CACHE_KEY));
+        static::deleted(fn () => Cache::forget(self::CACHE_KEY));
+    }
 
-        if (!$settings) {
-            // Create default settings if none exist
-            $settings = self::create([
-                'app_name' => 'Admin Panel',
-                'app_logo' => null,
-                'logo_type' => 'text',
-                'logo_text' => 'Admin Panel',
-            ]);
-        }
+    /**
+     * Get the current settings (singleton pattern with caching)
+     */
+    public static function getSettings(): self
+    {
+        return Cache::rememberForever(self::CACHE_KEY, function () {
+            $settings = self::first();
 
-        return $settings;
+            if (!$settings) {
+                // Create default settings if none exist
+                $settings = self::create([
+                    'app_name' => 'Admin Panel',
+                    'app_logo' => null,
+                    'logo_type' => 'text',
+                    'logo_text' => 'Admin Panel',
+                ]);
+            }
+
+            return $settings;
+        });
     }
 }

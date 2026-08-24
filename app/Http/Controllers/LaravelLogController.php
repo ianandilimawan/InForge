@@ -87,11 +87,11 @@ class LaravelLogController extends Controller
         $deleted = LaravelLogService::deleteLogFile($fileName);
 
         if ($deleted) {
-            return redirect()->route('admin.laravel_logs.index')
+            return redirect()->route('admin.laravel-logs.index')
                 ->with('success', 'Log file deleted successfully');
         }
 
-        return redirect()->route('admin.laravel_logs.index')
+        return redirect()->route('admin.laravel-logs.index')
             ->with('error', 'Failed to delete log file');
     }
 

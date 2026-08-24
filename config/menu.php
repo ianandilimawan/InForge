@@ -72,13 +72,6 @@ return [
         ],
     ],
 
-    'App Settings' => [],
-
-    'Content Management' => [],
-
-    'App Settings' => [
-    ],
-
     'Content Management' => [
 
     ],

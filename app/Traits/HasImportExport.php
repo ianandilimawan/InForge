@@ -36,7 +36,6 @@ trait HasImportExport
     {
         $format = $request->query('format', 'csv');
         $modelClass = $this->getModelClass();
-        $records = $modelClass::all();
         $model = new $modelClass();
         $fillableFields = $model->getFillable();
 
@@ -46,7 +45,8 @@ trait HasImportExport
 
         $headers = $fillableFields;
         $allRows = [];
-        foreach ($records as $record) {
+        // ponytail: Using cursor() streams rows sequentially from DB to prevent memory exhaustion on large tables.
+        foreach ($modelClass::query()->cursor() as $record) {
             $row = [];
             foreach ($fillableFields as $field) {
                 $row[] = $record->$field;
@@ -373,17 +373,13 @@ trait HasImportExport
                                 $errorMsg = "Row {$currentRowNumber}: Data exceeds maximum length.";
                             }
                         }
-                        $batchErrors[] = $errorMsg;
                         $errors[] = $errorMsg;
                     }
                 } else {
                     $failed++;
-                    $batchErrors[] = $result['error'];
                     $errors[] = $result['error'];
                 }
             }
-
-            $errors = array_merge($errors, $batchErrors);
         }
 
         if ($imported > 0) {

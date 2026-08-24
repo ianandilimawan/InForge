@@ -22,7 +22,7 @@
     <script>
         // Initialize theme before body loads to prevent flash
         (function() {
-            const dbTheme = '{{ \App\Models\Setting::getSettings()->theme_default ?? "light" }}';
+            const dbTheme = '{{ $settings->theme_default ?? "light" }}';
             let savedTheme = localStorage.getItem('adminTheme');
             
             if (!savedTheme) {

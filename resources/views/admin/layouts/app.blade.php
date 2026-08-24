@@ -28,7 +28,7 @@
     <script>
         // Initialize theme and sidebar state before body loads to prevent flash
         (function() {
-            const dbTheme = '{{ \App\Models\Setting::getSettings()->theme_default ?? "light" }}';
+            const dbTheme = '{{ $settings->theme_default ?? "light" }}';
             let savedTheme = localStorage.getItem('adminTheme');
             
             if (!savedTheme) {
@@ -49,7 +49,7 @@
             }
 
             // Apply sidebar state
-            const dbSidebarSetting = '{{ \App\Models\Setting::getSettings()->sidebar_style ?? "full" }}';
+            const dbSidebarSetting = '{{ $settings->sidebar_style ?? "full" }}';
             const dbSidebar = dbSidebarSetting === 'collapsed' ? 'closed' : 'open';
             
             let savedSidebarState = localStorage.getItem('desktopSidebarState');
@@ -212,7 +212,7 @@
             const html = document.getElementById('adminHtml');
 
             // Get saved theme or default to DB setting
-            const dbTheme = '{{ \App\Models\Setting::getSettings()->theme_default ?? "light" }}';
+            const dbTheme = '{{ $settings->theme_default ?? "light" }}';
             let savedTheme = localStorage.getItem('adminTheme');
             if (!savedTheme) {
                 if (dbTheme === 'system') {

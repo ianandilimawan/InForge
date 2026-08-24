@@ -25,8 +25,9 @@ class CheckMaintenanceMode
             $setting = Setting::getSettings();
             
             if ($setting && $setting->maintenance_mode) {
-                // Return custom maintenance view (HTTP 200 OK so it's not treated as a crash)
-                return response()->view('maintenance', ['setting' => $setting]);
+                // Return HTTP 503 Service Unavailable so search engines know it is temporary
+                return response()->view('maintenance', ['setting' => $setting], 503)
+                    ->header('Retry-After', '300');
             }
         } catch (\Exception $e) {
             // Ignore if settings table doesn't exist yet (e.g., during migration)

@@ -30,8 +30,9 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::useTailwind();
 
+        // Configure SMTP dynamically from cached settings
         try {
-            $settings = Setting::first();
+            $settings = Setting::getSettings();
             if ($settings && $settings->smtp_host) {
                 config([
                     'mail.mailers.smtp.host' => $settings->smtp_host,
@@ -43,18 +44,11 @@ class AppServiceProvider extends ServiceProvider
                     'mail.from.name' => $settings->smtp_from_name,
                 ]);
             }
-        } catch (\Exception $e) {
-            // Ignore if table doesn't exist yet
+        } catch (\Throwable $e) {
+            // Ignore during early migrations or when db is unavailable
         }
 
-        // Share settings to all admin views (including guest views like login)
-        View::composer('admin.*', function ($view) {
-            // Share settings to all admin views
-            $settings = Setting::getSettings();
-            $view->with('settings', $settings);
-        });
-
-        // Share menus to all admin views - filter by user permissions
+        // Share settings and filtered menus to all admin views
         View::composer('admin.*', function ($view) {
             $user = Auth::user();
 
@@ -69,8 +63,8 @@ class AppServiceProvider extends ServiceProvider
                     if (!empty($item['permission'])) {
                         try {
                             return $user->hasPermissionTo($item['permission']);
-                        } catch (\Exception $e) {
-                            return false; // Permission doesn't exist
+                        } catch (\Throwable $e) {
+                            return false;
                         }
                     }
                     return true;
@@ -82,17 +76,16 @@ class AppServiceProvider extends ServiceProvider
                 });
             };
 
-            $groupedMenus = collect(config('menu', []))->map(function ($items, $section) use ($filterMenus) {
+            $groupedMenus = collect(config('menu', []))->map(function ($items) use ($filterMenus) {
                 return $filterMenus($items)->values();
             })->filter(function ($items) {
                 return $items->count() > 0;
             });
 
-            $view->with('groupedMenus', $groupedMenus);
-
-            // Share settings to all admin views
-            $settings = Setting::getSettings();
-            $view->with('settings', $settings);
+            $view->with([
+                'settings' => Setting::getSettings(),
+                'groupedMenus' => $groupedMenus,
+            ]);
         });
     }
 }
