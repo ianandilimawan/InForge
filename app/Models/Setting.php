@@ -39,24 +39,32 @@ class Setting extends Model
     }
 
     /**
-     * Get the current settings (singleton pattern with caching)
+     * Get the current settings (singleton pattern with caching and safe fallback)
      */
     public static function getSettings(): self
     {
-        return Cache::rememberForever(self::CACHE_KEY, function () {
-            $settings = self::first();
+        try {
+            return Cache::rememberForever(self::CACHE_KEY, function () {
+                $settings = self::first();
 
-            if (!$settings) {
-                // Create default settings if none exist
-                $settings = self::create([
-                    'app_name' => 'Admin Panel',
-                    'app_logo' => null,
-                    'logo_type' => 'text',
-                    'logo_text' => 'Admin Panel',
-                ]);
-            }
+                if (!$settings) {
+                    // Create default settings if none exist
+                    $settings = self::create([
+                        'app_name' => 'InForge',
+                        'app_logo' => null,
+                        'logo_type' => 'text',
+                        'logo_text' => 'InForge',
+                    ]);
+                }
 
-            return $settings;
-        });
+                return $settings;
+            });
+        } catch (\Throwable $e) {
+            return new self([
+                'app_name' => config('app.name', 'InForge'),
+                'theme_default' => 'dark',
+                'sidebar_style' => 'full',
+            ]);
+        }
     }
 }

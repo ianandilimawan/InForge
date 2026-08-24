@@ -1,713 +1,420 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark scroll-smooth">
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    @php
+        $settings = \App\Models\Setting::getSettings();
+        $appName = 'InForge';
+        $appLogo = $settings->app_logo ?? null;
+    @endphp
+
+    <title>{{ $appName }} — High-Velocity Laravel 13 Application Platform by Intech Studio</title>
+
+    @if ($settings && $settings->app_favicon)
+        <link rel="icon" type="image/x-icon" href="{{ asset('storage/' . $settings->app_favicon) }}">
+    @endif
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap"
         rel="stylesheet">
 
+    <!-- Vite Assets -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary: #1a1a1a;
-            --secondary: #4a5568;
-            --accent: #3b82f6;
-            --accent-light: #60a5fa;
-            --border: #e5e7eb;
-            --bg: #ffffff;
-            --bg-light: #f9fafb;
-            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-        }
-
         body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg);
-            color: var(--primary);
-            line-height: 1.6;
-            overflow-x: hidden;
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
-        /* Animated Background Gradient */
-        body::before {
-            content: '';
-            position: fixed;
-            top: -50%;
-            right: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at 30% 50%, rgba(102, 126, 234, 0.08) 0%, transparent 50%),
-                radial-gradient(circle at 70% 80%, rgba(245, 87, 108, 0.08) 0%, transparent 50%);
-            animation: rotate 30s linear infinite;
-            z-index: -1;
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
         }
 
-        @keyframes rotate {
-            from {
-                transform: rotate(0deg);
-            }
-
-            to {
-                transform: rotate(360deg);
-            }
+        .bg-glow {
+            background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99, 102, 241, 0.18), transparent);
         }
 
-        /* Header */
-        .header {
-            border-bottom: 1px solid var(--border);
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: 800;
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-decoration: none;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 32px;
-            align-items: center;
-        }
-
-        .nav-link {
-            color: var(--secondary);
-            text-decoration: none;
-            font-size: 15px;
-            font-weight: 500;
-            transition: color 0.2s;
-            position: relative;
-        }
-
-        .nav-link:hover {
-            color: var(--primary);
-        }
-
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--gradient-1);
-            transition: width 0.3s;
-        }
-
-        .nav-link:hover::after {
-            width: 100%;
-        }
-
-        .btn-login {
-            padding: 10px 24px;
-            background: var(--primary);
-            color: white;
-            border-radius: 8px;
-            text-decoration: none;
-            font-size: 15px;
-            font-weight: 600;
-            transition: all 0.3s;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .btn-login:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        /* Hero Section */
-        .hero {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 120px 24px 80px;
-            text-align: center;
-            position: relative;
-        }
-
-        .hero-badge {
-            display: inline-block;
-            padding: 8px 20px;
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
-            border: 1px solid rgba(102, 126, 234, 0.2);
-            border-radius: 50px;
-            font-size: 14px;
-            font-weight: 600;
-            color: #667eea;
-            margin-bottom: 24px;
-            animation: fadeInUp 0.6s ease-out;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .hero h1 {
-            font-size: 64px;
-            font-weight: 800;
-            line-height: 1.1;
-            margin-bottom: 24px;
-            color: var(--primary);
-            letter-spacing: -2px;
-            animation: fadeInUp 0.6s ease-out 0.1s both;
-        }
-
-        .hero h1 .gradient-text {
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero p {
-            font-size: 20px;
-            color: var(--secondary);
-            max-width: 700px;
-            margin: 0 auto 40px;
-            line-height: 1.7;
-            animation: fadeInUp 0.6s ease-out 0.2s both;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-            flex-wrap: wrap;
-            animation: fadeInUp 0.6s ease-out 0.3s both;
-        }
-
-        .btn-primary {
-            padding: 16px 36px;
-            background: var(--gradient-1);
-            color: white;
-            border-radius: 10px;
-            text-decoration: none;
-            font-size: 16px;
-            font-weight: 700;
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 32px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-secondary {
-            padding: 16px 36px;
-            background: white;
-            color: var(--primary);
-            border: 2px solid var(--border);
-            border-radius: 10px;
-            text-decoration: none;
-            font-size: 16px;
-            font-weight: 700;
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-secondary:hover {
-            border-color: var(--primary);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Features Section */
-        .features {
-            background: var(--bg-light);
-            padding: 100px 24px;
-            position: relative;
-        }
-
-        .features::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--border), transparent);
-        }
-
-        .features-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: 70px;
-        }
-
-        .section-title h2 {
-            font-size: 42px;
-            font-weight: 800;
-            margin-bottom: 16px;
-            color: var(--primary);
-            letter-spacing: -1px;
-        }
-
-        .section-title p {
-            font-size: 18px;
-            color: var(--secondary);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 28px;
-        }
-
-        .feature-card {
-            background: white;
-            padding: 36px;
-            border-radius: 16px;
-            border: 1px solid var(--border);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: var(--gradient-1);
-            transform: scaleX(0);
-            transition: transform 0.4s;
-        }
-
-        .feature-card:hover::before {
-            transform: scaleX(1);
-        }
-
-        .feature-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
-            border-color: transparent;
-        }
-
-        .feature-icon {
-            width: 60px;
-            height: 60px;
-            background: var(--gradient-1);
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.2);
-        }
-
-        .feature-card:nth-child(2) .feature-icon {
-            background: var(--gradient-2);
-            box-shadow: 0 8px 16px rgba(245, 87, 108, 0.2);
-        }
-
-        .feature-card:nth-child(3) .feature-icon {
-            background: var(--gradient-3);
-            box-shadow: 0 8px 16px rgba(79, 172, 254, 0.2);
-        }
-
-        .feature-card:nth-child(4) .feature-icon {
-            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-            box-shadow: 0 8px 16px rgba(250, 112, 154, 0.2);
-        }
-
-        .feature-card:nth-child(5) .feature-icon {
-            background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
-            box-shadow: 0 8px 16px rgba(48, 207, 208, 0.2);
-        }
-
-        .feature-card:nth-child(6) .feature-icon {
-            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-            box-shadow: 0 8px 16px rgba(168, 237, 234, 0.2);
-        }
-
-        .feature-card h3 {
-            font-size: 22px;
-            font-weight: 700;
-            margin-bottom: 12px;
-            color: var(--primary);
-        }
-
-        .feature-card p {
-            font-size: 15px;
-            color: var(--secondary);
-            line-height: 1.7;
-        }
-
-        /* Stats Section */
-        .stats {
-            padding: 100px 24px;
-            background: white;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .stats::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 800px;
-            height: 800px;
-            background: radial-gradient(circle, rgba(102, 126, 234, 0.05) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
-        .stats-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 48px;
-            text-align: center;
-            position: relative;
-            z-index: 1;
-        }
-
-        .stat-item {
-            padding: 24px;
-            border-radius: 12px;
-            transition: transform 0.3s;
-        }
-
-        .stat-item:hover {
-            transform: scale(1.05);
-        }
-
-        .stat-item h3 {
-            font-size: 56px;
-            font-weight: 800;
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 8px;
-            letter-spacing: -2px;
-        }
-
-        .stat-item:nth-child(2) h3 {
-            background: var(--gradient-2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .stat-item:nth-child(3) h3 {
-            background: var(--gradient-3);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .stat-item:nth-child(4) h3 {
-            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .stat-item p {
-            font-size: 16px;
-            color: var(--secondary);
-            font-weight: 600;
-        }
-
-        /* Footer */
-        .footer {
-            background: var(--bg-light);
-            padding: 60px 24px;
-            border-top: 1px solid var(--border);
-        }
-
-        .footer-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 32px;
-            justify-content: center;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-        }
-
-        .footer-link {
-            color: var(--secondary);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.2s;
-            position: relative;
-        }
-
-        .footer-link:hover {
-            color: var(--primary);
-        }
-
-        .footer-link::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--gradient-1);
-            transition: width 0.3s;
-        }
-
-        .footer-link:hover::after {
-            width: 100%;
-        }
-
-        .footer-text {
-            font-size: 14px;
-            color: var(--secondary);
-        }
-
-        /* Mobile Menu */
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: var(--primary);
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-
-            .mobile-menu-btn {
-                display: block;
-            }
-
-            .hero {
-                padding: 80px 24px 60px;
-            }
-
-            .hero h1 {
-                font-size: 42px;
-                letter-spacing: -1px;
-            }
-
-            .hero p {
-                font-size: 18px;
-            }
-
-            .hero-buttons {
-                flex-direction: column;
-            }
-
-            .btn-primary,
-            .btn-secondary {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .features {
-                padding: 60px 24px;
-            }
-
-            .section-title h2 {
-                font-size: 32px;
-            }
-
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .stats {
-                padding: 60px 24px;
-            }
-
-            .stats-container {
-                grid-template-columns: 1fr;
-                gap: 32px;
-            }
-
-            .stat-item h3 {
-                font-size: 48px;
-            }
+        .grid-mesh {
+            background-size: 32px 32px;
+            background-image:
+                linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
         }
     </style>
 </head>
 
-<body>
-    <!-- Header -->
-    <header class="header">
-        <div class="nav-container">
-            <a href="/" class="logo">Gerai</a>
-            <nav class="nav-links">
-                <a href="#features" class="nav-link">Features</a>
-                <a href="https://gerai.id" target="_blank" class="nav-link">Gerai.id</a>
-                @if (Route::has('login'))
-                    @auth
-                        <a href="{{ url('/dashboard') }}" class="btn-login">Dashboard</a>
-                    @else
-                        <a href="{{ route('login') }}" class="btn-login">Login</a>
-                    @endauth
-                @endif
-            </nav>
-            <button class="mobile-menu-btn">☰</button>
-        </div>
-    </header>
+<body
+    class="bg-[#080c16] text-slate-200 min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white antialiased relative overflow-x-hidden">
+    <!-- Ambient Backdrop -->
+    <div class="fixed inset-0 bg-glow pointer-events-none z-0"></div>
+    <div class="fixed inset-0 grid-mesh pointer-events-none z-0"></div>
+
+    <!-- Header Navigation -->
+    <div class="w-full sticky top-3 sm:top-5 z-50 px-4 sm:px-6">
+        <header
+            class="max-w-5xl mx-auto rounded-2xl bg-slate-900/80 border border-slate-800/90 backdrop-blur-xl shadow-xl shadow-black/40">
+            <div class="px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-4">
+                <!-- Brand & Intech Studio Link -->
+                <div class="flex items-center gap-3 min-w-0">
+                    <a href="/" class="flex items-center gap-2.5 shrink-0 group">
+                        @if ($appLogo)
+                            <img src="{{ asset('storage/' . $appLogo) }}" alt="{{ $appName }}"
+                                class="h-7 sm:h-8 w-auto">
+                        @else
+                            <div
+                                class="w-8 h-8 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-600/30">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                        d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                </svg>
+                            </div>
+                        @endif
+                        <span
+                            class="font-bold text-base sm:text-lg tracking-tight text-white group-hover:text-indigo-300 transition-colors">
+                            {{ $appName }}
+                        </span>
+                    </a>
+
+                    <span class="text-slate-700 select-none">/</span>
+
+                    <a href="https://intechstudio.id" target="_blank" rel="noopener noreferrer"
+                        class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-800/80 hover:bg-slate-800 border border-slate-700/60 text-xs font-semibold text-slate-300 hover:text-white transition-all">
+                        <span>Intech Studio</span>
+                        <svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                    </a>
+                </div>
+
+                <!-- Right Action -->
+                <div>
+                    <a href="https://intechstudio.id" target="_blank" rel="noopener noreferrer"
+                        class="inline-flex items-center gap-1.5 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs sm:text-sm font-semibold shadow-md shadow-indigo-600/25 transition-all">
+                        <span>Visit Website</span>
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </header>
+    </div>
 
     <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-badge">✨ Powered by Gerai.id</div>
-        <h1>Build Admin Panels<br><span class="gradient-text">in Minutes</span></h1>
-        <p>Powerful template generator from Gerai.id. Create modern and professional admin panels for your projects
-            without coding from scratch.</p>
-        <div class="hero-buttons">
-            @if (Route::has('login'))
-                @auth
-                    <a href="{{ url('/dashboard') }}" class="btn-primary">
-                        Start Generating →
-                    </a>
-                @else
-                    <a href="{{ route('login') }}" class="btn-primary">
-                        Start Generating →
-                    </a>
-                @endauth
-            @endif
-            <a href="https://gerai.id" target="_blank" class="btn-secondary">
-                View Our Portfolio
+    <main class="relative z-10 flex-1 max-w-5xl mx-auto px-4 sm:px-6 pt-12 sm:pt-20 pb-20 text-center">
+        <!-- Badge -->
+        <a href="https://intechstudio.id" target="_blank" rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/20 text-indigo-300 text-xs font-semibold mx-auto mb-6 sm:mb-8 transition-all group">
+            <span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
+            <span>Crafted by Intech Studio</span>
+            <svg class="w-3 h-3 text-indigo-400 group-hover:translate-x-0.5 transition-transform" fill="none"
+                stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+        </a>
+
+        <!-- Main Headline -->
+        <h1
+            class="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.12] mb-5 max-w-4xl mx-auto">
+            The High-Velocity Laravel 13 <br class="hidden sm:block">
+            <span class="bg-gradient-to-r from-indigo-400 via-purple-300 to-indigo-300 bg-clip-text text-transparent">
+                Application Platform
+            </span>
+        </h1>
+
+        <!-- Subtitle -->
+        <p
+            class="text-sm sm:text-base md:text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed mb-8 sm:mb-10 font-normal">
+            A battle-tested application framework by <a href="https://intechstudio.id" target="_blank"
+                rel="noopener noreferrer"
+                class="text-slate-200 hover:text-indigo-300 font-medium underline underline-offset-4 decoration-slate-700">Intech
+                Studio</a>. Pre-configured with reactive Livewire PowerGrid tables, Spatie RBAC security, zero-overhead
+            background logging, and automated full-stack synthesis.
+        </p>
+
+        <!-- CTA Action Buttons -->
+        <div
+            class="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3.5 max-w-md mx-auto mb-14 sm:mb-16">
+            <a href="https://intechstudio.id" target="_blank" rel="noopener noreferrer"
+                class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm shadow-xl shadow-indigo-600/30 hover:shadow-indigo-600/50 hover:-translate-y-0.5 transition-all">
+                <span>Explore Intech Studio</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+            </a>
+
+            <a href="#features"
+                class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 hover:text-white font-semibold text-sm hover:-translate-y-0.5 transition-all">
+                <span>Explore Architecture</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
             </a>
         </div>
-    </section>
 
-    <!-- Features Section -->
-    <section class="features" id="features">
-        <div class="features-container">
-            <div class="section-title">
-                <h2>Why Choose Our Template?</h2>
-                <p>Save up to 70% development time with ready-to-use features</p>
-            </div>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">👥</div>
-                    <h3>User Management</h3>
-                    <p>Complete user management system with roles & permissions. Ready to use, no need to build from
-                        scratch.</p>
+        <!-- Terminal Widget -->
+        <div x-data="{
+            tab: 'scaffold',
+            copied: false,
+            commands: {
+                scaffold: 'php artisan generate:scaffold Product',
+                fromTable: 'php artisan generate:scaffold Blog --fromTable --tableName=blog',
+                revert: 'php artisan revert:scaffold Product'
+            }
+        }" class="max-w-3xl mx-auto mb-20 text-left">
+            <div
+                class="rounded-2xl border border-slate-800 bg-slate-900/90 shadow-2xl backdrop-blur-xl overflow-hidden">
+                <!-- Bar -->
+                <div
+                    class="px-4 py-3 bg-slate-950 border-b border-slate-800/80 flex items-center justify-between flex-wrap gap-2">
+                    <div class="flex items-center gap-2">
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-2.5 h-2.5 rounded-full bg-slate-700"></span>
+                            <span class="w-2.5 h-2.5 rounded-full bg-slate-700"></span>
+                            <span class="w-2.5 h-2.5 rounded-full bg-slate-700"></span>
+                        </div>
+                        <span class="ml-2 text-xs font-mono text-slate-400">inforge-cli</span>
+                    </div>
+
+                    <!-- Tabs -->
+                    <div class="flex items-center gap-1 bg-slate-900 p-0.5 rounded-lg border border-slate-800">
+                        <button type="button" @click="tab = 'scaffold'"
+                            :class="tab === 'scaffold' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-slate-200'"
+                            class="px-2.5 py-1 rounded-md text-[11px] font-mono font-medium transition-all">
+                            Scaffold
+                        </button>
+                        <button type="button" @click="tab = 'fromTable'"
+                            :class="tab === 'fromTable' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-slate-200'"
+                            class="px-2.5 py-1 rounded-md text-[11px] font-mono font-medium transition-all">
+                            --fromTable
+                        </button>
+                        <button type="button" @click="tab = 'revert'"
+                            :class="tab === 'revert' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-slate-200'"
+                            class="px-2.5 py-1 rounded-md text-[11px] font-mono font-medium transition-all">
+                            Revert
+                        </button>
+                    </div>
+
+                    <!-- Copy -->
+                    <button type="button"
+                        @click="navigator.clipboard.writeText(commands[tab]); copied = true; setTimeout(() => copied = false, 2000)"
+                        class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-mono flex items-center gap-1.5 transition-colors">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                        </svg>
+                        <span x-show="!copied">Copy</span>
+                        <span x-show="copied" x-cloak class="text-emerald-400 font-semibold">Copied</span>
+                    </button>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📝</div>
-                    <h3>Content Management</h3>
-                    <p>Automatic CRUD generator. Create, read, update, delete pages in just seconds.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📊</div>
-                    <h3>Analytics Dashboard</h3>
-                    <p>Ready-to-use analytics dashboard with interactive charts. Monitor real-time performance.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🔌</div>
-                    <h3>API Ready</h3>
-                    <p>RESTful API already set up. Connect easily with mobile apps or other services.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🔐</div>
-                    <h3>Security First</h3>
-                    <p>Authentication, authorization, and security best practices built-in. Your project is safe.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
-                    <h3>Production Ready</h3>
-                    <p>Clean, structured code ready to deploy. Production-ready without refactoring.</p>
+
+                <!-- Terminal Body -->
+                <div class="p-5 font-mono text-xs sm:text-sm space-y-2 overflow-x-auto">
+                    <template x-if="tab === 'scaffold'">
+                        <div class="space-y-1.5">
+                            <div class="flex items-center gap-2 text-slate-300">
+                                <span class="text-emerald-400 select-none">$</span>
+                                <span class="text-indigo-300">php artisan generate:scaffold Product</span>
+                            </div>
+                            <p class="text-slate-400 text-xs pl-4">[1/6] Created Model, Requests, and Database
+                                Migration</p>
+                            <p class="text-slate-400 text-xs pl-4">[2/6] Generated Livewire PowerGrid Table Component
+                            </p>
+                            <p class="text-slate-400 text-xs pl-4">[3/6] Rendered Statically-compiled Blade Views
+                                (index, create, edit, show)</p>
+                            <p class="text-slate-400 text-xs pl-4">[4/6] Injected Routes into web.php and Menu into
+                                config/menu.php</p>
+                            <p class="text-slate-400 text-xs pl-4">[5/6] Generated Unit and Feature Test Suite</p>
+                            <p class="text-emerald-400 text-xs font-semibold pt-1.5">Synthesis complete in 0.38s (Clean
+                                rollback on error enabled)</p>
+                        </div>
+                    </template>
+
+                    <template x-if="tab === 'fromTable'">
+                        <div class="space-y-1.5">
+                            <div class="flex items-center gap-2 text-slate-300">
+                                <span class="text-emerald-400 select-none">$</span>
+                                <span class="text-indigo-300">php artisan generate:scaffold Blog --fromTable
+                                    --tableName=blog</span>
+                            </div>
+                            <p class="text-slate-400 text-xs pl-4">[Schema] Introspected columns, ENUM types &
+                                BelongsTo foreign relations</p>
+                            <p class="text-slate-400 text-xs pl-4">[Sync] Synchronized Spatie permissions & Menu routes
+                            </p>
+                            <p class="text-emerald-400 text-xs font-semibold pt-1.5">Introspection completed without
+                                schema rewriting</p>
+                        </div>
+                    </template>
+
+                    <template x-if="tab === 'revert'">
+                        <div class="space-y-1.5">
+                            <div class="flex items-center gap-2 text-slate-300">
+                                <span class="text-emerald-400 select-none">$</span>
+                                <span class="text-indigo-300">php artisan revert:scaffold Product</span>
+                            </div>
+                            <p class="text-slate-400 text-xs pl-4">[Cleanup] Removed generated Model, Controllers,
+                                PowerGrid, and Views</p>
+                            <p class="text-slate-400 text-xs pl-4">[Cleanup] Cleaned menu entries and database
+                                permissions</p>
+                            <p class="text-emerald-400 text-xs font-semibold pt-1.5">Revert finished cleanly with 0
+                                leftover files</p>
+                        </div>
+                    </template>
                 </div>
             </div>
         </div>
-    </section>
 
-    <!-- Stats Section -->
-    <section class="stats">
-        <div class="stats-container">
-            <div class="stat-item">
-                <h3>70%</h3>
-                <p>Faster Development</p>
+        <!-- Bento Grid Architecture -->
+        <div id="features" class="grid grid-cols-1 md:grid-cols-3 gap-5 text-left mb-16 pt-4">
+            <!-- Bento Card 1 -->
+            <div
+                class="md:col-span-2 p-6 sm:p-8 rounded-2xl bg-slate-900/50 border border-slate-800/80 hover:border-slate-700 transition-all">
+                <div
+                    class="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center mb-5">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                </div>
+                <h3 class="text-lg sm:text-xl font-bold text-white mb-2">Automated Full-Stack Code Synthesis</h3>
+                <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                    A single unified command engine that synthesizes clean, PSR-compliant architecture: Eloquent Models,
+                    Form Requests, Statically compiled Blade views, Spatie permissions, and Feature Tests.
+                </p>
+                <div class="flex flex-wrap gap-2 text-[11px] font-mono text-slate-300">
+                    <span class="px-2.5 py-1 rounded-md bg-slate-800/90 border border-slate-700/60">--fromTable</span>
+                    <span
+                        class="px-2.5 py-1 rounded-md bg-slate-800/90 border border-slate-700/60">--schema=JSON</span>
+                    <span class="px-2.5 py-1 rounded-md bg-slate-800/90 border border-slate-700/60">--api</span>
+                    <span
+                        class="px-2.5 py-1 rounded-md bg-slate-800/90 border border-slate-700/60">--soft-deletes</span>
+                    <span class="px-2.5 py-1 rounded-md bg-slate-800/90 border border-slate-700/60">Auto
+                        Rollback</span>
+                </div>
             </div>
-            <div class="stat-item">
-                <h3>100+</h3>
-                <p>Ready Features</p>
+
+            <!-- Bento Card 2 -->
+            <div
+                class="p-6 sm:p-8 rounded-2xl bg-slate-900/50 border border-slate-800/80 hover:border-slate-700 transition-all flex flex-col justify-between">
+                <div>
+                    <div
+                        class="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center mb-5">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-lg sm:text-xl font-bold text-white mb-2">Reactive Data & Table Engine</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                        High-performance reactive datatables powered by Livewire PowerGrid with instant search,
+                        multi-column filters, and memory-safe streaming exports.
+                    </p>
+                </div>
+                <div class="text-xs font-mono text-purple-300">
+                    Livewire 4 + PowerGrid 6
+                </div>
             </div>
-            <div class="stat-item">
-                <h3>24/7</h3>
-                <p>Support Ready</p>
+
+            <!-- Bento Card 3 -->
+            <div
+                class="p-6 sm:p-8 rounded-2xl bg-slate-900/50 border border-slate-800/80 hover:border-slate-700 transition-all flex flex-col justify-between">
+                <div>
+                    <div
+                        class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center mb-5">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-lg sm:text-xl font-bold text-white mb-2">Zero-Trust RBAC & Security</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                        Granular user roles & permissions with automatic constructor middleware injection, brute-force
+                        rate limiters, and OWASP-hardened validation.
+                    </p>
+                </div>
+                <div class="text-xs font-mono text-emerald-300">
+                    Spatie RBAC Architecture
+                </div>
             </div>
-            <div class="stat-item">
-                <h3>0</h3>
-                <p>Coding from Scratch</p>
+
+            <!-- Bento Card 4 -->
+            <div
+                class="md:col-span-2 p-6 sm:p-8 rounded-2xl bg-slate-900/50 border border-slate-800/80 hover:border-slate-700 transition-all">
+                <div
+                    class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center mb-5">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                </div>
+                <h3 class="text-lg sm:text-xl font-bold text-white mb-2">Production-Hardened Core</h3>
+                <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                    Zero-latency async activity logs, streaming server log viewer, automatic WebP media optimization,
+                    two-factor OTP authentication, and dynamic SMTP settings.
+                </p>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+                    <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800">
+                        <div class="text-sm font-bold text-indigo-400 font-mono">0ms</div>
+                        <div class="text-[11px] text-slate-400 mt-0.5">Async Logs</div>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800">
+                        <div class="text-sm font-bold text-emerald-400 font-mono">18 / 18</div>
+                        <div class="text-[11px] text-slate-400 mt-0.5">Tests Passed</div>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800">
+                        <div class="text-sm font-bold text-purple-400 font-mono">WebP</div>
+                        <div class="text-[11px] text-slate-400 mt-0.5">Auto Media</div>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800">
+                        <div class="text-sm font-bold text-pink-400 font-mono">2FA OTP</div>
+                        <div class="text-[11px] text-slate-400 mt-0.5">Secured Auth</div>
+                    </div>
+                </div>
             </div>
         </div>
-    </section>
+
+        <!-- Tech Stack Pill Ribbon -->
+        <div
+            class="pt-8 border-t border-slate-900 flex flex-wrap items-center justify-center gap-2.5 text-xs text-slate-400">
+            <span class="text-slate-500 uppercase tracking-widest text-[10px] font-bold mr-2">Built With</span>
+            <span class="px-3 py-1 rounded-lg bg-slate-900/80 border border-slate-800 font-mono text-[11px]">PHP
+                8.3+</span>
+            <span class="px-3 py-1 rounded-lg bg-slate-900/80 border border-slate-800 font-mono text-[11px]">Laravel
+                13</span>
+            <span class="px-3 py-1 rounded-lg bg-slate-900/80 border border-slate-800 font-mono text-[11px]">Tailwind
+                CSS v4</span>
+            <span class="px-3 py-1 rounded-lg bg-slate-900/80 border border-slate-800 font-mono text-[11px]">Livewire
+                4</span>
+            <span class="px-3 py-1 rounded-lg bg-slate-900/80 border border-slate-800 font-mono text-[11px]">PowerGrid
+                v6</span>
+            <span class="px-3 py-1 rounded-lg bg-slate-900/80 border border-slate-800 font-mono text-[11px]">Spatie
+                Permissions</span>
+        </div>
+    </main>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-container">
-            <div class="footer-links">
-                <a href="https://gerai.id" target="_blank" class="footer-link">Gerai.id</a>
-                <a href="https://gerai.id/service" target="_blank" class="footer-link">Services</a>
-                <a href="https://gerai.id/portfolio" target="_blank" class="footer-link">Portfolio</a>
-                <a href="https://gerai.id/about" target="_blank" class="footer-link">About Us</a>
-                <a href="https://gerai.id/contact-us" target="_blank" class="footer-link">Contact</a>
+    <footer class="border-t border-slate-900 bg-[#060910] py-8 px-4 text-center text-xs text-slate-500">
+        <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p>&copy; {{ date('Y') }} <strong>{{ $appName }}</strong>. Developed by <a
+                    href="https://intechstudio.id" target="_blank" rel="noopener noreferrer"
+                    class="text-slate-300 hover:text-indigo-300 underline underline-offset-2 transition-colors font-medium">Intech
+                    Studio</a>.</p>
+            <div class="flex items-center gap-6 text-xs text-slate-400">
+                <a href="https://intechstudio.id" target="_blank" rel="noopener noreferrer"
+                    class="hover:text-white transition-colors">Intech Studio ↗</a>
+                <a href="https://intechstudio.id" target="_blank" rel="noopener noreferrer"
+                    class="hover:text-white transition-colors">Portfolio</a>
             </div>
-            <p class="footer-text">&copy; {{ date('Y') }} Gerai.id - All Rights Reserved</p>
         </div>
     </footer>
 </body>
