@@ -11,12 +11,10 @@ use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Components\SetUp\Exportable;
-use PowerComponents\LivewirePowerGrid\Traits\WithExport;
 use Illuminate\Support\Facades\Schema;
 
 class {{MODEL_NAME}}Table extends PowerGridComponent
 {
-    use WithExport;
     public string $tableName = '{{MODEL_NAME_CAMEL}}-table';
     public string $sortField = 'id';
     public string $sortDirection = 'asc';
@@ -28,8 +26,6 @@ class {{MODEL_NAME}}Table extends PowerGridComponent
         }
 
         return [
-            PowerGrid::exportable('export_{{MODEL_NAME_SNAKE_PLURAL}}_' . now()->format('Ymd_His'))
-                ->type(Exportable::TYPE_XLS, Exportable::TYPE_CSV),
             PowerGrid::header()
                 ->showSearchInput()
                 ->showToggleColumns()

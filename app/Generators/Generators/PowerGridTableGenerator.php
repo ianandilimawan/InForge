@@ -119,11 +119,6 @@ class PowerGridTableGenerator extends BaseGenerator
             }
         }
 
-        if ($this->commandData->withSoftDeletes) {
-            $filters[] = "            Filter::enumSelect('trashed', 'deleted_at')";
-            $filters[] = "                ->dataSource(\\PowerComponents\\LivewirePowerGrid\\Enums\\TrashedStatus::cases())";
-            $filters[] = "                ->optionLabel('deleted_at'),";
-        }
 
         return implode("\n", $filters);
     }
