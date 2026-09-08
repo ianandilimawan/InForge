@@ -5,7 +5,7 @@
             <!-- Desktop Only: Sidebar Toggle Button -->
             <button id="toggleSidebar"
                 class="hidden lg:inline-flex p-2 rounded-xl text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white bg-zinc-100/80 dark:bg-zinc-800/80 hover:bg-zinc-200/80 dark:hover:bg-zinc-700/80 border border-zinc-200/60 dark:border-zinc-700/60 focus:outline-none transition-all cursor-pointer"
-                title="Sembunyikan / Tampilkan Sidebar">
+                title="Toggle Sidebar">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
                 </svg>
@@ -44,8 +44,8 @@
                     style="display: none;"
                     class="absolute right-0 mt-2 w-80 bg-white dark:bg-zinc-900 rounded-2xl shadow-xl py-1 border border-zinc-200/80 dark:border-zinc-800 z-50">
                     <div class="px-4 py-3 border-b border-zinc-100 dark:border-zinc-800 flex justify-between items-center">
-                        <h3 class="text-xs font-bold text-zinc-900 dark:text-white uppercase tracking-wider">Notifikasi</h3>
-                        <span class="bg-emerald-50 text-emerald-700 dark:bg-emerald-950/80 dark:text-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-200/50">3 Baru</span>
+                        <h3 class="text-xs font-bold text-zinc-900 dark:text-white uppercase tracking-wider">Notifications</h3>
+                        <span class="bg-emerald-50 text-emerald-700 dark:bg-emerald-950/80 dark:text-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-200/50">3 New</span>
                     </div>
                     <div class="max-h-80 overflow-y-auto divide-y divide-zinc-100 dark:divide-zinc-800">
                         <div class="p-3 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition flex gap-3">
@@ -53,9 +53,9 @@
                                 <x-heroicon-o-user class="w-4 h-4" />
                             </div>
                             <div class="text-xs">
-                                <p class="font-bold text-zinc-900 dark:text-white">Pengguna Baru Terdaftar</p>
-                                <p class="text-zinc-500 dark:text-zinc-400 text-[11px]">User baru berhasil membuat akun.</p>
-                                <p class="text-emerald-600 dark:text-emerald-400 text-[10px] font-medium mt-1">2 menit lalu</p>
+                                <p class="font-bold text-zinc-900 dark:text-white">New User Registered</p>
+                                <p class="text-zinc-500 dark:text-zinc-400 text-[11px]">A new user account was created.</p>
+                                <p class="text-emerald-600 dark:text-emerald-400 text-[10px] font-medium mt-1">2 minutes ago</p>
                             </div>
                         </div>
                         <div class="p-3 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition flex gap-3">
@@ -63,9 +63,9 @@
                                 <x-heroicon-o-check-circle class="w-4 h-4" />
                             </div>
                             <div class="text-xs">
-                                <p class="font-bold text-zinc-900 dark:text-white">Sistem Normal</p>
-                                <p class="text-zinc-500 dark:text-zinc-400 text-[11px]">Database backup otomatis selesai.</p>
-                                <p class="text-blue-600 dark:text-blue-400 text-[10px] font-medium mt-1">1 jam lalu</p>
+                                <p class="font-bold text-zinc-900 dark:text-white">System Normal</p>
+                                <p class="text-zinc-500 dark:text-zinc-400 text-[11px]">Automated database backup completed.</p>
+                                <p class="text-blue-600 dark:text-blue-400 text-[10px] font-medium mt-1">1 hour ago</p>
                             </div>
                         </div>
                     </div>
@@ -75,7 +75,7 @@
             <!-- Dark Mode Toggle -->
             <button id="themeToggle"
                 class="p-2 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white bg-zinc-100/80 dark:bg-zinc-800/80 border border-zinc-200/60 dark:border-zinc-700/60 hover:border-zinc-300 dark:hover:border-zinc-600 rounded-xl transition-all cursor-pointer"
-                title="Ganti Mode Tema">
+                title="Toggle Theme Mode">
                 <x-heroicon-s-sun id="sunIcon" class="w-4 h-4" style="display: block;" />
                 <x-heroicon-s-moon id="moonIcon" class="w-4 h-4" style="display: none;" />
             </button>

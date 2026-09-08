@@ -3,7 +3,13 @@
 @section('title', 'My Profile')
 
 @section('content')
-<div class="space-y-8">
+<div class="space-y-6">
+
+    <!-- Page Header -->
+    <div>
+        <h1 class="text-base sm:text-lg md:text-xl font-bold tracking-tight text-zinc-900 dark:text-white">Account Profile</h1>
+        <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Manage your personal profile and security credentials</p>
+    </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         

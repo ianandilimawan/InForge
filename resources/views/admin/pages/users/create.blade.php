@@ -4,8 +4,8 @@
     <div class="space-y-6">
         <!-- Page Header -->
         <div>
-            <h1 class="lg:text-2xl text-xl font-semibold text-gray-900 dark:text-white">Add New User</h1>
-            <p class="mt-1 lg:text-sm text-xs text-gray-600 dark:text-gray-400">Create a new user account</p>
+            <h1 class="text-base sm:text-lg md:text-xl font-bold tracking-tight text-zinc-900 dark:text-white">Add New User</h1>
+            <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Create a new user account</p>
         </div>
 
         <!-- Form -->

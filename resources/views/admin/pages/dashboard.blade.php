@@ -37,26 +37,26 @@
                     Dashboard Overview
                 </h1>
                 <span class="text-[10px] sm:text-xs px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-bold border border-emerald-200 dark:border-emerald-800">
-                    Sistem & Platform
+                    System & Platform
                 </span>
             </div>
-            <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Pantau pertumbuhan pengguna, log aktivitas sistem, status server, dan kontrol platform.</p>
+            <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Monitor user growth, system activity logs, server health, and platform controls.</p>
         </div>
         <div class="flex items-center gap-2 flex-wrap">
             <a href="{{ route('admin.users.index') }}"
                 class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white transition shadow-sm shadow-emerald-600/20">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                <span>Kelola Pengguna</span>
+                <span>Manage Users</span>
             </a>
             <a href="{{ route('admin.settings.index') }}"
                 class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-200 transition shadow-2xs">
                 <svg class="w-3.5 h-3.5 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                <span>Pengaturan</span>
+                <span>Settings</span>
             </a>
             <a href="{{ route('admin.laravel-logs.index') }}"
                 class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-200 transition shadow-2xs">
                 <svg class="w-3.5 h-3.5 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                <span>Log Server</span>
+                <span>Server Logs</span>
             </a>
         </div>
     </div>
@@ -71,15 +71,15 @@
                 </div>
                 <span class="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200/50">
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                    {{ $systemStats['total_users'] }} Aktif
+                    {{ $systemStats['total_users'] }} Active
                 </span>
             </div>
             <div class="text-2xl sm:text-3xl font-black text-zinc-900 dark:text-white tracking-tight">
                 {{ number_format($systemStats['total_users']) }}
             </div>
             <div class="flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400 font-medium mt-1">
-                <span>Pengguna Terdaftar</span>
-                <span class="text-emerald-600 dark:text-emerald-400 font-bold">+{{ $systemStats['new_users_this_month'] }} bln ini</span>
+                <span>Registered Users</span>
+                <span class="text-emerald-600 dark:text-emerald-400 font-bold">+{{ $systemStats['new_users_this_month'] }} this month</span>
             </div>
         </div>
 
@@ -97,7 +97,7 @@
                 {{ number_format($systemStats['total_roles']) }}
             </div>
             <p class="text-xs text-zinc-500 dark:text-zinc-400 font-medium mt-1">
-                Role & {{ number_format($systemStats['total_permissions']) }} Permission Aktif
+                Roles & {{ number_format($systemStats['total_permissions']) }} Active Permissions
             </p>
         </div>
 
@@ -115,7 +115,7 @@
                 {{ number_format($systemStats['total_activities']) }}
             </div>
             <p class="text-xs text-zinc-500 dark:text-zinc-400 font-medium mt-1">
-                Total Mutasi & Log Tercatat
+                Total System Logs Recorded
             </p>
         </div>
 
@@ -146,12 +146,12 @@
                 <div>
                     <h2 class="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">
                         <svg class="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-                        <span>Tren Pertumbuhan Pengguna Baru (6 Bulan Terakhir)</span>
+                        <span>New User Registration Trend (Last 6 Months)</span>
                     </h2>
-                    <p class="text-[11px] text-zinc-500 dark:text-zinc-400 mt-0.5">Statistik pendaftaran akun pengguna per bulan</p>
+                    <p class="text-[11px] text-zinc-500 dark:text-zinc-400 mt-0.5">Monthly new user registration statistics</p>
                 </div>
                 <span class="text-xs font-bold px-2.5 py-1 rounded-xl bg-indigo-50 text-indigo-700 dark:bg-indigo-950/80 dark:text-indigo-300 border border-indigo-200/50">
-                    +{{ $systemStats['new_users_this_month'] }} Bulan Ini
+                    +{{ $systemStats['new_users_this_month'] }} This Month
                 </span>
             </div>
             <div class="h-52 w-full">
@@ -164,13 +164,13 @@
             <div>
                 <h2 class="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-3 flex items-center gap-1.5">
                     <svg class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    <span>Aktivitas & Pertumbuhan Pengguna</span>
+                    <span>User Activity & Growth</span>
                 </h2>
                 <div class="space-y-3">
                     <div class="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-100 dark:border-zinc-700/50 flex items-center justify-between">
                         <div>
-                            <span class="text-[10px] text-zinc-400 font-medium block">Pengguna Baru (7 Hari)</span>
-                            <span class="text-base font-black text-zinc-900 dark:text-white">+{{ $systemStats['new_users_this_week'] }} Akun</span>
+                            <span class="text-[10px] text-zinc-400 font-medium block">New Users (7 Days)</span>
+                            <span class="text-base font-black text-zinc-900 dark:text-white">+{{ $systemStats['new_users_this_week'] }} Accounts</span>
                         </div>
                         <div class="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold text-xs">
                             7D
@@ -179,8 +179,8 @@
 
                     <div class="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-100 dark:border-zinc-700/50 flex items-center justify-between">
                         <div>
-                            <span class="text-[10px] text-zinc-400 font-medium block">Role Terdefinisi</span>
-                            <span class="text-base font-black text-zinc-900 dark:text-white">{{ $systemStats['total_roles'] }} Role</span>
+                            <span class="text-[10px] text-zinc-400 font-medium block">Defined Roles</span>
+                            <span class="text-base font-black text-zinc-900 dark:text-white">{{ $systemStats['total_roles'] }} Roles</span>
                         </div>
                         <div class="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-900/60 text-purple-600 dark:text-purple-400 flex items-center justify-center font-bold text-xs">
                             Role
@@ -189,8 +189,8 @@
 
                     <div class="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-100 dark:border-zinc-700/50 flex items-center justify-between">
                         <div>
-                            <span class="text-[10px] text-zinc-400 font-medium block">Permission Terdaftar</span>
-                            <span class="text-base font-black text-zinc-900 dark:text-white">{{ $systemStats['total_permissions'] }} Key</span>
+                            <span class="text-[10px] text-zinc-400 font-medium block">Registered Permissions</span>
+                            <span class="text-base font-black text-zinc-900 dark:text-white">{{ $systemStats['total_permissions'] }} Keys</span>
                         </div>
                         <div class="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/60 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-xs">
                             Key
@@ -199,17 +199,17 @@
                 </div>
             </div>
             <div class="pt-3 border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between text-xs text-zinc-400">
-                <span>Status Environtment</span>
-                <span class="font-bold text-emerald-600 dark:text-emerald-400">Siap Digunakan</span>
+                <span>Environment Status</span>
+                <span class="font-bold text-emerald-600 dark:text-emerald-400">Operational</span>
             </div>
         </div>
     </div>
 
-    <!-- Pusat Administrasi & Kontrol Cepat -->
+    <!-- Quick Administration & Controls -->
     <div class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 shadow-xs">
         <h2 class="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-3 flex items-center gap-1.5">
             <svg class="w-3.5 h-3.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
-            <span>Pusat Administrasi & Kontrol Cepat</span>
+            <span>Quick Administration & Controls</span>
         </h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
             <a href="{{ route('admin.users.index') }}"
@@ -219,7 +219,7 @@
                 </div>
                 <div class="min-w-0">
                     <p class="text-xs font-bold text-zinc-900 dark:text-white truncate group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">User Management</p>
-                    <p class="text-[10px] text-zinc-400 truncate">Kelola data user</p>
+                    <p class="text-[10px] text-zinc-400 truncate">Manage users</p>
                 </div>
             </a>
 
@@ -229,8 +229,8 @@
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
                 </div>
                 <div class="min-w-0">
-                    <p class="text-xs font-bold text-zinc-900 dark:text-white truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">Roles & Akses</p>
-                    <p class="text-[10px] text-zinc-400 truncate">Hak permission</p>
+                    <p class="text-xs font-bold text-zinc-900 dark:text-white truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">Roles & Access</p>
+                    <p class="text-[10px] text-zinc-400 truncate">Permissions & roles</p>
                 </div>
             </a>
 
@@ -241,7 +241,7 @@
                 </div>
                 <div class="min-w-0">
                     <p class="text-xs font-bold text-zinc-900 dark:text-white truncate group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Activity Logs</p>
-                    <p class="text-[10px] text-zinc-400 truncate">Audit trail user</p>
+                    <p class="text-[10px] text-zinc-400 truncate">Audit trail logs</p>
                 </div>
             </a>
 
@@ -252,7 +252,7 @@
                 </div>
                 <div class="min-w-0">
                     <p class="text-xs font-bold text-zinc-900 dark:text-white truncate group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">Server Logs</p>
-                    <p class="text-[10px] text-zinc-400 truncate">Monitor error</p>
+                    <p class="text-[10px] text-zinc-400 truncate">Error monitoring</p>
                 </div>
             </a>
 
@@ -271,15 +271,15 @@
 
     <!-- Bottom Lists Row: Recent Users & Recent Audit Logs -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
-        <!-- Pengguna Terdaftar Terbaru -->
+        <!-- Recent Registered Users -->
         <div class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 shadow-xs">
             <div class="flex items-center justify-between mb-3">
                 <h2 class="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">
                     <svg class="w-3.5 h-3.5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                    <span>Pengguna Terdaftar Terbaru</span>
+                    <span>Recent Registered Users</span>
                 </h2>
                 <a href="{{ route('admin.users.index') }}" class="text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:underline inline-flex items-center gap-1">
-                    <span>Lihat Semua</span>
+                    <span>View All</span>
                     <span>&rarr;</span>
                 </a>
             </div>
@@ -311,20 +311,20 @@
                         </div>
                     </div>
                 @empty
-                    <p class="text-xs text-zinc-400 py-4 text-center">Belum ada data pengguna.</p>
+                    <p class="text-xs text-zinc-400 py-4 text-center">No users found.</p>
                 @endforelse
             </div>
         </div>
 
-        <!-- Audit Log Aktivitas Terkini -->
+        <!-- Recent Audit Activity Logs -->
         <div class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 shadow-xs">
             <div class="flex items-center justify-between mb-3">
                 <h2 class="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">
                     <svg class="w-3.5 h-3.5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    <span>Audit Log Aktivitas Terkini</span>
+                    <span>Recent Audit Activity Logs</span>
                 </h2>
                 <a href="{{ route('admin.activity-logs.index') }}" class="text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:underline inline-flex items-center gap-1">
-                    <span>Semua Log</span>
+                    <span>All Logs</span>
                     <span>&rarr;</span>
                 </a>
             </div>
@@ -338,7 +338,7 @@
                             <div class="min-w-0">
                                 <p class="text-xs font-medium text-zinc-900 dark:text-white truncate">
                                     <span class="font-bold">{{ $log->user ? $log->user->name : 'System' }}</span>
-                                    <span class="text-zinc-500 dark:text-zinc-400">{{ $log->description ?? $log->action ?? 'melakukan aksi' }}</span>
+                                    <span class="text-zinc-500 dark:text-zinc-400">{{ $log->description ?? $log->action ?? 'performed action' }}</span>
                                 </p>
                                 <p class="text-[10px] text-zinc-400">{{ $log->ip_address ?? '127.0.0.1' }}</p>
                             </div>
@@ -348,7 +348,7 @@
                         </span>
                     </div>
                 @empty
-                    <p class="text-xs text-zinc-400 py-4 text-center">Belum ada riwayat aktivitas.</p>
+                    <p class="text-xs text-zinc-400 py-4 text-center">No activity logs found.</p>
                 @endforelse
             </div>
         </div>
@@ -372,7 +372,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const userRegistrationOptions = {
             series: [{
-                name: 'Pengguna Baru',
+                name: 'New Users',
                 data: userCounts
             }],
             chart: {
@@ -412,7 +412,7 @@ document.addEventListener('DOMContentLoaded', function() {
             tooltip: {
                 theme: isDark ? 'dark' : 'light',
                 y: {
-                    formatter: function(val) { return val + ' Pengguna'; }
+                    formatter: function(val) { return val + ' Users'; }
                 }
             }
         };

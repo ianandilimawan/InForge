@@ -6,8 +6,8 @@
 <!-- Page Header -->
         <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
             <div>
-                <h1 class="lg:text-2xl text-xl font-semibold text-gray-900 dark:text-white">Users</h1>
-                <p class="mt-1 lg:text-sm text-xs text-gray-600 dark:text-gray-400">Manage your users here</p>
+                <h1 class="text-base sm:text-lg md:text-xl font-bold tracking-tight text-zinc-900 dark:text-white">Users</h1>
+                <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Manage your platform users and their roles</p>
             </div>
             @if (auth()->user() && auth()->user()->hasPermission('create-users'))
                 <a href="{{ route('admin.users.create') }}"

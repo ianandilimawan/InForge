@@ -50,10 +50,10 @@
                 Page Expired
             </h2>
             <p class="text-lg text-gray-600 dark:text-gray-400 mb-2">
-                Sesi halaman Anda telah kedaluwarsa.
+                Your page session has expired.
             </p>
             <p class="text-sm text-gray-500 dark:text-gray-500">
-                Ini biasanya terjadi karena halaman dibuka terlalu lama atau token keamanan telah berakhir.
+                This usually happens when the page has been idle for too long or the security token expired.
             </p>
         </div>
 

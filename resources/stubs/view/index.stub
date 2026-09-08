@@ -8,8 +8,8 @@
 <!-- Page Header -->
         <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
             <div>
-                <h2 class="lg:text-2xl text-xl font-bold text-gray-900 dark:text-white">{{MODEL_NAME_PLURAL}}</h2>
-                <p class="mt-1 lg:text-sm text-xs text-gray-600 dark:text-gray-400">Manage your {{MODEL_NAME_LOWER_PLURAL}} here</p>
+                <h1 class="text-base sm:text-lg md:text-xl font-bold tracking-tight text-zinc-900 dark:text-white">{{MODEL_NAME_PLURAL}}</h1>
+                <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Manage your {{MODEL_NAME_LOWER_PLURAL}} here</p>
             </div>
             <div class="flex flex-wrap gap-3">
                 @if(auth()->user() && auth()->user()->hasPermission('create-{{MODEL_NAME_SNAKE_PLURAL}}'))

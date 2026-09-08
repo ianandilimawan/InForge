@@ -33,7 +33,7 @@
 <div class="relative {{ $class }}">
     <select name="{{ $name }}" id="{{ $id }}" {{ $required ? 'required' : '' }}
         {{ $isReadonly ? 'disabled' : '' }} {{ $attributes->merge(['class' => $mergedClasses]) }}>
-        <option value="" disabled {{ is_null($value) || $value === '' ? 'selected' : '' }} class="bg-white dark:bg-zinc-900 text-zinc-500">Pilih
+        <option value="" disabled {{ is_null($value) || $value === '' ? 'selected' : '' }} class="bg-white dark:bg-zinc-900 text-zinc-500">Select
             {{ $label }}</option>
         @foreach ($options as $key => $optionLabel)
             <option value="{{ $key }}" {{ (string) old($name, $value) === (string) $key ? 'selected' : '' }} class="bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100">

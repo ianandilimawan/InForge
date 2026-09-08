@@ -51,10 +51,10 @@
                 Server Error
             </h2>
             <p class="text-lg text-gray-600 dark:text-gray-400 mb-2">
-                Maaf, terjadi kesalahan pada server.
+                Sorry, an internal server error has occurred.
             </p>
             <p class="text-sm text-gray-500 dark:text-gray-500">
-                Tim kami telah diberitahu dan sedang memperbaiki masalah ini.
+                Our technical team has been notified and is working on resolving the issue.
             </p>
         </div>
 
