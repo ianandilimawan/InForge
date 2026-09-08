@@ -62,12 +62,22 @@ if ($routeName && Route::has($routeName)) {
             $isActive = request()->routeIs($routeName) || request()->routeIs($matchPattern);
         }
     }
+    // Optional badge in menu config (e.g. 'badge' => 'New')
+    $badgeText = $menu['badge'] ?? null;
+    $badgeClass = $menu['badge_class'] ?? 'bg-emerald-100 dark:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60';
 @endphp
 
 <a href="{{ $url }}"
-    class="group flex items-center gap-2.5 px-2.5 py-2 text-[13px] rounded-xl transition-all cursor-pointer {{ $isActive ? 'bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 font-semibold' : 'font-medium text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/50' }}">
-    <div class="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-colors {{ $isActive ? 'bg-blue-100 dark:bg-blue-900/60' : 'bg-zinc-100 dark:bg-zinc-800' }}">
-        {!! App\Helpers\MenuHelper::renderIcon($menuIcon) !!}
+    class="group w-full flex items-center justify-between px-2.5 py-2 text-xs font-semibold rounded-xl transition-all duration-200 cursor-pointer {{ $isActive ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/80 dark:text-emerald-300 font-bold border border-emerald-200/50 dark:border-emerald-800/50 shadow-xs' : 'text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100/80 dark:hover:bg-zinc-800/80 hover:text-zinc-900 dark:hover:text-white' }}">
+    <div class="flex items-center gap-2.5 min-w-0">
+        <div class="w-4 h-4 flex-shrink-0 flex items-center justify-center transition-colors duration-200 {{ $isActive ? 'text-emerald-600 dark:text-emerald-400' : 'text-zinc-400 dark:text-zinc-500 group-hover:text-zinc-700 dark:group-hover:text-zinc-200' }}">
+            {!! App\Helpers\MenuHelper::renderIcon($menuIcon, 'w-4 h-4') !!}
+        </div>
+        <span class="truncate">{{ $menuName }}</span>
     </div>
-    <span class="truncate">{{ $menuName }}</span>
+    @if ($badgeText)
+        <span class="ml-2 px-1.5 py-0.2 text-[9px] font-extrabold rounded-md {{ $badgeClass }} flex-shrink-0">
+            {{ $badgeText }}
+        </span>
+    @endif
 </a>

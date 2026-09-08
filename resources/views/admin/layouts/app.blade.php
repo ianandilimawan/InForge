@@ -63,36 +63,57 @@
         })();
     </script>
     <style>
+        [x-cloak] {
+            display: none !important;
+        }
+
+        html, body {
+            height: 100%;
+            min-height: 100%;
+            min-height: 100vh;
+            min-height: 100dvh;
+        }
+
+        @media (min-width: 1024px) {
+            html.admin-panel, html.admin-panel body {
+                height: 100vh;
+                max-height: 100vh;
+                overflow: hidden;
+            }
+        }
+
         /* Desktop sidebar collapsed state */
         @media (min-width: 1024px) {
             html.sidebar-closed #sidebar {
-                transform: translateX(-100%) !important;
+                transform: translateX(calc(-100% - 2rem)) !important;
             }
 
             html.sidebar-closed #sidebarSpacer {
                 width: 0 !important;
+                margin-right: -0.875rem !important;
             }
         }
     </style>
 </head>
 
-<body class="bg-zinc-50 dark:bg-zinc-950 font-sans text-sm antialiased text-zinc-900 dark:text-zinc-100" id="body">
-    <div class="flex h-screen overflow-hidden">
-        <!-- Sidebar & Desktop Spacer -->
+<body class="bg-zinc-100/80 dark:bg-[#090d12] font-sans text-sm antialiased text-zinc-900 dark:text-zinc-100 min-h-screen lg:h-screen lg:max-h-screen overflow-x-hidden lg:overflow-hidden flex flex-col" id="body">
+    <div class="flex flex-1 w-full min-h-screen lg:min-h-0 lg:h-screen lg:max-h-screen lg:overflow-hidden lg:p-3.5 lg:gap-3.5">
+        <!-- Left Floating Sidebar Card & Desktop Spacer -->
         @include('admin.layouts.partials.sidebar')
 
-        <!-- Main Content -->
-        <div class="flex-1 flex flex-col overflow-hidden lg:ml-0">
-            <!-- Top Navbar -->
+        <!-- Right Floating Main Workspace Card (Harmonized with Sidebar Card) -->
+        <div id="mainWorkspaceCard"
+            class="flex-1 flex flex-col min-w-0 w-full min-h-screen lg:min-h-[calc(100vh-1.75rem)] lg:h-[calc(100vh-1.75rem)] lg:max-h-[calc(100vh-1.75rem)] bg-white dark:bg-zinc-900 lg:rounded-2xl lg:border lg:border-zinc-200/80 lg:dark:border-zinc-800 lg:shadow-xs overflow-hidden transition-all duration-300">
+            <!-- Top Navbar inside Workspace Card -->
             @include('admin.layouts.partials.navbar')
 
-            <!-- Page Content -->
-            <div class="flex-1 overflow-y-auto flex flex-col relative z-0">
-                <main class="flex-1 p-6 animate-fade-in-up">
-                    @yield('content')
-                </main>
-                @include('admin.layouts.partials.footer')
-            </div>
+            <!-- Scrollable Page Content -->
+            <main class="flex-1 overflow-y-auto min-h-0 p-3.5 sm:p-6 custom-scrollbar animate-fade-in-up pb-28 lg:pb-6">
+                @yield('content')
+            </main>
+
+            <!-- Footer inside Workspace Card -->
+            @include('admin.layouts.partials.footer')
         </div>
     </div>
 

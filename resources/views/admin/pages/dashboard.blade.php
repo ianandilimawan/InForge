@@ -1,657 +1,468 @@
 @extends('admin.layouts.app')
 
+@section('page-title', 'Dashboard')
+
+@push('styles')
+<style>
+    /* ApexCharts Theme Text Styling */
+    .apexcharts-canvas text,
+    .apexcharts-text,
+    .apexcharts-legend-text {
+        fill: #52525b !important;
+        color: #52525b !important;
+    }
+    .dark .apexcharts-canvas text,
+    .dark .apexcharts-text,
+    .dark .apexcharts-legend-text {
+        fill: #a1a1aa !important;
+        color: #a1a1aa !important;
+    }
+    .apexcharts-grid line {
+        stroke: #f4f4f5 !important;
+    }
+    .dark .apexcharts-grid line {
+        stroke: #27272a !important;
+    }
+</style>
+@endpush
+
 @section('content')
-    <div class="space-y-6">
-        <!-- Page Header -->
-        <div class="flex justify-between items-end animate-fade-in-up">
+<div class="space-y-4 sm:space-y-5 pb-6">
+
+    <!-- Top Role Tab Switcher & Status Mode -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 pb-3 border-b border-zinc-200/80 dark:border-zinc-800">
+        <div class="inline-flex items-center p-1 bg-zinc-100 dark:bg-zinc-800/80 rounded-xl border border-zinc-200/80 dark:border-zinc-700/60 w-full sm:w-auto">
+            <button type="button"
+                class="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-xs bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white shadow-xs font-bold transition-all cursor-pointer flex-1 sm:flex-initial whitespace-nowrap">
+                <svg class="w-3.5 h-3.5 text-emerald-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                <span>Dashboard Platform</span>
+            </button>
+            <a href="{{ route('admin.profile.index') }}"
+                class="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-xs text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-zinc-200 font-medium transition-all cursor-pointer flex-1 sm:flex-initial whitespace-nowrap">
+                <svg class="w-3.5 h-3.5 text-blue-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                <span>Profil Akun</span>
+            </a>
+        </div>
+        <div class="flex items-center">
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                Super Admin Mode
+            </span>
+        </div>
+    </div>
+
+    <!-- Header & Shortcuts -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div>
+            <div class="flex items-center gap-2 flex-wrap">
+                <h1 class="text-base sm:text-lg md:text-xl font-bold tracking-tight text-zinc-900 dark:text-white">
+                    Dashboard Super Admin
+                </h1>
+                <span class="text-[10px] sm:text-xs px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-bold border border-emerald-200 dark:border-emerald-800">
+                    Sistem & Platform
+                </span>
+            </div>
+            <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Pantau pertumbuhan pengguna, log aktivitas sistem, status server, dan kontrol platform.</p>
+        </div>
+        <div class="flex items-center gap-2 flex-wrap">
+            <a href="{{ route('admin.users.index') }}"
+                class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white transition shadow-sm shadow-emerald-600/20">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                <span>Kelola Pengguna</span>
+            </a>
+            <a href="{{ route('admin.settings.index') }}"
+                class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-200 transition shadow-2xs">
+                <svg class="w-3.5 h-3.5 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                <span>Pengaturan</span>
+            </a>
+            <a href="{{ route('admin.laravel-logs.index') }}"
+                class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-200 transition shadow-2xs">
+                <svg class="w-3.5 h-3.5 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                <span>Log Server</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- 4 Platform Metric Summary Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <!-- Card 1: Total Users -->
+        <div class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 shadow-xs relative overflow-hidden group hover:border-zinc-300 dark:hover:border-zinc-700 transition">
+            <div class="flex items-center justify-between mb-3">
+                <div class="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shadow-xs">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                </div>
+                <span class="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200/50">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                    {{ $systemStats['total_users'] }} Aktif
+                </span>
+            </div>
+            <div class="text-2xl sm:text-3xl font-black text-zinc-900 dark:text-white tracking-tight">
+                {{ number_format($systemStats['total_users']) }}
+            </div>
+            <div class="flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400 font-medium mt-1">
+                <span>Pengguna Terdaftar</span>
+                <span class="text-emerald-600 dark:text-emerald-400 font-bold">+{{ $systemStats['new_users_this_month'] }} bln ini</span>
+            </div>
+        </div>
+
+        <!-- Card 2: Roles & Permissions -->
+        <div class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 shadow-xs relative overflow-hidden group hover:border-zinc-300 dark:hover:border-zinc-700 transition">
+            <div class="flex items-center justify-between mb-3">
+                <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shadow-xs">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                </div>
+                <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 dark:bg-blue-950/80 dark:text-blue-300 border border-blue-200/50">
+                    Multi-Role
+                </span>
+            </div>
+            <div class="text-2xl sm:text-3xl font-black text-zinc-900 dark:text-white tracking-tight">
+                {{ number_format($systemStats['total_roles']) }}
+            </div>
+            <p class="text-xs text-zinc-500 dark:text-zinc-400 font-medium mt-1">
+                Role & {{ number_format($systemStats['total_permissions']) }} Permission Aktif
+            </p>
+        </div>
+
+        <!-- Card 3: Activity Logs -->
+        <div class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 shadow-xs relative overflow-hidden group hover:border-zinc-300 dark:hover:border-zinc-700 transition">
+            <div class="flex items-center justify-between mb-3">
+                <div class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center shadow-xs">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
+                <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-purple-50 text-purple-700 dark:bg-purple-950/80 dark:text-purple-300 border border-purple-200/50">
+                    Audit Trail
+                </span>
+            </div>
+            <div class="text-2xl sm:text-3xl font-black text-zinc-900 dark:text-white tracking-tight">
+                {{ number_format($systemStats['total_activities']) }}
+            </div>
+            <p class="text-xs text-zinc-500 dark:text-zinc-400 font-medium mt-1">
+                Total Mutasi & Log Tercatat
+            </p>
+        </div>
+
+        <!-- Card 4: Server Status -->
+        <div class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 shadow-xs relative overflow-hidden group hover:border-zinc-300 dark:hover:border-zinc-700 transition">
+            <div class="flex items-center justify-between mb-3">
+                <div class="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center shadow-xs">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"></path></svg>
+                </div>
+                <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 dark:bg-amber-950/80 dark:text-amber-300 border border-amber-200/50">
+                    {{ strtoupper($systemStats['server_info']['environment']) }}
+                </span>
+            </div>
+            <div class="text-xl sm:text-2xl font-black text-zinc-900 dark:text-white tracking-tight">
+                PHP {{ PHP_MAJOR_VERSION }}.{{ PHP_MINOR_VERSION }}
+            </div>
+            <p class="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium mt-1">
+                Laravel {{ $systemStats['server_info']['laravel_version'] }} • DB: <span class="font-bold text-zinc-700 dark:text-zinc-300">{{ $systemStats['server_info']['db_driver'] }}</span>
+            </p>
+        </div>
+    </div>
+
+    <!-- User Growth Analytics Chart & Growth Highlights -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4">
+        <!-- Main Registration Chart -->
+        <div class="lg:col-span-2 p-4 sm:p-5 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 shadow-xs flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-2">
+                <div>
+                    <h2 class="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                        <span>Tren Pertumbuhan Pengguna Baru (6 Bulan Terakhir)</span>
+                    </h2>
+                    <p class="text-[11px] text-zinc-500 dark:text-zinc-400 mt-0.5">Statistik pendaftaran akun pengguna per bulan</p>
+                </div>
+                <span class="text-xs font-bold px-2.5 py-1 rounded-xl bg-indigo-50 text-indigo-700 dark:bg-indigo-950/80 dark:text-indigo-300 border border-indigo-200/50">
+                    +{{ $systemStats['new_users_this_month'] }} Bulan Ini
+                </span>
+            </div>
+            <div class="h-52 w-full">
+                <div id="userRegistrationChart" class="h-full w-full"></div>
+            </div>
+        </div>
+
+        <!-- User Growth Highlights Card -->
+        <div class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 shadow-xs flex flex-col justify-between">
             <div>
-                <h1 class="text-xl font-bold tracking-tight text-zinc-900 dark:text-white tracking-tight">Dashboard Overview</h1>
-                <p class="mt-1 text-sm text-zinc-500 dark:text-zinc-400">Here's what's happening with your platform today.</p>
-            </div>
-            <div class="hidden sm:flex space-x-2">
-                <button class="px-4 py-2 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg text-sm font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-700 transition-colors shadow-sm flex items-center">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                    Export Report
-                </button>
-                <button class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-colors shadow-sm shadow-blue-500/30 flex items-center">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
-                    New Campaign
-                </button>
-            </div>
-        </div>
-
-        <!-- Stats Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 animate-fade-in-up delay-100">
-            <!-- Stat Card 1 -->
-            <div class="bg-white dark:bg-zinc-800 rounded-xl shadow-sm border border-zinc-100 dark:border-zinc-700 p-6 transform transition-all duration-300 hover:-translate-y-1 hover:shadow-md group cursor-pointer">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm font-medium text-zinc-500 dark:text-zinc-400">Total Users</p>
-                        <p class="mt-2 text-xl font-bold tracking-tight tracking-tight text-zinc-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">2,543</p>
-                    </div>
-                    <div class="p-3 bg-blue-50 dark:bg-blue-900/40 rounded-xl group-hover:bg-blue-100 dark:group-hover:bg-blue-900/60 transition-colors">
-                        <svg class="w-7 h-7 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                        </svg>
-                    </div>
-                </div>
-                <div class="mt-4 flex items-center text-sm">
-                    <span class="text-green-600 dark:text-green-400 font-semibold flex items-center bg-green-50 dark:bg-green-900/30 px-2 py-0.5 rounded-full">
-                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-                        12.5%
-                    </span>
-                    <span class="text-zinc-500 dark:text-zinc-400 ml-2">vs last month</span>
-                </div>
-            </div>
-
-            <!-- Stat Card 2 -->
-            <div class="bg-white dark:bg-zinc-800 rounded-xl shadow-sm border border-zinc-100 dark:border-zinc-700 p-6 transform transition-all duration-300 hover:-translate-y-1 hover:shadow-md group cursor-pointer">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm font-medium text-zinc-500 dark:text-zinc-400">Total Revenue</p>
-                        <p class="mt-2 text-xl font-bold tracking-tight tracking-tight text-zinc-900 dark:text-white group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">$45,231</p>
-                    </div>
-                    <div class="p-3 bg-green-50 dark:bg-green-900/40 rounded-xl group-hover:bg-green-100 dark:group-hover:bg-green-900/60 transition-colors">
-                        <svg class="w-7 h-7 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                    </div>
-                </div>
-                <div class="mt-4 flex items-center text-sm">
-                    <span class="text-green-600 dark:text-green-400 font-semibold flex items-center bg-green-50 dark:bg-green-900/30 px-2 py-0.5 rounded-full">
-                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-                        8.2%
-                    </span>
-                    <span class="text-zinc-500 dark:text-zinc-400 ml-2">vs last month</span>
-                </div>
-            </div>
-
-            <!-- Stat Card 3 -->
-            <div class="bg-white dark:bg-zinc-800 rounded-xl shadow-sm border border-zinc-100 dark:border-zinc-700 p-6 transform transition-all duration-300 hover:-translate-y-1 hover:shadow-md group cursor-pointer">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm font-medium text-zinc-500 dark:text-zinc-400">Active Projects</p>
-                        <p class="mt-2 text-xl font-bold tracking-tight tracking-tight text-zinc-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">124</p>
-                    </div>
-                    <div class="p-3 bg-purple-50 dark:bg-purple-900/40 rounded-xl group-hover:bg-purple-100 dark:group-hover:bg-purple-900/60 transition-colors">
-                        <svg class="w-7 h-7 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                        </svg>
-                    </div>
-                </div>
-                <div class="mt-4 flex items-center text-sm">
-                    <span class="text-green-600 dark:text-green-400 font-semibold flex items-center bg-green-50 dark:bg-green-900/30 px-2 py-0.5 rounded-full">
-                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-                        4.3%
-                    </span>
-                    <span class="text-zinc-500 dark:text-zinc-400 ml-2">vs last month</span>
-                </div>
-            </div>
-
-            <!-- Stat Card 4 -->
-            <div class="bg-white dark:bg-zinc-800 rounded-xl shadow-sm border border-zinc-100 dark:border-zinc-700 p-6 transform transition-all duration-300 hover:-translate-y-1 hover:shadow-md group cursor-pointer">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm font-medium text-zinc-500 dark:text-zinc-400">Bounce Rate</p>
-                        <p class="mt-2 text-xl font-bold tracking-tight tracking-tight text-zinc-900 dark:text-white group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">24.5%</p>
-                    </div>
-                    <div class="p-3 bg-orange-50 dark:bg-orange-900/40 rounded-xl group-hover:bg-orange-100 dark:group-hover:bg-orange-900/60 transition-colors">
-                        <svg class="w-7 h-7 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path>
-                        </svg>
-                    </div>
-                </div>
-                <div class="mt-4 flex items-center text-sm">
-                    <span class="text-red-600 dark:text-red-400 font-semibold flex items-center bg-red-50 dark:bg-red-900/30 px-2 py-0.5 rounded-full">
-                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path></svg>
-                        2.4%
-                    </span>
-                    <span class="text-zinc-500 dark:text-zinc-400 ml-2">vs last month</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Charts Grid -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fade-in-up delay-200">
-            <!-- Revenue Area Chart -->
-            <div class="bg-white dark:bg-zinc-800 rounded-xl shadow-sm border border-zinc-100 dark:border-zinc-700 lg:col-span-2 group">
-                <div class="p-6 border-b border-zinc-100 dark:border-zinc-700 flex justify-between items-center">
-                    <h2 class="text-base font-semibold tracking-tight text-zinc-900 dark:text-white">Revenue Growth</h2>
-                    <div class="flex space-x-2">
-                        <button class="px-3 py-1 bg-zinc-100 dark:bg-zinc-700 text-xs font-medium text-zinc-700 dark:text-zinc-300 rounded-md hover:bg-zinc-200 dark:hover:bg-zinc-600 transition-colors">7d</button>
-                        <button class="px-3 py-1 bg-transparent text-xs font-medium text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300 rounded-md transition-colors">30d</button>
-                        <button class="px-3 py-1 bg-transparent text-xs font-medium text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300 rounded-md transition-colors">YTD</button>
-                    </div>
-                </div>
-                <div class="p-6">
-                    <div id="revenueChart" class="w-full h-72 transition-opacity duration-300"></div>
-                </div>
-            </div>
-
-            <!-- Device Usage Donut Chart -->
-            <div class="bg-white dark:bg-zinc-800 rounded-xl shadow-sm border border-zinc-100 dark:border-zinc-700 lg:col-span-1 group">
-                <div class="p-6 border-b border-zinc-100 dark:border-zinc-700">
-                    <h2 class="text-base font-semibold tracking-tight text-zinc-900 dark:text-white">Traffic Sources</h2>
-                </div>
-                <div class="p-6 flex flex-col justify-center items-center h-full pb-10">
-                    <div id="trafficChart" class="w-full h-64 flex justify-center"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Tables Grid -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fade-in-up delay-300">
-            <!-- Recent Users -->
-            <div class="bg-white dark:bg-zinc-800 rounded-xl shadow-sm border border-zinc-100 dark:border-zinc-700 lg:col-span-2">
-                <div class="p-6 border-b border-zinc-100 dark:border-zinc-700 flex justify-between items-center">
-                    <h2 class="text-base font-semibold tracking-tight text-zinc-900 dark:text-white">Recent Users</h2>
-                    <a href="#" class="text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline">View All</a>
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full">
-                        <thead class="bg-zinc-50 dark:bg-zinc-700">
-                            <tr>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-zinc-500 dark:text-zinc-300 uppercase tracking-wider">
-                                    User</th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-zinc-500 dark:text-zinc-300 uppercase tracking-wider">
-                                    Status</th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-zinc-500 dark:text-zinc-300 uppercase tracking-wider">
-                                    Date</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-zinc-200 dark:divide-zinc-700">
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <img class="h-10 w-10 rounded-full"
-                                            src="https://ui-avatars.com/api/?name=John+Doe" alt="">
-                                        <div class="ml-4">
-                                            <div class="text-sm font-medium text-zinc-900 dark:text-white">John Doe</div>
-                                            <div class="text-sm text-zinc-500 dark:text-zinc-400">john@example.com</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">Active</span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-zinc-500 dark:text-zinc-400">2 hours
-                                    ago</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <img class="h-10 w-10 rounded-full"
-                                            src="https://ui-avatars.com/api/?name=Jane+Smith" alt="">
-                                        <div class="ml-4">
-                                            <div class="text-sm font-medium text-zinc-900 dark:text-white">Jane Smith</div>
-                                            <div class="text-sm text-zinc-500 dark:text-zinc-400">jane@example.com</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">Active</span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-zinc-500 dark:text-zinc-400">5 hours
-                                    ago</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <img class="h-10 w-10 rounded-full"
-                                            src="https://ui-avatars.com/api/?name=Bob+Johnson" alt="">
-                                        <div class="ml-4">
-                                            <div class="text-sm font-medium text-zinc-900 dark:text-white">Bob Johnson
-                                            </div>
-                                            <div class="text-sm text-zinc-500 dark:text-zinc-400">bob@example.com</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">Pending</span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-zinc-500 dark:text-zinc-400">1 day ago
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Quick Actions -->
-            <div class="bg-white dark:bg-zinc-800 rounded-xl shadow-sm border border-zinc-100 dark:border-zinc-700 lg:col-span-1">
-                <div class="p-6 border-b border-zinc-100 dark:border-zinc-700">
-                    <h2 class="text-base font-semibold tracking-tight text-zinc-900 dark:text-white">Quick Actions</h2>
-                </div>
-                <div class="p-4 space-y-3">
-                    <a href="#" class="flex items-center p-3 text-base font-medium text-zinc-900 rounded-lg bg-zinc-50 hover:bg-zinc-100 hover:shadow-sm group hover:-translate-y-0.5 transition-all dark:bg-zinc-700/50 dark:hover:bg-zinc-700 dark:text-white">
-                        <span class="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 rounded-md">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
-                        </span>
-                        <span class="flex-1 ml-3 whitespace-nowrap group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Add New User</span>
-                    </a>
-                    <a href="#" class="flex items-center p-3 text-base font-medium text-zinc-900 rounded-lg bg-zinc-50 hover:bg-zinc-100 hover:shadow-sm group hover:-translate-y-0.5 transition-all dark:bg-zinc-700/50 dark:hover:bg-zinc-700 dark:text-white">
-                        <span class="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-green-100 dark:bg-green-900/40 text-green-600 dark:text-green-400 rounded-md">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                        </span>
-                        <span class="flex-1 ml-3 whitespace-nowrap group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">Generate Report</span>
-                    </a>
-                    <a href="#" class="flex items-center p-3 text-base font-medium text-zinc-900 rounded-lg bg-zinc-50 hover:bg-zinc-100 hover:shadow-sm group hover:-translate-y-0.5 transition-all dark:bg-zinc-700/50 dark:hover:bg-zinc-700 dark:text-white">
-                        <span class="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-purple-100 dark:bg-purple-900/40 text-purple-600 dark:text-purple-400 rounded-md">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                        </span>
-                        <span class="flex-1 ml-3 whitespace-nowrap group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">System Settings</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Fourth Row (Products & Server) -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fade-in-up delay-300" style="animation-delay: 400ms;">
-            <!-- Top Products Table -->
-            <div class="bg-white dark:bg-zinc-800 rounded-xl shadow-sm border border-zinc-100 dark:border-zinc-700 lg:col-span-2">
-                <div class="p-6 border-b border-zinc-100 dark:border-zinc-700 flex justify-between items-center">
-                    <h2 class="text-base font-semibold tracking-tight text-zinc-900 dark:text-white">Top Selling Products</h2>
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-sm text-left text-zinc-500 dark:text-zinc-400">
-                        <thead class="text-xs text-zinc-700 uppercase bg-zinc-50 dark:bg-zinc-700 dark:text-zinc-400">
-                            <tr>
-                                <th scope="col" class="px-6 py-4">Product Name</th>
-                                <th scope="col" class="px-6 py-4">Price</th>
-                                <th scope="col" class="px-6 py-4">Sold</th>
-                                <th scope="col" class="px-6 py-4">Sales Target</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="bg-white border-b dark:bg-zinc-800 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-700/50 transition-colors">
-                                <td class="px-6 py-4 flex items-center">
-                                    <div class="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/50 rounded-lg flex items-center justify-center mr-3">
-                                        <svg class="w-6 h-6 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-                                    </div>
-                                    <span class="font-medium text-zinc-900 dark:text-white">Smartphone X Pro</span>
-                                </td>
-                                <td class="px-6 py-4 font-semibold text-zinc-900 dark:text-white">$899</td>
-                                <td class="px-6 py-4 text-green-600 dark:text-green-400 font-medium">1,245</td>
-                                <td class="px-6 py-4">
-                                    <div class="w-full bg-zinc-200 rounded-full h-2.5 dark:bg-zinc-700">
-                                        <div class="bg-indigo-600 h-2.5 rounded-full" style="width: 85%"></div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr class="bg-white border-b dark:bg-zinc-800 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-700/50 transition-colors">
-                                <td class="px-6 py-4 flex items-center">
-                                    <div class="w-10 h-10 bg-pink-100 dark:bg-pink-900/50 rounded-lg flex items-center justify-center mr-3">
-                                        <svg class="w-6 h-6 text-pink-600 dark:text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path></svg>
-                                    </div>
-                                    <span class="font-medium text-zinc-900 dark:text-white">Wireless Earbuds V2</span>
-                                </td>
-                                <td class="px-6 py-4 font-semibold text-zinc-900 dark:text-white">$149</td>
-                                <td class="px-6 py-4 text-green-600 dark:text-green-400 font-medium">3,120</td>
-                                <td class="px-6 py-4">
-                                    <div class="w-full bg-zinc-200 rounded-full h-2.5 dark:bg-zinc-700">
-                                        <div class="bg-pink-600 h-2.5 rounded-full" style="width: 92%"></div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr class="bg-white border-b dark:bg-zinc-800 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-700/50 transition-colors">
-                                <td class="px-6 py-4 flex items-center">
-                                    <div class="w-10 h-10 bg-teal-100 dark:bg-teal-900/50 rounded-lg flex items-center justify-center mr-3">
-                                        <svg class="w-6 h-6 text-teal-600 dark:text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                    </div>
-                                    <span class="font-medium text-zinc-900 dark:text-white">Smart Watch Series 5</span>
-                                </td>
-                                <td class="px-6 py-4 font-semibold text-zinc-900 dark:text-white">$299</td>
-                                <td class="px-6 py-4 text-green-600 dark:text-green-400 font-medium">854</td>
-                                <td class="px-6 py-4">
-                                    <div class="w-full bg-zinc-200 rounded-full h-2.5 dark:bg-zinc-700">
-                                        <div class="bg-teal-600 h-2.5 rounded-full" style="width: 65%"></div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Server Status -->
-            <div class="bg-white dark:bg-zinc-800 rounded-xl shadow-sm border border-zinc-100 dark:border-zinc-700 lg:col-span-1">
-                <div class="p-6 border-b border-zinc-100 dark:border-zinc-700 flex justify-between items-center">
-                    <h2 class="text-base font-semibold tracking-tight text-zinc-900 dark:text-white">Server Resources</h2>
-                    <span class="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">Healthy</span>
-                </div>
-                <div class="p-6 space-y-6">
-                    <!-- CPU -->
-                    <div>
-                        <div class="flex justify-between mb-1">
-                            <span class="text-sm font-medium text-zinc-700 dark:text-zinc-300">CPU Usage</span>
-                            <span class="text-sm font-medium text-zinc-900 dark:text-white">45%</span>
+                <h2 class="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-3 flex items-center gap-1.5">
+                    <svg class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span>Aktivitas & Pertumbuhan Pengguna</span>
+                </h2>
+                <div class="space-y-3">
+                    <div class="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-100 dark:border-zinc-700/50 flex items-center justify-between">
+                        <div>
+                            <span class="text-[10px] text-zinc-400 font-medium block">Pengguna Baru (7 Hari)</span>
+                            <span class="text-base font-black text-zinc-900 dark:text-white">+{{ $systemStats['new_users_this_week'] }} Akun</span>
                         </div>
-                        <div class="w-full bg-zinc-200 rounded-full h-2 dark:bg-zinc-700">
-                            <div class="bg-blue-600 h-2 rounded-full" style="width: 45%"></div>
+                        <div class="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold text-xs">
+                            7D
                         </div>
                     </div>
-                    <!-- RAM -->
-                    <div>
-                        <div class="flex justify-between mb-1">
-                            <span class="text-sm font-medium text-zinc-700 dark:text-zinc-300">Memory (RAM)</span>
-                            <span class="text-sm font-medium text-zinc-900 dark:text-white">72%</span>
+
+                    <div class="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-100 dark:border-zinc-700/50 flex items-center justify-between">
+                        <div>
+                            <span class="text-[10px] text-zinc-400 font-medium block">Role Terdefinisi</span>
+                            <span class="text-base font-black text-zinc-900 dark:text-white">{{ $systemStats['total_roles'] }} Role</span>
                         </div>
-                        <div class="w-full bg-zinc-200 rounded-full h-2 dark:bg-zinc-700">
-                            <div class="bg-yellow-400 h-2 rounded-full" style="width: 72%"></div>
+                        <div class="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-900/60 text-purple-600 dark:text-purple-400 flex items-center justify-center font-bold text-xs">
+                            Role
                         </div>
-                        <p class="text-xs text-zinc-500 mt-1">11.5 GB / 16 GB used</p>
                     </div>
-                    <!-- Disk -->
-                    <div>
-                        <div class="flex justify-between mb-1">
-                            <span class="text-sm font-medium text-zinc-700 dark:text-zinc-300">SSD Storage</span>
-                            <span class="text-sm font-medium text-zinc-900 dark:text-white">88%</span>
+
+                    <div class="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-100 dark:border-zinc-700/50 flex items-center justify-between">
+                        <div>
+                            <span class="text-[10px] text-zinc-400 font-medium block">Permission Terdaftar</span>
+                            <span class="text-base font-black text-zinc-900 dark:text-white">{{ $systemStats['total_permissions'] }} Key</span>
                         </div>
-                        <div class="w-full bg-zinc-200 rounded-full h-2 dark:bg-zinc-700">
-                            <div class="bg-red-500 h-2 rounded-full" style="width: 88%"></div>
+                        <div class="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/60 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-xs">
+                            Key
                         </div>
-                        <p class="text-xs text-zinc-500 mt-1">440 GB / 500 GB used</p>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Fifth Row (Bar Chart & Activity Timeline) -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fade-in-up delay-300" style="animation-delay: 500ms;">
-            <!-- Bar Chart -->
-            <div class="bg-white dark:bg-zinc-800 rounded-xl shadow-sm border border-zinc-100 dark:border-zinc-700 lg:col-span-2 group">
-                <div class="p-6 border-b border-zinc-100 dark:border-zinc-700">
-                    <h2 class="text-base font-semibold tracking-tight text-zinc-900 dark:text-white">Sales by Category</h2>
-                </div>
-                <div class="p-6">
-                    <div id="barChart" class="w-full h-72 transition-opacity duration-300"></div>
-                </div>
-            </div>
-
-            <!-- Activity Timeline -->
-            <div class="bg-white dark:bg-zinc-800 rounded-xl shadow-sm border border-zinc-100 dark:border-zinc-700 lg:col-span-1">
-                <div class="p-6 border-b border-zinc-100 dark:border-zinc-700">
-                    <h2 class="text-base font-semibold tracking-tight text-zinc-900 dark:text-white">Activity Timeline</h2>
-                </div>
-                <div class="p-6">
-                    <ol class="relative border-l border-zinc-200 dark:border-zinc-700 ml-3">
-                        <li class="mb-6 ml-6">
-                            <span class="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -left-3 ring-8 ring-white dark:ring-zinc-800 dark:bg-blue-900">
-                                <svg class="w-3 h-3 text-blue-800 dark:text-blue-300" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
-                            </span>
-                            <h3 class="flex items-center mb-1 text-sm font-semibold text-zinc-900 dark:text-white">System Updated <span class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 ml-3">Latest</span></h3>
-                            <time class="block mb-2 text-xs font-normal leading-none text-zinc-400 dark:text-zinc-500">Just now</time>
-                            <p class="mb-4 text-xs font-normal text-zinc-500 dark:text-zinc-400">Admin deployed version 2.4.1 to production servers.</p>
-                        </li>
-                        <li class="mb-6 ml-6">
-                            <span class="absolute flex items-center justify-center w-6 h-6 bg-green-100 rounded-full -left-3 ring-8 ring-white dark:ring-zinc-800 dark:bg-green-900">
-                                <svg class="w-3 h-3 text-green-800 dark:text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                            </span>
-                            <h3 class="mb-1 text-sm font-semibold text-zinc-900 dark:text-white">3 New Users Registered</h3>
-                            <time class="block mb-2 text-xs font-normal leading-none text-zinc-400 dark:text-zinc-500">2 hours ago</time>
-                            <p class="text-xs font-normal text-zinc-500 dark:text-zinc-400">Sarah, John, and Mike joined the platform.</p>
-                        </li>
-                        <li class="ml-6">
-                            <span class="absolute flex items-center justify-center w-6 h-6 bg-orange-100 rounded-full -left-3 ring-8 ring-white dark:ring-zinc-800 dark:bg-orange-900">
-                                <svg class="w-3 h-3 text-orange-800 dark:text-orange-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                            </span>
-                            <h3 class="mb-1 text-sm font-semibold text-zinc-900 dark:text-white">Big Order Received</h3>
-                            <time class="block mb-2 text-xs font-normal leading-none text-zinc-400 dark:text-zinc-500">5 hours ago</time>
-                            <p class="text-xs font-normal text-zinc-500 dark:text-zinc-400">Order #29381 processed for $2,490.00.</p>
-                        </li>
-                    </ol>
-                </div>
+            <div class="pt-3 border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between text-xs text-zinc-400">
+                <span>Status Environtment</span>
+                <span class="font-bold text-emerald-600 dark:text-emerald-400">Siap Digunakan</span>
             </div>
         </div>
     </div>
+
+    <!-- Pusat Administrasi & Kontrol Cepat -->
+    <div class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 shadow-xs">
+        <h2 class="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-3 flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+            <span>Pusat Administrasi & Kontrol Cepat</span>
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+            <a href="{{ route('admin.users.index') }}"
+                class="flex items-center gap-3 p-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-100 dark:border-zinc-700/60 hover:bg-emerald-50/60 dark:hover:bg-emerald-950/30 hover:border-emerald-200 dark:hover:border-emerald-800/60 transition group cursor-pointer">
+                <div class="w-9 h-9 rounded-xl bg-emerald-100 dark:bg-emerald-900/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                </div>
+                <div class="min-w-0">
+                    <p class="text-xs font-bold text-zinc-900 dark:text-white truncate group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">User Management</p>
+                    <p class="text-[10px] text-zinc-400 truncate">Kelola data user</p>
+                </div>
+            </a>
+
+            <a href="{{ route('admin.roles.index') }}"
+                class="flex items-center gap-3 p-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-100 dark:border-zinc-700/60 hover:bg-indigo-50/60 dark:hover:bg-indigo-950/30 hover:border-indigo-200 dark:hover:border-indigo-800/60 transition group cursor-pointer">
+                <div class="w-9 h-9 rounded-xl bg-indigo-100 dark:bg-indigo-900/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                </div>
+                <div class="min-w-0">
+                    <p class="text-xs font-bold text-zinc-900 dark:text-white truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">Roles & Akses</p>
+                    <p class="text-[10px] text-zinc-400 truncate">Hak permission</p>
+                </div>
+            </a>
+
+            <a href="{{ route('admin.activity-logs.index') }}"
+                class="flex items-center gap-3 p-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-100 dark:border-zinc-700/60 hover:bg-blue-50/60 dark:hover:bg-blue-950/30 hover:border-blue-200 dark:hover:border-blue-800/60 transition group cursor-pointer">
+                <div class="w-9 h-9 rounded-xl bg-blue-100 dark:bg-blue-900/60 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
+                <div class="min-w-0">
+                    <p class="text-xs font-bold text-zinc-900 dark:text-white truncate group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Activity Logs</p>
+                    <p class="text-[10px] text-zinc-400 truncate">Audit trail user</p>
+                </div>
+            </a>
+
+            <a href="{{ route('admin.laravel-logs.index') }}"
+                class="flex items-center gap-3 p-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-100 dark:border-zinc-700/60 hover:bg-amber-50/60 dark:hover:bg-amber-950/30 hover:border-amber-200 dark:hover:border-amber-800/60 transition group cursor-pointer">
+                <div class="w-9 h-9 rounded-xl bg-amber-100 dark:bg-amber-900/60 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                </div>
+                <div class="min-w-0">
+                    <p class="text-xs font-bold text-zinc-900 dark:text-white truncate group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">Server Logs</p>
+                    <p class="text-[10px] text-zinc-400 truncate">Monitor error</p>
+                </div>
+            </a>
+
+            <a href="{{ route('admin.settings.index') }}"
+                class="flex items-center gap-3 p-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-100 dark:border-zinc-700/60 hover:bg-purple-50/60 dark:hover:bg-purple-950/30 hover:border-purple-200 dark:hover:border-purple-800/60 transition group cursor-pointer">
+                <div class="w-9 h-9 rounded-xl bg-purple-100 dark:bg-purple-900/60 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                </div>
+                <div class="min-w-0">
+                    <p class="text-xs font-bold text-zinc-900 dark:text-white truncate group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">Settings</p>
+                    <p class="text-[10px] text-zinc-400 truncate">Branding & mail</p>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Bottom Lists Row: Recent Users & Recent Audit Logs -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
+        <!-- Pengguna Terdaftar Terbaru -->
+        <div class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 shadow-xs">
+            <div class="flex items-center justify-between mb-3">
+                <h2 class="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">
+                    <svg class="w-3.5 h-3.5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    <span>Pengguna Terdaftar Terbaru</span>
+                </h2>
+                <a href="{{ route('admin.users.index') }}" class="text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:underline inline-flex items-center gap-1">
+                    <span>Lihat Semua</span>
+                    <span>&rarr;</span>
+                </a>
+            </div>
+            <div class="divide-y divide-zinc-100 dark:divide-zinc-800/80">
+                @forelse($systemStats['recent_users'] as $user)
+                    <div class="py-2.5 flex items-center justify-between gap-3">
+                        <div class="flex items-center gap-2.5 min-w-0">
+                            @if($user->avatar)
+                                <img src="{{ Storage::url($user->avatar) }}" alt="{{ $user->name }}" class="w-8 h-8 rounded-xl object-cover shrink-0">
+                            @else
+                                <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-500 text-white font-bold text-xs flex items-center justify-center shrink-0 shadow-2xs">
+                                    {{ strtoupper(substr($user->name, 0, 1)) }}
+                                </div>
+                            @endif
+                            <div class="min-w-0">
+                                <p class="text-xs font-bold text-zinc-900 dark:text-white truncate">{{ $user->name }}</p>
+                                <p class="text-[10px] text-zinc-400 truncate">{{ $user->email }}</p>
+                            </div>
+                        </div>
+                        <div class="text-right shrink-0">
+                            @if($user->roles->isNotEmpty())
+                                <span class="px-2 py-0.5 text-[9px] font-bold rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
+                                    {{ $user->roles->first()->name }}
+                                </span>
+                            @else
+                                <span class="px-2 py-0.5 text-[9px] font-bold rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-400">User</span>
+                            @endif
+                            <p class="text-[10px] text-zinc-400 mt-0.5">{{ $user->created_at ? $user->created_at->diffForHumans() : '-' }}</p>
+                        </div>
+                    </div>
+                @empty
+                    <p class="text-xs text-zinc-400 py-4 text-center">Belum ada data pengguna.</p>
+                @endforelse
+            </div>
+        </div>
+
+        <!-- Audit Log Aktivitas Terkini -->
+        <div class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 shadow-xs">
+            <div class="flex items-center justify-between mb-3">
+                <h2 class="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">
+                    <svg class="w-3.5 h-3.5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span>Audit Log Aktivitas Terkini</span>
+                </h2>
+                <a href="{{ route('admin.activity-logs.index') }}" class="text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:underline inline-flex items-center gap-1">
+                    <span>Semua Log</span>
+                    <span>&rarr;</span>
+                </a>
+            </div>
+            <div class="divide-y divide-zinc-100 dark:divide-zinc-800/80">
+                @forelse($systemStats['recent_activities'] as $log)
+                    <div class="py-2.5 flex items-center justify-between gap-3">
+                        <div class="flex items-center gap-2.5 min-w-0">
+                            <div class="w-7 h-7 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 flex items-center justify-center shrink-0">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-xs font-medium text-zinc-900 dark:text-white truncate">
+                                    <span class="font-bold">{{ $log->user ? $log->user->name : 'System' }}</span>
+                                    <span class="text-zinc-500 dark:text-zinc-400">{{ $log->description ?? $log->action ?? 'melakukan aksi' }}</span>
+                                </p>
+                                <p class="text-[10px] text-zinc-400">{{ $log->ip_address ?? '127.0.0.1' }}</p>
+                            </div>
+                        </div>
+                        <span class="text-[10px] font-medium text-zinc-400 shrink-0">
+                            {{ $log->created_at ? $log->created_at->diffForHumans() : '-' }}
+                        </span>
+                    </div>
+                @empty
+                    <p class="text-xs text-zinc-400 py-4 text-center">Belum ada riwayat aktivitas.</p>
+                @endforelse
+            </div>
+        </div>
+    </div>
+
+</div>
 @endsection
 
 @push('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Function to get current theme colors
-        const isDark = document.documentElement.classList.contains('dark');
-        const textColor = isDark ? '#9ca3af' : '#6b7280'; // gray-400 vs gray-500
-        const gridColor = isDark ? '#374151' : '#e5e7eb'; // gray-700 vs gray-200
+document.addEventListener('DOMContentLoaded', function() {
+    const isDark = document.documentElement.classList.contains('dark');
 
-        const options = {
+    // 1. User Registration Growth Chart (Bar Chart)
+    let userRegChart = null;
+    const userGrowthTrends = @json($systemStats['user_growth_trends'] ?? []);
+
+    if (document.querySelector("#userRegistrationChart") && userGrowthTrends.length > 0 && typeof ApexCharts !== 'undefined') {
+        const userMonths = userGrowthTrends.map(item => item.month_name);
+        const userCounts = userGrowthTrends.map(item => item.new_users);
+
+        const userRegistrationOptions = {
             series: [{
-                name: 'Revenue',
-                data: [31, 40, 28, 51, 42, 109, 100]
-            }],
-            chart: {
-                height: 300,
-                type: 'area',
-                fontFamily: 'Inter, sans-serif',
-                toolbar: {
-                    show: false
-                },
-                background: 'transparent'
-            },
-            theme: {
-                mode: isDark ? 'dark' : 'light',
-            },
-            colors: ['#3b82f6'], // blue-500
-            dataLabels: {
-                enabled: false
-            },
-            stroke: {
-                curve: 'smooth',
-                width: 2
-            },
-            fill: {
-                type: 'gradient',
-                gradient: {
-                    shadeIntensity: 1,
-                    opacityFrom: 0.7,
-                    opacityTo: 0.1,
-                    stops: [0, 90, 100]
-                }
-            },
-            xaxis: {
-                categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-                axisBorder: {
-                    show: false
-                },
-                axisTicks: {
-                    show: false
-                },
-                labels: {
-                    style: {
-                        colors: textColor
-                    }
-                }
-            },
-            yaxis: {
-                labels: {
-                    style: {
-                        colors: textColor
-                    },
-                    formatter: function (value) {
-                        return "$" + value;
-                    }
-                }
-            },
-            grid: {
-                borderColor: gridColor,
-                strokeDashArray: 4,
-                yaxis: {
-                    lines: {
-                        show: true
-                    }
-                }
-            }
-        };
-
-        const chart = new ApexCharts(document.querySelector("#revenueChart"), options);
-        chart.render();
-
-        // Traffic Sources Donut Chart
-        const trafficOptions = {
-            series: [44, 55, 13],
-            labels: ['Organic', 'Direct', 'Referral'],
-            chart: {
-                type: 'donut',
-                height: 280,
-                fontFamily: 'Inter, sans-serif',
-                background: 'transparent'
-            },
-            theme: {
-                mode: isDark ? 'dark' : 'light',
-            },
-            colors: ['#3b82f6', '#8b5cf6', '#10b981'], // blue, purple, green
-            plotOptions: {
-                pie: {
-                    donut: {
-                        size: '70%',
-                        labels: {
-                            show: true,
-                            name: {
-                                color: textColor
-                            },
-                            value: {
-                                color: isDark ? '#fff' : '#111827',
-                                fontSize: '24px',
-                                fontWeight: 700
-                            },
-                            total: {
-                                show: true,
-                                color: textColor,
-                                label: 'Total Visits'
-                            }
-                        }
-                    }
-                }
-            },
-            dataLabels: {
-                enabled: false
-            },
-            stroke: {
-                show: false
-            },
-            legend: {
-                position: 'bottom',
-                labels: {
-                    colors: textColor
-                }
-            }
-        };
-
-        const trafficChart = new ApexCharts(document.querySelector("#trafficChart"), trafficOptions);
-        trafficChart.render();
-
-        // Bar Chart (Sales by Category)
-        const barOptions = {
-            series: [{
-                name: 'Electronics',
-                data: [44, 55, 41, 67, 22, 43, 21]
-            }, {
-                name: 'Apparel',
-                data: [13, 23, 20, 8, 13, 27, 33]
-            }, {
-                name: 'Home',
-                data: [11, 17, 15, 15, 21, 14, 15]
+                name: 'Pengguna Baru',
+                data: userCounts
             }],
             chart: {
                 type: 'bar',
-                height: 300,
-                stacked: true,
-                fontFamily: 'Inter, sans-serif',
-                toolbar: { show: false },
-                background: 'transparent'
+                height: '100%',
+                fontFamily: 'inherit',
+                toolbar: { show: false }
             },
-            theme: {
-                mode: isDark ? 'dark' : 'light',
-            },
-            colors: ['#3b82f6', '#10b981', '#f59e0b'],
             plotOptions: {
                 bar: {
-                    horizontal: false,
-                    borderRadius: 4,
-                    columnWidth: '40%',
-                },
+                    borderRadius: 6,
+                    columnWidth: '38%',
+                    distributed: false,
+                }
             },
-            dataLabels: {
-                enabled: false
-            },
+            colors: ['#6366F1'],
+            dataLabels: { enabled: false },
             xaxis: {
-                categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                categories: userMonths,
                 axisBorder: { show: false },
                 axisTicks: { show: false },
                 labels: {
-                    style: { colors: textColor }
+                    style: { colors: isDark ? '#9CA3AF' : '#6B7280', fontSize: '11px', fontWeight: 500 }
                 }
             },
             yaxis: {
                 labels: {
-                    style: { colors: textColor }
+                    formatter: function(val) { return Math.round(val); },
+                    style: { colors: isDark ? '#9CA3AF' : '#6B7280', fontSize: '10px' }
                 }
             },
             grid: {
-                borderColor: gridColor,
+                borderColor: isDark ? '#27272A' : '#F4F4F5',
                 strokeDashArray: 4,
+                padding: { top: 0, right: 0, bottom: 0, left: 10 }
             },
-            legend: {
-                position: 'top',
-                horizontalAlign: 'right',
-                labels: {
-                    colors: textColor
+            tooltip: {
+                theme: isDark ? 'dark' : 'light',
+                y: {
+                    formatter: function(val) { return val + ' Pengguna'; }
                 }
             }
         };
 
-        const barChart = new ApexCharts(document.querySelector("#barChart"), barOptions);
-        barChart.render();
+        userRegChart = new ApexCharts(document.querySelector("#userRegistrationChart"), userRegistrationOptions);
+        userRegChart.render();
+    }
 
-        // Listen for theme toggle to update chart dynamically
-        const themeToggle = document.getElementById('themeToggle');
-        if (themeToggle) {
-            themeToggle.addEventListener('click', function() {
-                // Short delay to allow HTML class to update first
-                setTimeout(() => {
-                    const currentlyDark = document.documentElement.classList.contains('dark');
-                    const newTextColor = currentlyDark ? '#9ca3af' : '#6b7280';
-                    const newGridColor = currentlyDark ? '#374151' : '#e5e7eb';
-                    
-                    chart.updateOptions({
-                        theme: { mode: currentlyDark ? 'dark' : 'light' },
-                        xaxis: { labels: { style: { colors: newTextColor } } },
-                        yaxis: { labels: { style: { colors: newTextColor } } },
-                        grid: { borderColor: newGridColor }
-                    });
-
-                    trafficChart.updateOptions({
-                        theme: { mode: currentlyDark ? 'dark' : 'light' },
-                        legend: { labels: { colors: newTextColor } },
-                        plotOptions: {
-                            pie: {
-                                donut: {
-                                    labels: {
-                                        name: { color: newTextColor },
-                                        value: { color: currentlyDark ? '#fff' : '#111827' },
-                                        total: { color: newTextColor }
-                                    }
-                                }
-                            }
-                        }
-                    });
-
-                    barChart.updateOptions({
-                        theme: { mode: currentlyDark ? 'dark' : 'light' },
-                        xaxis: { labels: { style: { colors: newTextColor } } },
-                        yaxis: { labels: { style: { colors: newTextColor } } },
-                        grid: { borderColor: newGridColor },
-                        legend: { labels: { colors: newTextColor } }
-                    });
-                }, 50);
-            });
+    function updateChartsTheme(dark) {
+        if (userRegChart) {
+            userRegChart.updateOptions({
+                xaxis: { labels: { style: { colors: dark ? '#9CA3AF' : '#6B7280' } } },
+                yaxis: { labels: { style: { colors: dark ? '#9CA3AF' : '#6B7280' } } },
+                grid: { borderColor: dark ? '#27272A' : '#F4F4F5' },
+                tooltip: { theme: dark ? 'dark' : 'light' }
+            }, false, false);
         }
+    }
+
+    window.addEventListener('theme-changed', (e) => {
+        updateChartsTheme(e.detail.isDark);
     });
+
+    const themeObserver = new MutationObserver(() => {
+        const dark = document.documentElement.classList.contains('dark');
+        updateChartsTheme(dark);
+    });
+    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+});
 </script>
 @endpush

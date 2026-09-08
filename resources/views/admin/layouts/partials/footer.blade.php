@@ -1,22 +1,25 @@
-<footer
-    class="mt-auto py-2.5 px-4 border-t border-zinc-200/80 dark:border-zinc-800/80 bg-white/60 dark:bg-zinc-900/60 backdrop-blur-md">
-    <div class="flex flex-col md:flex-row justify-between items-center gap-1.5">
-        <div class="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">
-            &copy; {{ date('Y') }}
-            <a href="/"
-                class="font-bold text-zinc-800 dark:text-zinc-200 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300">
-                {{ isset($settings) ? $settings->app_name : config('app.name', 'InForge') }}
-            </a>.
-            <span class="hidden sm:inline-block ml-0.5">
-                Created by <a href="https://intechstudio.id"
-                    class="font-bold text-zinc-800 dark:text-zinc-200 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300">Intech
-                    Studio</a>
-            </span>
+<footer class="app-footer mt-auto border-t border-zinc-100 dark:border-zinc-800/80 bg-zinc-50/50 dark:bg-zinc-900/50 backdrop-blur-md hidden lg:block py-3 px-6 flex-shrink-0">
+    <div class="flex items-center justify-between gap-4">
+        <!-- Left: Brand & Copyright -->
+        <div class="flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400">
+            <div class="flex items-center gap-1">
+                <span class="font-bold text-zinc-800 dark:text-zinc-200">
+                    {{ isset($settings) && $settings->app_name ? $settings->app_name : 'InForge' }}<span class="text-emerald-500">.</span>
+                </span>
+                <span class="text-zinc-400 dark:text-zinc-600">&copy; {{ date('Y') }}</span>
+            </div>
+            <span class="text-zinc-300 dark:text-zinc-700">•</span>
+            <span class="text-zinc-400 dark:text-zinc-500">Enterprise Starter Kit & CRUD Engine</span>
+            <span class="text-zinc-300 dark:text-zinc-700">•</span>
+            <a href="https://intechstudio.id" target="_blank" rel="noopener noreferrer"
+               class="font-medium text-zinc-500 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+                Intech Studio
+            </a>
         </div>
 
-        <div class="flex items-center text-[10px] font-medium text-zinc-500 dark:text-zinc-400">
-            <div
-                class="flex items-center justify-center px-1.5 py-0.5 rounded border border-zinc-200/80 dark:border-zinc-700/80 shadow-sm ring-1 ring-black/5 dark:ring-white/5">
+        <!-- Right: Version Badge -->
+        <div class="flex items-center text-xs">
+            <div class="inline-flex items-center px-2 py-0.5 rounded-md bg-zinc-100 dark:bg-zinc-800/80 border border-zinc-200/80 dark:border-zinc-700/80 text-zinc-500 dark:text-zinc-400 font-mono text-[10px] font-medium">
                 v3.0.0
             </div>
         </div>
