@@ -17,22 +17,10 @@
                 <x-heroicon-o-bars-3 class="w-5 h-5" />
             </button>
 
-            <!-- Desktop: Workspace Indicator -->
-            <div class="hidden lg:flex items-center gap-2 text-xs">
-                <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-                <span class="font-bold text-zinc-700 dark:text-zinc-300">Workspace</span>
-            </div>
         </div>
 
         <!-- Right: Utility Actions -->
         <div class="flex items-center space-x-2 sm:space-x-3">
-            <!-- Panduan Fitur Button -->
-            <a href="https://github.com" target="_blank"
-                class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/80 hover:bg-emerald-100 dark:hover:bg-emerald-900/80 border border-emerald-200/60 dark:border-emerald-800/60 rounded-xl transition-all cursor-pointer shadow-2xs"
-                title="Buka Panduan & Dokumentasi">
-                <svg class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                <span>Panduan</span>
-            </a>
 
             <!-- Notifications -->
             <div class="relative" x-data="{ open: false }" @click.outside="open = false">
