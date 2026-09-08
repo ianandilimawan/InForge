@@ -57,6 +57,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::put('profile/password', [\App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('profile.password');
         Route::post('profile/check-password', [\App\Http\Controllers\ProfileController::class, 'checkPassword'])->name('profile.check-password');
 
+        // UI Kit / Component Showcase
+        Route::get('uikit', [\App\Http\Controllers\UiKitController::class, 'index'])->name('uikit');
+
         // Test Error Pages (only in non-production)
         if (app()->environment(['local', 'staging', 'development'])) {
             Route::get('test-error/{code}', function ($code) {

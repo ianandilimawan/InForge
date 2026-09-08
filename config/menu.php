@@ -72,6 +72,14 @@ return [
         ],
     ],
 
+    'Developer' => [
+        [
+            'name' => 'UI Components',
+            'route' => 'admin.uikit',
+            'icon' => 'collection',
+        ],
+    ],
+
     'Content Management' => [
 
     ],
