@@ -16,50 +16,53 @@
         <div>
             <div class="flex items-center gap-2 mb-1">
                 <span class="px-2 py-0.5 rounded-md font-mono text-[10px] font-extrabold bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60 uppercase">
-                    v3.0 Design System
+                    v3.0 UI Kit
                 </span>
                 <span class="text-xs text-zinc-400">&bull;</span>
-                <span class="text-xs text-zinc-500 dark:text-zinc-400">Reusable Primitives & UI Kit</span>
+                <span class="text-xs text-zinc-500 dark:text-zinc-400">100% Native Blade Components Directory</span>
             </div>
             <h1 class="text-base sm:text-lg md:text-xl font-bold tracking-tight text-zinc-900 dark:text-white">
                 UI Components Showcase
             </h1>
             <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
-                Comprehensive directory of every Blade component, input control, button, badge, and notification ready for your CRUDs.
+                Live interactive showcase of all 20 pre-built Blade components, buttons, inputs, rich text editor, and modals.
             </p>
         </div>
         <div class="flex items-center gap-2">
             <x-button variant="secondary" icon="arrow-left" href="{{ route('admin.dashboard') }}">
                 Dashboard
             </x-button>
-            <x-button variant="primary" icon="check" @click="window.dispatchEvent(new CustomEvent('notify', { detail: { message: 'InForge UI Kit ready for rapid prototyping!', type: 'success' } }))">
-                Quick Test
+            <x-button variant="primary" icon="check" @click="window.dispatchEvent(new CustomEvent('notify', { detail: { message: 'All components loaded and verified!', type: 'success' } }))">
+                Test Notification
             </x-button>
         </div>
     </div>
 
-    <!-- Sticky Navigation Sub-Header -->
+    <!-- Quick Navigation Pills -->
     <div class="flex items-center gap-2 overflow-x-auto pb-1 text-xs no-scrollbar">
         <a href="#buttons" class="px-3 py-1.5 rounded-xl font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 border border-zinc-200/60 dark:border-zinc-700/60 transition-colors shrink-0">
             Buttons
         </a>
         <a href="#badges" class="px-3 py-1.5 rounded-xl font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 border border-zinc-200/60 dark:border-zinc-700/60 transition-colors shrink-0">
-            Badges & Statuses
+            Badges
         </a>
-        <a href="#text-inputs" class="px-3 py-1.5 rounded-xl font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 border border-zinc-200/60 dark:border-zinc-700/60 transition-colors shrink-0">
-            Text & Number Inputs
+        <a href="#standard-inputs" class="px-3 py-1.5 rounded-xl font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 border border-zinc-200/60 dark:border-zinc-700/60 transition-colors shrink-0">
+            Standard Inputs
+        </a>
+        <a href="#floating-inputs" class="px-3 py-1.5 rounded-xl font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 border border-zinc-200/60 dark:border-zinc-700/60 transition-colors shrink-0">
+            Floating Inputs
         </a>
         <a href="#select-inputs" class="px-3 py-1.5 rounded-xl font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 border border-zinc-200/60 dark:border-zinc-700/60 transition-colors shrink-0">
             Select & Dropdowns
         </a>
-        <a href="#textarea-inputs" class="px-3 py-1.5 rounded-xl font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 border border-zinc-200/60 dark:border-zinc-700/60 transition-colors shrink-0">
-            Textareas & Multiline
+        <a href="#textareas" class="px-3 py-1.5 rounded-xl font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 border border-zinc-200/60 dark:border-zinc-700/60 transition-colors shrink-0">
+            Textareas & TinyMCE
         </a>
         <a href="#toggles" class="px-3 py-1.5 rounded-xl font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 border border-zinc-200/60 dark:border-zinc-700/60 transition-colors shrink-0">
-            Toggles & Radios
+            Toggles & Selectors
         </a>
         <a href="#uploads" class="px-3 py-1.5 rounded-xl font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 border border-zinc-200/60 dark:border-zinc-700/60 transition-colors shrink-0">
-            Date & File Uploaders
+            Pickers & FilePond
         </a>
         <a href="#cards" class="px-3 py-1.5 rounded-xl font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 border border-zinc-200/60 dark:border-zinc-700/60 transition-colors shrink-0">
             Cards
@@ -212,47 +215,46 @@
         </div>
     </section>
 
-    <!-- 3. TEXT & NUMBER INPUTS SECTION -->
-    <section id="text-inputs" class="space-y-6">
+    <!-- 3. STANDARD & MODERN INPUTS (EXTERNAL LABELS - PERFECTLY ALIGNED) -->
+    <section id="standard-inputs" class="space-y-6">
         <div class="flex items-center gap-2 border-b border-zinc-200/80 dark:border-zinc-800 pb-3">
             <div class="w-6 h-6 rounded-lg bg-amber-100 dark:bg-amber-950/60 flex items-center justify-center text-amber-600 dark:text-amber-400">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
             </div>
             <div>
                 <div class="flex items-center gap-2">
-                    <h2 class="text-sm font-bold text-zinc-900 dark:text-white">Text & Number Inputs</h2>
+                    <h2 class="text-sm font-bold text-zinc-900 dark:text-white">Standard & Modern Inputs</h2>
                     <span class="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">&lt;x-input&gt;</span>
                     <span class="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">&lt;x-modern-input&gt;</span>
-                    <span class="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">&lt;x-input-floating&gt;</span>
                 </div>
-                <p class="text-[11px] text-zinc-500">Standard, icon-prefixed, and floating label text and currency inputs.</p>
+                <p class="text-[11px] text-zinc-500">Inputs with clean external labels, currency masks, and icon slots &mdash; all aligned to the pixel.</p>
             </div>
         </div>
 
-        <x-card title="Interactive Text & Number Controls" subtitle="Try typing or testing the interactive masks and icons.">
+        <x-card title="Standard Inputs Grid" subtitle="Every input in this row shares identical label spacing and box heights for perfect vertical alignment.">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- 1. Standard Input -->
-                <div>
-                    <div class="flex items-center justify-between mb-1.5">
-                        <span class="text-xs font-bold text-zinc-700 dark:text-zinc-300">Standard Input</span>
+                <div class="flex flex-col justify-between">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-[11px] font-semibold text-zinc-400">Default Text</span>
                         <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">&lt;x-input&gt;</span>
                     </div>
                     <x-input name="demo_fullname" label="Full Name" placeholder="e.g. Andy Ian" value="Andy Ian" />
                 </div>
 
                 <!-- 2. Currency Input -->
-                <div>
-                    <div class="flex items-center justify-between mb-1.5">
-                        <span class="text-xs font-bold text-zinc-700 dark:text-zinc-300">Currency Mask Input</span>
+                <div class="flex flex-col justify-between">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-[11px] font-semibold text-zinc-400">Currency Mask</span>
                         <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">:isCurrency="true"</span>
                     </div>
                     <x-input name="demo_price" label="Project Budget (IDR)" placeholder="100.000" :isCurrency="true" value="15000000" />
                 </div>
 
                 <!-- 3. Modern Input with Icon -->
-                <div>
-                    <div class="flex items-center justify-between mb-1.5">
-                        <span class="text-xs font-bold text-zinc-700 dark:text-zinc-300">Modern Input with Icon</span>
+                <div class="flex flex-col justify-between">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-[11px] font-semibold text-zinc-400">Icon Prefix Slot</span>
                         <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">&lt;x-modern-input&gt;</span>
                     </div>
                     <x-modern-input name="demo_email" label="Email Address" type="email" value="andy@intechstudio.id">
@@ -262,64 +264,85 @@
                     </x-modern-input>
                 </div>
 
-                <!-- 4. Floating Label Input -->
-                <div>
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="text-xs font-bold text-zinc-700 dark:text-zinc-300">Floating Label Input</span>
-                        <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">&lt;x-input-floating&gt;</span>
-                    </div>
-                    <div class="pt-1">
-                        <x-input-floating name="demo_floating_user" label="Username / Handle" value="andyian" />
-                    </div>
-                </div>
-
-                <!-- 5. Floating Label Password -->
-                <div>
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="text-xs font-bold text-zinc-700 dark:text-zinc-300">Floating Password Input</span>
+                <!-- 4. Standard Password Input -->
+                <div class="flex flex-col justify-between">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-[11px] font-semibold text-zinc-400">Password Field</span>
                         <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">type="password"</span>
                     </div>
-                    <div class="pt-1">
-                        <x-input-floating type="password" name="demo_floating_pwd" label="Account Password" value="SecretP@ssw0rd!" />
-                    </div>
+                    <x-input type="password" name="demo_pwd" label="Security Password" value="SecretP@ssw0rd!" />
                 </div>
 
-                <!-- 6. Disabled Input -->
-                <div>
-                    <div class="flex items-center justify-between mb-1.5">
-                        <span class="text-xs font-bold text-zinc-700 dark:text-zinc-300">Readonly / Disabled Input</span>
+                <!-- 5. Search Input with Icon -->
+                <div class="flex flex-col justify-between">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-[11px] font-semibold text-zinc-400">Search Filter</span>
+                        <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">iconSlot</span>
+                    </div>
+                    <x-modern-input name="demo_search" label="Search Keywords" placeholder="Search tables, users...">
+                        <x-slot:iconSlot>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        </x-slot:iconSlot>
+                    </x-modern-input>
+                </div>
+
+                <!-- 6. Readonly / Disabled Input (Now perfectly aligned with Row 2!) -->
+                <div class="flex flex-col justify-between">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-[11px] font-semibold text-zinc-400">Readonly / Locked</span>
                         <span class="text-[10px] font-mono text-zinc-400">disabled</span>
                     </div>
                     <x-input name="demo_disabled" label="System ID (Auto)" value="USR-98421" disabled />
                 </div>
             </div>
+        </x-card>
+    </section>
 
-            <!-- Code Snippet -->
-            <div class="mt-6 p-3.5 rounded-xl bg-zinc-900 dark:bg-black text-zinc-300 font-mono text-xs overflow-x-auto">
-                <div class="flex items-center justify-between text-[11px] text-zinc-400 mb-2 border-b border-zinc-800 pb-1.5">
-                    <span>Blade Syntax Comparison</span>
-                    <span class="text-emerald-400">copy-paste ready</span>
+    <!-- 4. FLOATING LABEL INPUTS SECTION -->
+    <section id="floating-inputs" class="space-y-6">
+        <div class="flex items-center gap-2 border-b border-zinc-200/80 dark:border-zinc-800 pb-3">
+            <div class="w-6 h-6 rounded-lg bg-sky-100 dark:bg-sky-950/60 flex items-center justify-center text-sky-600 dark:text-sky-400">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+            </div>
+            <div>
+                <div class="flex items-center gap-2">
+                    <h2 class="text-sm font-bold text-zinc-900 dark:text-white">Floating Label Inputs</h2>
+                    <span class="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">&lt;x-input-floating&gt;</span>
                 </div>
-                <pre class="text-zinc-300">&lt;!-- 1. Standard Input --&gt;
-&lt;x-input name="name" label="Full Name" placeholder="John Doe" /&gt;
+                <p class="text-[11px] text-zinc-500">Material-style animated floating labels that rest inside the input and float upward on focus.</p>
+            </div>
+        </div>
 
-&lt;!-- 2. Input with Currency Thousand Separator Mask --&gt;
-&lt;x-input name="price" label="Price" :isCurrency="true" /&gt;
+        <x-card title="Floating Label Grid" subtitle="Used extensively across CRUD create and edit modals for clean glassmorphism styling.">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-[11px] font-semibold text-zinc-400">Text Floating</span>
+                        <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">type="text"</span>
+                    </div>
+                    <x-input-floating name="float_user" label="Username / Handle" value="andyian" />
+                </div>
 
-&lt;!-- 3. Modern Input with Icon Prefix Slot --&gt;
-&lt;x-modern-input name="email" label="Email" type="email"&gt;
-    &lt;x-slot:iconSlot&gt;
-        &lt;svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"&gt;...&lt;/svg&gt;
-    &lt;/x-slot:iconSlot&gt;
-&lt;/x-modern-input&gt;
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-[11px] font-semibold text-zinc-400">Email Floating</span>
+                        <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">type="email"</span>
+                    </div>
+                    <x-input-floating type="email" name="float_email" label="Contact Email" value="ian@basecode.dev" />
+                </div>
 
-&lt;!-- 4. Floating Label Input (Glassmorphic) --&gt;
-&lt;x-input-floating name="username" label="Username" /&gt;</pre>
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-[11px] font-semibold text-zinc-400">Password Floating</span>
+                        <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">type="password"</span>
+                    </div>
+                    <x-input-floating type="password" name="float_pwd" label="Account Password" value="SuperSecure123!" />
+                </div>
             </div>
         </x-card>
     </section>
 
-    <!-- 4. SELECT & DROPDOWNS SECTION -->
+    <!-- 5. SELECT & DROPDOWNS SECTION -->
     <section id="select-inputs" class="space-y-6">
         <div class="flex items-center gap-2 border-b border-zinc-200/80 dark:border-zinc-800 pb-3">
             <div class="w-6 h-6 rounded-lg bg-indigo-100 dark:bg-indigo-950/60 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
@@ -327,98 +350,84 @@
             </div>
             <div>
                 <div class="flex items-center gap-2">
-                    <h2 class="text-sm font-bold text-zinc-900 dark:text-white">Select & Dropdowns</h2>
+                    <h2 class="text-sm font-bold text-zinc-900 dark:text-white">Select & Dropdown Controls</h2>
                     <span class="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">&lt;x-select&gt;</span>
                     <span class="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">&lt;x-modern-select&gt;</span>
                     <span class="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">&lt;x-select-floating&gt;</span>
                 </div>
-                <p class="text-[11px] text-zinc-500">Dropdown select controls supporting key-value options arrays and custom icons.</p>
+                <p class="text-[11px] text-zinc-500">Custom styled select dropdowns with dark mode option backgrounds and chevron indicators.</p>
             </div>
         </div>
 
-        <x-card title="Interactive Select Components" subtitle="Select options with standard, modern with icon, and floating labels.">
+        <x-card title="Interactive Select Components" subtitle="Supporting key-value options arrays with standard, icon, and floating labels.">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- 1. Standard Select -->
-                <div>
-                    <div class="flex items-center justify-between mb-1.5">
-                        <span class="text-xs font-bold text-zinc-700 dark:text-zinc-300">Standard Select</span>
+                <!-- Standard Select -->
+                <div class="flex flex-col justify-between">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-[11px] font-semibold text-zinc-400">Standard Select</span>
                         <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">&lt;x-select&gt;</span>
                     </div>
-                    <x-select name="demo_role" label="User Role" :options="['admin' => 'Administrator', 'editor' => 'Editor', 'member' => 'Member']" value="admin" />
+                    <x-select name="demo_role" label="Assigned Role" :options="['admin' => 'Super Administrator', 'editor' => 'Editor & Manager', 'member' => 'Staff Member']" value="admin" />
                 </div>
 
-                <!-- 2. Modern Select with Icon -->
-                <div>
-                    <div class="flex items-center justify-between mb-1.5">
-                        <span class="text-xs font-bold text-zinc-700 dark:text-zinc-300">Modern Select with Icon</span>
+                <!-- Modern Select with Icon -->
+                <div class="flex flex-col justify-between">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-[11px] font-semibold text-zinc-400">With Icon Prefix</span>
                         <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">&lt;x-modern-select&gt;</span>
                     </div>
-                    <x-modern-select name="demo_dept" label="Department" :options="['tech' => 'Engineering & Tech', 'design' => 'Product Design', 'marketing' => 'Marketing']" value="tech">
+                    <x-modern-select name="demo_dept" label="Corporate Department" :options="['tech' => 'Engineering & Tech', 'design' => 'Product Design', 'marketing' => 'Marketing']" value="tech">
                         <x-slot:iconSlot>
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
                         </x-slot:iconSlot>
                     </x-modern-select>
                 </div>
 
-                <!-- 3. Floating Label Select -->
-                <div>
+                <!-- Floating Select -->
+                <div class="flex flex-col justify-between">
                     <div class="flex items-center justify-between mb-2">
-                        <span class="text-xs font-bold text-zinc-700 dark:text-zinc-300">Floating Label Select</span>
+                        <span class="text-[11px] font-semibold text-zinc-400">Floating Select</span>
                         <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">&lt;x-select-floating&gt;</span>
                     </div>
-                    <div class="pt-1">
-                        <x-select-floating name="demo_country" label="Country of Origin" :options="['id' => 'Indonesia', 'us' => 'United States', 'sg' => 'Singapore', 'jp' => 'Japan']" value="id" />
+                    <div class="pt-0.5">
+                        <x-select-floating name="demo_country" label="Country of Operation" :options="['id' => 'Indonesia', 'us' => 'United States', 'sg' => 'Singapore', 'jp' => 'Japan']" value="id" />
                     </div>
                 </div>
-            </div>
-
-            <!-- Code Snippet -->
-            <div class="mt-6 p-3.5 rounded-xl bg-zinc-900 dark:bg-black text-zinc-300 font-mono text-xs overflow-x-auto">
-                <div class="flex items-center justify-between text-[11px] text-zinc-400 mb-2 border-b border-zinc-800 pb-1.5">
-                    <span>Select Syntax Example</span>
-                    <span class="text-emerald-400">copy-paste ready</span>
-                </div>
-                <pre class="text-zinc-300">&lt;!-- Standard Select with options array --&gt;
-&lt;x-select name="role" label="Role" :options="['admin' =&gt; 'Administrator', 'user' =&gt; 'User']" value="admin" /&gt;
-
-&lt;!-- Floating Select Dropdown --&gt;
-&lt;x-select-floating name="status" label="Status" :options="['active' =&gt; 'Active', 'inactive' =&gt; 'Inactive']" /&gt;</pre>
             </div>
         </x-card>
     </section>
 
-    <!-- 5. TEXTAREAS SECTION -->
-    <section id="textarea-inputs" class="space-y-6">
+    <!-- 6. TEXTAREAS & TINYMCE RICH TEXT EDITOR SECTION -->
+    <section id="textareas" class="space-y-6">
         <div class="flex items-center gap-2 border-b border-zinc-200/80 dark:border-zinc-800 pb-3">
             <div class="w-6 h-6 rounded-lg bg-teal-100 dark:bg-teal-950/60 flex items-center justify-center text-teal-600 dark:text-teal-400">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
             </div>
             <div>
                 <div class="flex items-center gap-2">
-                    <h2 class="text-sm font-bold text-zinc-900 dark:text-white">Textareas & Multiline Inputs</h2>
+                    <h2 class="text-sm font-bold text-zinc-900 dark:text-white">Textareas & TinyMCE Rich Text Editor</h2>
                     <span class="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">&lt;x-textarea&gt;</span>
-                    <span class="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">&lt;x-modern-textarea&gt;</span>
-                    <span class="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">&lt;x-textarea-floating&gt;</span>
+                    <span class="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">&lt;x-tinymce&gt;</span>
                 </div>
-                <p class="text-[11px] text-zinc-500">Multiline inputs for notes, descriptions, and addresses.</p>
+                <p class="text-[11px] text-zinc-500">Standard multiline inputs, floating textareas, and the bundled TinyMCE v8 WYSIWYG editor.</p>
             </div>
         </div>
 
-        <x-card title="Interactive Multiline Controls" subtitle="All textareas support configurable row heights and focus rings.">
+        <x-card title="Multiline Text Inputs" subtitle="Standard, modern with icon, and floating label textareas.">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- 1. Standard Textarea -->
+                <!-- Standard Textarea -->
                 <div>
-                    <div class="flex items-center justify-between mb-1.5">
-                        <span class="text-xs font-bold text-zinc-700 dark:text-zinc-300">Standard Textarea</span>
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-[11px] font-semibold text-zinc-400">Standard Textarea</span>
                         <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">&lt;x-textarea&gt;</span>
                     </div>
-                    <x-textarea name="demo_bio" label="Biography" rows="3" value="Experienced software developer building modern enterprise web applications." />
+                    <x-textarea name="demo_bio" label="Biography" rows="3" value="Senior developer specializing in Laravel & modern Tailwind admin architectures." />
                 </div>
 
-                <!-- 2. Modern Textarea with Icon -->
+                <!-- Modern Textarea with Icon -->
                 <div>
-                    <div class="flex items-center justify-between mb-1.5">
-                        <span class="text-xs font-bold text-zinc-700 dark:text-zinc-300">Modern Textarea with Icon</span>
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-[11px] font-semibold text-zinc-400">Icon Prefix</span>
                         <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">&lt;x-modern-textarea&gt;</span>
                     </div>
                     <x-modern-textarea name="demo_notes" label="Meeting Minutes" rows="3" value="Reviewed database indexing and Tailwind 4 theme performance.">
@@ -428,21 +437,47 @@
                     </x-modern-textarea>
                 </div>
 
-                <!-- 3. Floating Label Textarea -->
+                <!-- Floating Label Textarea -->
                 <div>
                     <div class="flex items-center justify-between mb-2">
-                        <span class="text-xs font-bold text-zinc-700 dark:text-zinc-300">Floating Label Textarea</span>
+                        <span class="text-[11px] font-semibold text-zinc-400">Floating Textarea</span>
                         <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">&lt;x-textarea-floating&gt;</span>
                     </div>
-                    <div class="pt-1">
+                    <div class="pt-0.5">
                         <x-textarea-floating name="demo_address" label="Company Physical Address" rows="3" value="Gedung Cyber 2 Lt. 18, Jl. H.R. Rasuna Said, Jakarta Selatan" />
                     </div>
                 </div>
             </div>
         </x-card>
+
+        <!-- TinyMCE Rich Text Editor Component -->
+        <x-card title="TinyMCE WYSIWYG Rich Text Editor (&lt;x-tinymce&gt;)" subtitle="Bundled via NPM, fully reactive to dark mode toggle with table, code, image, and list plugins.">
+            <div class="space-y-4">
+                <x-tinymce name="demo_article_content" label="Article Content" height="280">
+                    <h2>Welcome to the InForge Base Code Admin!</h2>
+                    <p>This rich text area is powered by <strong>TinyMCE v8</strong>, compiled locally via Vite with zero external CDN dependencies.</p>
+                    <ul>
+                        <li>Supports code snippets, headers, lists, tables, and media formatting</li>
+                        <li>Seamlessly switches between light and dark mode themes</li>
+                        <li>Packaged cleanly as a reusable Blade component: <code>&lt;x-tinymce name="..." /&gt;</code></li>
+                    </ul>
+                </x-tinymce>
+
+                <!-- Code Snippet -->
+                <div class="p-3.5 rounded-xl bg-zinc-900 dark:bg-black text-zinc-300 font-mono text-xs overflow-x-auto">
+                    <div class="flex items-center justify-between text-[11px] text-zinc-400 mb-2 border-b border-zinc-800 pb-1.5">
+                        <span>TinyMCE Blade Component Usage</span>
+                        <span class="text-emerald-400">copy-paste ready</span>
+                    </div>
+                    <pre class="text-zinc-300">&lt;x-tinymce name="content" label="Article Body" height="350"&gt;
+    {!! $post->content ?? '' !!}
+&lt;/x-tinymce&gt;</pre>
+                </div>
+            </div>
+        </x-card>
     </section>
 
-    <!-- 6. TOGGLES, SWITCHES, CHECKBOXES & RADIOS -->
+    <!-- 7. TOGGLES, SWITCHES, CHECKBOXES & RADIOS -->
     <section id="toggles" class="space-y-6">
         <div class="flex items-center gap-2 border-b border-zinc-200/80 dark:border-zinc-800 pb-3">
             <div class="w-6 h-6 rounded-lg bg-emerald-100 dark:bg-emerald-950/60 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
@@ -501,7 +536,7 @@
         </div>
     </section>
 
-    <!-- 7. DATE & FILE UPLOADS SECTION -->
+    <!-- 8. DATE & FILE UPLOADS SECTION -->
     <section id="uploads" class="space-y-6">
         <div class="flex items-center gap-2 border-b border-zinc-200/80 dark:border-zinc-800 pb-3">
             <div class="w-6 h-6 rounded-lg bg-rose-100 dark:bg-rose-950/60 flex items-center justify-center text-rose-600 dark:text-rose-400">
@@ -534,7 +569,7 @@
         </div>
     </section>
 
-    <!-- 8. CARDS & CONTAINERS SECTION -->
+    <!-- 9. CARDS & CONTAINERS SECTION -->
     <section id="cards" class="space-y-6">
         <div class="flex items-center gap-2 border-b border-zinc-200/80 dark:border-zinc-800 pb-3">
             <div class="w-6 h-6 rounded-lg bg-purple-100 dark:bg-purple-950/60 flex items-center justify-center text-purple-600 dark:text-purple-400">
@@ -597,7 +632,7 @@
         </x-card>
     </section>
 
-    <!-- 9. ALERTS & NOTIFICATIONS SECTION -->
+    <!-- 10. ALERTS & NOTIFICATIONS SECTION -->
     <section id="alerts" class="space-y-6">
         <div class="flex items-center gap-2 border-b border-zinc-200/80 dark:border-zinc-800 pb-3">
             <div class="w-6 h-6 rounded-lg bg-rose-100 dark:bg-rose-950/60 flex items-center justify-center text-rose-600 dark:text-rose-400">

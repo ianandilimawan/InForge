@@ -267,6 +267,7 @@
 
                     applyTheme(newTheme);
                     localStorage.setItem('adminTheme', newTheme);
+                    window.dispatchEvent(new CustomEvent('theme-changed', { detail: { theme: newTheme } }));
                 });
             }
         });
