@@ -65,11 +65,9 @@ if ($routeName && Route::has($routeName)) {
 @endphp
 
 <a href="{{ $url }}"
-    class="group flex items-center px-3 py-2 text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800/60 hover:text-zinc-900 dark:hover:text-zinc-100 rounded-lg transition-all duration-200 cursor-pointer {{ $isActive ? 'bg-zinc-100 dark:bg-zinc-800/60 text-zinc-900 dark:text-zinc-100 font-semibold shadow-sm' : '' }}">
-    <div
-        class="w-4 h-4 mr-3 flex items-center justify-center menu-icon-container group-hover:scale-110 transition-transform duration-200">
+    class="group flex items-center gap-2.5 px-2.5 py-2 text-[13px] rounded-xl transition-all cursor-pointer {{ $isActive ? 'bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 font-semibold' : 'font-medium text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/50' }}">
+    <div class="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-colors {{ $isActive ? 'bg-blue-100 dark:bg-blue-900/60' : 'bg-zinc-100 dark:bg-zinc-800' }}">
         {!! App\Helpers\MenuHelper::renderIcon($menuIcon) !!}
     </div>
-    <span
-        class="group-hover:text-zinc-900 dark:group-hover:text-white transition-colors duration-200">{{ $menuName }}</span>
+    <span class="truncate">{{ $menuName }}</span>
 </a>

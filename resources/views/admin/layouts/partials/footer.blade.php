@@ -17,7 +17,7 @@
         <div class="flex items-center text-[10px] font-medium text-zinc-500 dark:text-zinc-400">
             <div
                 class="flex items-center justify-center px-1.5 py-0.5 rounded border border-zinc-200/80 dark:border-zinc-700/80 shadow-sm ring-1 ring-black/5 dark:ring-white/5">
-                v2.1.0
+                v3.0.0
             </div>
         </div>
     </div>

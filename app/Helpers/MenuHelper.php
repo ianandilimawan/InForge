@@ -72,7 +72,7 @@ class MenuHelper
     public static function renderIcon(?string $iconCode): string
     {
         if (empty($iconCode)) {
-            return '<svg class="w-5 h-5 text-blue-600 dark:text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>';
+            return '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>';
         }
 
         // FontAwesome format (fa fa-home, fas fa-users, etc.)
@@ -81,16 +81,16 @@ class MenuHelper
             str_starts_with($iconCode, 'far ') || str_starts_with($iconCode, 'fab ') ||
             str_starts_with($iconCode, 'fal ') || str_starts_with($iconCode, 'fad ')
         ) {
-            return '<i class="' . htmlspecialchars($iconCode) . ' text-blue-600 dark:text-blue-300"></i>';
+            return '<i class="' . htmlspecialchars($iconCode) . '"></i>';
         }
 
         // Bootstrap Icons format (bi bi-house)
         if (str_starts_with($iconCode, 'bi ')) {
-            return '<i class="' . htmlspecialchars($iconCode) . ' text-blue-600 dark:text-blue-300"></i>';
+            return '<i class="' . htmlspecialchars($iconCode) . '"></i>';
         }
 
         // Heroicons (default) - just the icon name
         $svgPath = self::getIconSvg($iconCode);
-        return '<svg class="w-5 h-5 text-blue-600 dark:text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">' . $svgPath . '</svg>';
+        return '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">' . $svgPath . '</svg>';
     }
 }
