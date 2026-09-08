@@ -8,15 +8,17 @@
             <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Update user information and access rights</p>
         </div>
 
-<!-- Form -->
+        <!-- Form -->
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700">
-            <form x-data="ajaxForm" @submit.prevent="submit" action="{{ route('admin.users.update', $user) }}" method="POST" class="lg:p-8 px-4 py-4 space-y-6">
+            <form x-data="ajaxForm" @submit.prevent="submit" action="{{ route('admin.users.update', $user) }}"
+                method="POST" class="lg:p-8 px-4 py-4 space-y-6">
                 @csrf
                 @method('PUT')
 
                 <!-- Name -->
                 <div class="mb-6">
-                    <x-input-floating type="text" name="name" label="Name" value="{{ old('name', $user->name) }}" required="true" />
+                    <x-input-floating type="text" name="name" label="Name" value="{{ old('name', $user->name) }}"
+                        required="true" />
                     @error('name')
                         <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                     @enderror
@@ -24,7 +26,8 @@
 
                 <!-- Email -->
                 <div class="mb-6">
-                    <x-input-floating type="email" name="email" label="Email" value="{{ old('email', $user->email) }}" required="true" />
+                    <x-input-floating type="email" name="email" label="Email" value="{{ old('email', $user->email) }}"
+                        required="true" />
                     @error('email')
                         <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                     @enderror
@@ -36,7 +39,8 @@
                         <input type="password" name="password" id="password" placeholder=" "
                             class="block px-4 pb-3 pt-3 w-full text-sm text-zinc-900 bg-transparent rounded-xl border-2 border-zinc-200 appearance-none dark:text-white dark:border-zinc-700 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-500 peer transition-colors pr-12">
                         <label for="password"
-                            class="absolute text-sm text-zinc-500 dark:text-zinc-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-800 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-2 cursor-text">Password (leave blank to keep current)</label>
+                            class="absolute text-sm text-zinc-500 dark:text-zinc-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-800 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-2 cursor-text">Password
+                            (leave blank to keep current)</label>
                         <button type="button" id="togglePassword"
                             class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition-colors">
                             <!-- Eye icon (visible) -->
@@ -81,7 +85,8 @@
                         <input type="password" name="password_confirmation" id="password_confirmation" placeholder=" "
                             class="block px-4 pb-3 pt-3 w-full text-sm text-zinc-900 bg-transparent rounded-xl border-2 border-zinc-200 appearance-none dark:text-white dark:border-zinc-700 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-500 peer transition-colors pr-12">
                         <label for="password_confirmation"
-                            class="absolute text-sm text-zinc-500 dark:text-zinc-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-800 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-2 cursor-text">Confirm Password</label>
+                            class="absolute text-sm text-zinc-500 dark:text-zinc-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-800 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-2 cursor-text">Confirm
+                            Password</label>
                         <button type="button" id="togglePasswordConfirmation"
                             class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition-colors">
                             <!-- Eye icon (visible) -->
@@ -176,7 +181,7 @@
                                 $groupedPermissions = $permissions->groupBy('module');
                                 $userPermissionIds = $user->permissions->pluck('id')->toArray();
                                 $userRole = $user->roles->first();
-                                $isSuperAdmin = $userRole && ($userRole->name === 'super-admin');
+                                $isSuperAdmin = $userRole && $userRole->name === 'super-admin';
                                 $allPermissionIds = $permissions->pluck('id')->toArray();
                             @endphp
                             @if ($isSuperAdmin)
@@ -198,7 +203,7 @@
                                         @else
                                             <h3 class="text-sm font-bold text-gray-800 dark:text-gray-200">Other</h3>
                                         @endif
-                                        @if (!$isAdministrator)
+                                        @if (!$isSuperAdmin)
                                             <label class="flex items-center cursor-pointer">
                                                 <input type="checkbox"
                                                     class="select-all-module w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
@@ -212,13 +217,13 @@
                                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                                         @foreach ($modulePermissions as $permission)
                                             <label
-                                                class="flex items-center {{ !$isAdministrator ? 'cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700' : 'cursor-not-allowed opacity-60' }} p-2 rounded-lg transition-colors permission-checkbox"
+                                                class="flex items-center {{ !$isSuperAdmin ? 'cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700' : 'cursor-not-allowed opacity-60' }} p-2 rounded-lg transition-colors permission-checkbox"
                                                 data-module="{{ $module ?? 'other' }}">
                                                 <input type="checkbox" name="permissions[]"
                                                     value="{{ $permission->id }}"
-                                                    {{ $isAdministrator || in_array($permission->id, old('permissions', $userPermissionIds)) ? 'checked' : '' }}
-                                                    {{ $isAdministrator ? 'disabled' : '' }}
-                                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 {{ $isAdministrator ? 'cursor-not-allowed' : '' }}">
+                                                    {{ $isSuperAdmin || in_array($permission->id, old('permissions', $userPermissionIds)) ? 'checked' : '' }}
+                                                    {{ $isSuperAdmin ? 'disabled' : '' }}
+                                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 {{ $isSuperAdmin ? 'cursor-not-allowed' : '' }}">
                                                 <span
                                                     class="ml-2 text-sm text-gray-700 dark:text-gray-300">{{ str_replace('-', ' ', $permission->name) }}</span>
                                             </label>
@@ -233,21 +238,27 @@
                 </div>
 
                 <!-- Actions -->
-                <div class="flex items-center justify-end gap-4 pt-8 border-t-2 border-gray-100 dark:border-gray-700 mt-8">
+                <div class="flex items-center justify-end gap-3 pt-6 border-t border-zinc-100 dark:border-zinc-800 mt-6">
                     <a href="{{ route('admin.users.index') }}"
-                        class="lg:px-8 px-3 py-3 bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors font-semibold shadow-md hover:shadow-lg border-2 border-gray-200 dark:border-gray-600 lg:text-base text-sm">
+                        class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white bg-zinc-100/80 dark:bg-zinc-800/80 hover:bg-zinc-200/80 dark:hover:bg-zinc-700/80 border border-zinc-200/60 dark:border-zinc-700/60 rounded-xl transition-all cursor-pointer shadow-2xs">
                         Cancel
                     </a>
-                    <button type="submit" class="lg:px-8 px-3 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors font-semibold shadow-md hover:shadow-lg hover:scale-105 transform lg:text-base text-sm" x-bind:disabled="loading">
-<span x-show="!loading">Update User</span>
-                        <span x-show="loading" style="display: none;">
-                            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    <button type="submit"
+                        class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-emerald-700 dark:text-emerald-300 hover:text-emerald-800 dark:hover:text-emerald-200 bg-emerald-50 dark:bg-emerald-950/60 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 border border-emerald-200/60 dark:border-emerald-800/60 rounded-xl transition-all cursor-pointer shadow-2xs"
+                        x-bind:disabled="loading">
+                        <span x-show="!loading">Update User</span>
+                        <span x-show="loading" style="display: none;" class="inline-flex items-center gap-1.5">
+                            <svg class="animate-spin h-3.5 w-3.5 text-emerald-700 dark:text-emerald-300 inline"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                    stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                </path>
                             </svg>
                             Saving...
                         </span>
-</button>
+                    </button>
                 </div>
             </form>
         </div>

@@ -69,18 +69,18 @@ class ViewGenerator extends BaseGenerator
                     $importButton = "";
                     if ($this->commandData->withImport) {
                         $importButton = "<a href=\"{{ route('{$routeName}.export') }}?format=csv\"
-                    class=\"lg:px-4 px-3 lg:py-2 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors lg:text-base text-sm\">
-                    <svg class=\"lg:w-5 w-4 lg:h-5 h-4 inline lg:mr-2 mr-1\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">
+                    class=\"inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-amber-700 dark:text-amber-400 hover:text-amber-800 dark:hover:text-amber-300 bg-amber-50 dark:bg-amber-950/60 hover:bg-amber-100 dark:hover:bg-amber-900/60 border border-amber-200/60 dark:border-amber-800/60 rounded-xl transition-all cursor-pointer shadow-2xs\">
+                    <svg class=\"w-3.5 h-3.5\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">
                         <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4\"></path>
                     </svg>
-                    Export CSV
+                    <span>Export CSV</span>
                 </a>
                 <a href=\"{{ route('{$routeName}.importForm') }}\"
-                    class=\"lg:px-4 px-3 lg:py-2 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors lg:text-base text-sm\">
-                    <svg class=\"lg:w-5 w-4 lg:h-5 h-4 inline lg:mr-2 mr-1\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">
+                    class=\"inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white bg-zinc-100/80 dark:bg-zinc-800/80 hover:bg-zinc-200/80 dark:hover:bg-zinc-700/80 border border-zinc-200/60 dark:border-zinc-700/60 rounded-xl transition-all cursor-pointer shadow-2xs\">
+                    <svg class=\"w-3.5 h-3.5\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">
                         <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12\"></path>
                     </svg>
-                    Import Data
+                    <span>Import Data</span>
                 </a>";
                     }
 

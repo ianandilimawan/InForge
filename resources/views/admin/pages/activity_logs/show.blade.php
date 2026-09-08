@@ -9,12 +9,12 @@
                 <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">View detailed information about this activity</p>
             </div>
             <a href="{{ route('admin.activity-logs.index') }}"
-                class="lg:px-4 px-3 lg:py-2 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors inline-flex items-center lg:text-base text-sm">
-                <svg class="lg:w-5 w-4 lg:h-5 h-4 inline lg:mr-2 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white bg-zinc-100/80 dark:bg-zinc-800/80 hover:bg-zinc-200/80 dark:hover:bg-zinc-700/80 border border-zinc-200/60 dark:border-zinc-700/60 rounded-xl transition-all cursor-pointer shadow-2xs">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18">
                     </path>
                 </svg>
-                Back to Logs
+                <span>Back to Logs</span>
             </a>
         </div>
 

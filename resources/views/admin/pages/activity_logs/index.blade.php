@@ -44,19 +44,21 @@
                         class="w-full px-2 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
                 </div>
                 <div class="flex items-end gap-2">
-                    <button type="submit" class="w-full px-2 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors font-medium" x-bind:disabled="loading">
-<span x-show="!loading">Filter</span>
-                        <span x-show="loading" style="display: none;">
-                            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <button type="submit"
+                        class="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 text-xs font-bold text-emerald-700 dark:text-emerald-300 hover:text-emerald-800 dark:hover:text-emerald-200 bg-emerald-50 dark:bg-emerald-950/60 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 border border-emerald-200/60 dark:border-emerald-800/60 rounded-xl transition-all cursor-pointer shadow-2xs w-full"
+                        x-bind:disabled="loading">
+                        <span x-show="!loading">Filter</span>
+                        <span x-show="loading" style="display: none;" class="inline-flex items-center gap-1.5">
+                            <svg class="animate-spin h-3.5 w-3.5 text-emerald-700 dark:text-emerald-300 inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                             </svg>
                             Saving...
                         </span>
-</button>
+                    </button>
                     @if (request()->anyFilled(['action', 'model_type', 'search']))
                         <a href="{{ route('admin.activity-logs.index') }}"
-                            class="px-2 py-2.5 bg-gray-600 text-white rounded-lg hover:bg-gray-700 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors font-medium whitespace-nowrap">
+                            class="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 text-xs font-bold text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white bg-zinc-100/80 dark:bg-zinc-800/80 hover:bg-zinc-200/80 dark:hover:bg-zinc-700/80 border border-zinc-200/60 dark:border-zinc-700/60 rounded-xl transition-all cursor-pointer shadow-2xs whitespace-nowrap">
                             Clear
                         </a>
                     @endif

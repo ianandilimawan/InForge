@@ -23,8 +23,8 @@
                     title: '!text-lg font-bold tracking-tight mt-2 !text-zinc-900 dark:!text-white',
                     htmlContainer: 'text-sm !text-zinc-500 dark:!text-zinc-400 mt-2 mb-6',
                     actions: 'flex gap-4 w-full justify-center mt-6',
-                    confirmButton: 'btn btn-danger btn-md px-6',
-                    cancelButton: 'btn btn-secondary btn-md px-6'
+                    confirmButton: 'btn btn-danger px-4 py-2',
+                    cancelButton: 'btn btn-secondary px-4 py-2'
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -72,8 +72,8 @@
                     title: '!text-lg font-bold tracking-tight mt-2 !text-zinc-900 dark:!text-white',
                     htmlContainer: 'text-sm !text-zinc-500 dark:!text-zinc-400 mt-2 mb-6',
                     actions: 'flex gap-4 w-full justify-center mt-6',
-                    confirmButton: 'btn btn-danger btn-md px-6',
-                    cancelButton: 'btn btn-secondary btn-md px-6'
+                    confirmButton: 'btn btn-danger px-4 py-2',
+                    cancelButton: 'btn btn-secondary px-4 py-2'
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
