@@ -3,9 +3,10 @@
     $toastError = session('error');
     $toastInfo = session('info');
     $toastWarning = session('warning');
+    $toastSolid = session('solid') || session('toast_solid');
 
     if ($toastSuccess || $toastError || $toastInfo || $toastWarning) {
-        session()->forget(['success', 'error', 'info', 'warning']);
+        session()->forget(['success', 'error', 'info', 'warning', 'solid', 'toast_solid']);
         session()->save();
     }
 @endphp
@@ -19,12 +20,12 @@
         toastContainer.innerHTML = '';
     }
 
-    function fireThemeToast(message, type) {
+    function fireThemeToast(message, type, solid = false) {
         if (!message) return;
 
         function run() {
             if (typeof showToast === 'function') {
-                showToast(message, type);
+                showToast(message, type, 5000, solid);
             } else if (window.Toast && typeof window.Toast.fire === 'function') {
                 window.Toast.fire({ icon: type, title: message });
             }
@@ -46,16 +47,16 @@
     });
 
     @if($toastSuccess)
-        fireThemeToast({!! json_encode($toastSuccess) !!}, 'success');
+        fireThemeToast({!! json_encode($toastSuccess) !!}, 'success', {{ $toastSolid ? 'true' : 'false' }});
     @endif
     @if($toastError)
-        fireThemeToast({!! json_encode($toastError) !!}, 'error');
+        fireThemeToast({!! json_encode($toastError) !!}, 'error', {{ $toastSolid ? 'true' : 'false' }});
     @endif
     @if($toastInfo)
-        fireThemeToast({!! json_encode($toastInfo) !!}, 'info');
+        fireThemeToast({!! json_encode($toastInfo) !!}, 'info', {{ $toastSolid ? 'true' : 'false' }});
     @endif
     @if($toastWarning)
-        fireThemeToast({!! json_encode($toastWarning) !!}, 'warning');
+        fireThemeToast({!! json_encode($toastWarning) !!}, 'warning', {{ $toastSolid ? 'true' : 'false' }});
     @endif
 
     // Listen for custom Livewire / Alpine 'notify' events
@@ -69,8 +70,9 @@
         
         var msg = (detail && (detail.message || detail.title)) ? (detail.message || detail.title) : '';
         var t = (detail && detail.type) ? detail.type : 'info';
+        var solid = !!(detail && (detail.solid === true || detail.style === 'solid'));
         
-        fireThemeToast(msg, t);
+        fireThemeToast(msg, t, solid);
     });
 })();
 </script>

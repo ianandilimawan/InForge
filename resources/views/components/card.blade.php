@@ -8,13 +8,13 @@
     'rounded' => 'rounded-2xl',
 ])
 
-<div {{ $attributes->merge(['class' => "bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 {$rounded} shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden"]) }}>
+<div {{ $attributes->merge(['class' => "bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 {$rounded} shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative"]) }}>
     @if ($header)
-        <div class="px-5 py-4 border-b border-zinc-100 dark:border-zinc-800">
+        <div class="px-5 py-4 border-b border-zinc-100 dark:border-zinc-800 rounded-t-2xl">
             {{ $header }}
         </div>
     @elseif ($title || $actions)
-        <div class="px-5 py-4 border-b border-zinc-100 dark:border-zinc-800 flex items-center justify-between gap-4">
+        <div class="px-5 py-4 border-b border-zinc-100 dark:border-zinc-800 flex items-center justify-between gap-4 rounded-t-2xl">
             <div>
                 @if ($title)
                     <h3 class="text-sm sm:text-base font-bold text-zinc-900 dark:text-white tracking-tight">
@@ -40,7 +40,7 @@
     </div>
 
     @if ($footer)
-        <div class="px-5 py-3 bg-zinc-50/50 dark:bg-zinc-800/30 border-t border-zinc-100 dark:border-zinc-800">
+        <div class="px-5 py-3 bg-zinc-50/50 dark:bg-zinc-800/30 border-t border-zinc-100 dark:border-zinc-800 rounded-b-2xl">
             {{ $footer }}
         </div>
     @endif

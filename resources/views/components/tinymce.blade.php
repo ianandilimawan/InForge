@@ -10,15 +10,12 @@
 
 @php
     $id = $id ?? $name;
+    $initialContent = old($name, $value ?? (trim($slot) ?: ''));
 @endphp
 
 @once
-    @push('styles')
-        @vite('resources/css/form-libs.css')
-        @include('admin.partials.form-styles')
-    @endpush
     @push('scripts')
-        @vite('resources/js/form-libs.js')
+        <script src="{{ asset('tinymce/tinymce.min.js') }}"></script>
     @endpush
 @endonce
 
@@ -32,8 +29,8 @@
 
     <div wire:ignore class="rounded-xl overflow-hidden shadow-2xs border border-zinc-200/80 dark:border-zinc-700/80">
         <textarea name="{{ $name }}" id="{{ $id }}" {{ $required ? 'required' : '' }}
-            {{ $attributes->merge(['class' => 'w-full hidden']) }}
-            placeholder="{{ $placeholder }}">{{ old($name, $value) }}</textarea>
+            {{ $attributes->merge(['class' => 'w-full']) }}
+            placeholder="{{ $placeholder }}">{{ $initialContent }}</textarea>
     </div>
 
     @error($name)
@@ -43,10 +40,10 @@
 
 @push('scripts')
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    function initTinyMce_{{ str_replace(['-', '.', ' '], '_', $id) }}() {
+(function() {
+    function initEditor_{{ str_replace(['-', '.', ' '], '_', $id) }}() {
         if (typeof tinymce === 'undefined') {
-            setTimeout(initTinyMce_{{ str_replace(['-', '.', ' '], '_', $id) }}, 100);
+            setTimeout(initEditor_{{ str_replace(['-', '.', ' '], '_', $id) }}, 100);
             return;
         }
 
@@ -59,10 +56,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
         tinymce.init({
             selector: '#' + editorId,
+            license_key: 'gpl',
             height: {{ $height }},
             menubar: false,
             branding: false,
             promotion: false,
+            skin: isDark ? 'oxide-dark' : 'oxide',
+            content_css: isDark ? 'dark' : 'default',
             plugins: [
                 'anchor', 'autolink', 'charmap', 'code', 'codesample', 'directionality',
                 'emoticons', 'fullscreen', 'help', 'image', 'insertdatetime', 'link',
@@ -70,24 +70,26 @@ document.addEventListener('DOMContentLoaded', function() {
                 'table', 'visualblocks', 'visualchars', 'wordcount'
             ],
             toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist | link image media table | code preview fullscreen | removeformat',
-            skin: isDark ? 'oxide-dark' : 'oxide',
-            content_css: isDark ? 'dark' : 'default',
             content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 14px; ' +
                 (isDark ? 'background-color: #18181b; color: #f4f4f5;' : 'background-color: #ffffff; color: #18181b;') + ' }',
             placeholder: '{{ $placeholder }}',
             setup: function(editor) {
-                editor.on('change', function() {
+                editor.on('change keyup', function() {
                     editor.save();
                 });
             }
         });
     }
 
-    initTinyMce_{{ str_replace(['-', '.', ' '], '_', $id) }}();
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        initEditor_{{ str_replace(['-', '.', ' '], '_', $id) }}();
+    } else {
+        document.addEventListener('DOMContentLoaded', initEditor_{{ str_replace(['-', '.', ' '], '_', $id) }});
+    }
 
     window.addEventListener('theme-changed', function() {
-        initTinyMce_{{ str_replace(['-', '.', ' '], '_', $id) }}();
+        initEditor_{{ str_replace(['-', '.', ' '], '_', $id) }}();
     });
-});
+})();
 </script>
 @endpush

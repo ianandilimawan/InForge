@@ -128,29 +128,61 @@
 
     <script>
         // Toast notification function
-        function showToast(message, type = 'info', duration = 5000) {
+        function showToast(message, type = 'info', duration = 5000, solid = false) {
+            if (typeof duration === 'object' && duration !== null) {
+                solid = duration.solid || duration.style === 'solid' || false;
+                duration = duration.duration !== undefined ? duration.duration : 5000;
+            } else if (typeof duration === 'boolean') {
+                solid = duration;
+                duration = 5000;
+            }
+
             const container = document.getElementById('toast-container');
             if (!container) return;
 
-            const toastId = 'toast-' + Date.now();
+            const isSolid = !!solid;
+            const toastId = 'toast-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+
+            const iconColor = isSolid ? 'text-white' : ({
+                info: 'text-blue-600 dark:text-blue-400',
+                success: 'text-emerald-600 dark:text-emerald-400',
+                error: 'text-rose-600 dark:text-rose-400',
+                warning: 'text-amber-500 dark:text-amber-400',
+                dark: 'text-zinc-700 dark:text-zinc-300'
+            }[type] || 'text-blue-600 dark:text-blue-400');
+
             const icons = {
-                info: '<svg class="animate-spin h-5 w-5 text-blue-600 dark:text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>',
-                success: '<svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>',
-                error: '<svg class="w-5 h-5 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>',
-                warning: '<svg class="w-5 h-5 text-yellow-600 dark:text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>'
+                info: `<svg class="w-5 h-5 ${iconColor}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`,
+                success: `<svg class="w-5 h-5 ${iconColor}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`,
+                error: `<svg class="w-5 h-5 ${iconColor}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`,
+                warning: `<svg class="w-5 h-5 ${iconColor}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>`,
+                dark: `<svg class="w-5 h-5 ${iconColor}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`
             };
 
-            const colors = {
-                info: 'bg-blue-50 dark:bg-blue-900 border-2 border-blue-600 dark:border-blue-600',
-                success: 'bg-green-50 dark:bg-green-900 border-2 border-green-600 dark:border-green-600',
-                error: 'bg-red-50 dark:bg-red-900 border-2 border-red-600 dark:border-red-600',
-                warning: 'bg-yellow-50 dark:bg-yellow-900 border-2 border-yellow-600 dark:border-yellow-600'
+            const softColors = {
+                info: 'bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 text-blue-900 dark:text-blue-200',
+                success: 'bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-900 dark:text-emerald-200',
+                error: 'bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800 text-rose-900 dark:text-rose-200',
+                warning: 'bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800 text-amber-900 dark:text-amber-200',
+                dark: 'bg-zinc-100 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100'
             };
+
+            const solidColors = {
+                info: 'bg-blue-600 text-white border border-blue-500 shadow-xl shadow-blue-500/25',
+                success: 'bg-emerald-600 text-white border border-emerald-500 shadow-xl shadow-emerald-500/25',
+                error: 'bg-rose-600 text-white border border-rose-500 shadow-xl shadow-rose-500/25',
+                warning: 'bg-amber-500 text-white border border-amber-400 shadow-xl shadow-amber-500/25',
+                dark: 'bg-zinc-900 dark:bg-zinc-800 text-white border border-zinc-700 shadow-xl shadow-zinc-950/30'
+            };
+
+            const themeStyle = isSolid ? (solidColors[type] || solidColors.info) : (softColors[type] || softColors.info);
+            const textColor = isSolid ? 'text-white' : 'text-zinc-900 dark:text-white';
+            const closeBtnColor = isSolid ? 'text-white/70 hover:text-white' : 'text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200';
 
             const toast = document.createElement('div');
             toast.id = toastId;
             toast.className =
-                `${colors[type] || colors.info} rounded-xl p-4 shadow-lg min-w-[300px] max-w-md transform transition-all duration-300 ease-in-out opacity-0 translate-x-8`;
+                `${themeStyle} rounded-xl p-4 shadow-lg min-w-[300px] max-w-md transform transition-all duration-300 ease-in-out opacity-0 translate-x-8`;
 
             const messageLines = message.split('\n');
             toast.innerHTML = `
@@ -159,9 +191,9 @@
                         ${icons[type] || icons.info}
                     </div>
                     <div class="flex-1">
-                        ${messageLines.map(line => `<p class="text-sm font-semibold text-zinc-900 dark:text-white">${line}</p>`).join('')}
+                        ${messageLines.map(line => `<p class="text-sm font-semibold ${textColor}">${line}</p>`).join('')}
                     </div>
-                    <button onclick="closeToast('${toastId}')" class="ml-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                    <button onclick="closeToast('${toastId}')" class="ml-2 ${closeBtnColor} transition-colors">
                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
                     </button>
                 </div>

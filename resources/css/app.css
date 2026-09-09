@@ -328,6 +328,11 @@ select[class*="appearance-none"] {
     background-image: none !important;
 }
 
+/* Global Checkbox and Radio Default Primary Accent Colors (zero specificity so custom accent classes/styles override) */
+:where(input[type="checkbox"], input[type="radio"]) {
+    accent-color: #059669; /* emerald-600 */
+}
+
 /* Remove default IE/Edge select arrow */
 select::-ms-expand {
     display: none;
@@ -337,4 +342,123 @@ select::-ms-expand {
 .ts-wrapper.single .ts-control::after {
     display: none !important;
 }
+
+/* ==========================================================================
+   Modern TomSelect Theme Styling (Dark & Light Mode)
+   ========================================================================== */
+.ts-wrapper {
+    border: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    min-height: auto !important;
+}
+
+.ts-wrapper .ts-control {
+    border-radius: 0.75rem !important; /* rounded-xl */
+    border: 1px solid rgba(228, 228, 231, 0.8) !important;
+    background: #fafafa !important;
+    color: #18181b !important;
+    padding: 0.625rem 1rem !important;
+    min-height: 46px !important;
+    box-shadow: none !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.375rem !important;
+    flex-wrap: wrap !important;
+    transition: all 0.2s ease !important;
+}
+
+.dark .ts-wrapper .ts-control {
+    border-color: rgba(63, 63, 70, 0.8) !important;
+    background: rgba(39, 39, 42, 0.8) !important;
+    color: #ffffff !important;
+}
+
+.ts-wrapper.focus .ts-control {
+    border-color: #10b981 !important;
+    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.25) !important;
+    background: #ffffff !important;
+}
+
+.dark .ts-wrapper.focus .ts-control {
+    background: rgba(39, 39, 42, 1) !important;
+    border-color: #10b981 !important;
+}
+
+/* Multi-select item pills */
+.ts-wrapper.multi .ts-control > div {
+    background: #ecfdf5 !important;
+    color: #047857 !important;
+    border: 1px solid #a7f3d0 !important;
+    border-radius: 0.5rem !important;
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    padding: 0.125rem 0.5rem !important;
+    margin: 2px !important;
+}
+
+.dark .ts-wrapper.multi .ts-control > div {
+    background: rgba(6, 78, 59, 0.5) !important;
+    color: #6ee7b7 !important;
+    border-color: rgba(16, 185, 129, 0.3) !important;
+}
+
+.ts-wrapper.multi .ts-control > div .remove {
+    border-left: 1px solid rgba(4, 120, 87, 0.2) !important;
+    color: inherit !important;
+    padding-left: 0.375rem !important;
+    margin-left: 0.375rem !important;
+}
+
+/* TomSelect input placeholder */
+.ts-wrapper .ts-control > input {
+    color: inherit !important;
+    font-size: 0.875rem !important;
+}
+
+.dark .ts-wrapper .ts-control > input::placeholder {
+    color: #71717a !important;
+}
+
+/* TomSelect Dropdown Menu */
+.ts-dropdown {
+    border-radius: 0.75rem !important;
+    border: 1px solid rgba(228, 228, 231, 0.8) !important;
+    background: #ffffff !important;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
+    overflow: hidden !important;
+    z-index: 50 !important;
+    margin-top: 4px !important;
+}
+
+.dark .ts-dropdown {
+    background: #18181b !important;
+    border-color: #27272a !important;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
+}
+
+.ts-dropdown .option {
+    padding: 0.625rem 1rem !important;
+    font-size: 0.8125rem !important;
+    color: #27272a !important;
+    transition: background-color 0.15s ease !important;
+}
+
+.dark .ts-dropdown .option {
+    color: #e4e4e7 !important;
+}
+
+.ts-dropdown .option:hover,
+.ts-dropdown .active {
+    background: #f4f4f5 !important;
+    color: #10b981 !important;
+}
+
+.dark .ts-dropdown .option:hover,
+.dark .ts-dropdown .active {
+    background: #27272a !important;
+    color: #34d399 !important;
+}
+
 
