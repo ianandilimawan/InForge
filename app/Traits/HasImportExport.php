@@ -29,7 +29,12 @@ trait HasImportExport
 
     public function importForm()
     {
-        return view($this->getViewPath() . '.import');
+        $viewPath = $this->getViewPath();
+        if (!view()->exists($viewPath . '.import') && view()->exists('admin.' . $viewPath . '.import')) {
+            $viewPath = 'admin.' . $viewPath;
+        }
+
+        return view($viewPath . '.import');
     }
 
     public function export(Request $request)

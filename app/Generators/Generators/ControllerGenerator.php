@@ -23,8 +23,9 @@ class ControllerGenerator extends BaseGenerator
             $importPermissions = ", 'import', 'importForm'";
             
             $modelName = $this->commandData->modelName;
-            $modelNameSnakePlural = $this->commandData->modelNameSnakePlural;
             $modelNameSnake = $this->commandData->modelNameSnake;
+            $viewPath = $this->commandData->getViewPath();
+            $routeName = $this->commandData->getRouteName();
             
             $importExportAbstracts = "
     protected function getModelClass(): string
@@ -34,12 +35,12 @@ class ControllerGenerator extends BaseGenerator
 
     protected function getViewPath(): string
     {
-        return '{$modelNameSnakePlural}';
+        return '{$viewPath}';
     }
 
     protected function getRouteName(): string
     {
-        return 'admin.{$modelNameSnakePlural}';
+        return '{$routeName}';
     }
 
     protected function getModelNameSnake(): string
