@@ -45,6 +45,14 @@ class PermissionTable extends PowerGridComponent
         return PowerGrid::fields()
             ->add('id')
             ->add('name')
+            ->add('name_display', function (Permission $row) {
+                $displayName = e($row->display_name ?: $row->name);
+                $name = e($row->name);
+                return '<div>'
+                    . '<div class="font-bold sm:font-semibold text-zinc-900 dark:text-zinc-100 text-sm sm:text-xs">' . $displayName . '</div>'
+                    . ($row->display_name ? '<div class="text-[10px] font-mono text-zinc-400 dark:text-zinc-500">' . $name . '</div>' : '')
+                    . '</div>';
+            })
             ->add('module_display', function (Permission $row) {
                 if ($row->module) {
                     return '<span class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 border border-zinc-200/60 dark:border-zinc-700">'
@@ -83,7 +91,8 @@ class PermissionTable extends PowerGridComponent
             Column::add()->title('No')->index()
                 ->headerAttribute('text-center')
                 ->bodyAttribute('text-center'),
-            Column::make('Name', 'name')
+
+            Column::make('Name', 'name_display', 'name')
                 ->sortable()
                 ->searchable(),
 
@@ -93,9 +102,9 @@ class PermissionTable extends PowerGridComponent
             Column::make('Status', 'is_active_display')
                 ->visibleInExport(false),
 
-            Column::make('Actions', 'action')
-                ->headerAttribute('text-right')
-                ->bodyAttribute('text-right')
+            Column::make('Action', 'action')
+                ->headerAttribute('text-center')
+                ->bodyAttribute('text-center')
                 ->visibleInExport(false),
         ];
     }

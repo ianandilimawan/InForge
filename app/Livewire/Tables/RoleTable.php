@@ -86,9 +86,9 @@ class RoleTable extends PowerGridComponent
             Column::make('Status', 'is_active_display')
                 ->visibleInExport(false),
 
-            Column::make('Actions', 'action')
-                ->headerAttribute('text-right')
-                ->bodyAttribute('text-right')
+            Column::make('Action', 'action')
+                ->headerAttribute('text-center')
+                ->bodyAttribute('text-center')
                 ->visibleInExport(false),
         ];
     }

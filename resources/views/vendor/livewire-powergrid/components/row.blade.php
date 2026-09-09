@@ -55,13 +55,17 @@
                 ? data_get($column, 'contentClasses')[$content]
                 : '';
         }
+
+        $isAction = data_get($column, 'isAction') || $field === 'action';
     @endphp
     <td @class([
         theme_style($theme, 'table.body.td'),
         data_get($column, 'bodyClass'),
+        'sticky right-0 z-10 bg-white dark:bg-zinc-900 group-hover:bg-zinc-50/80 dark:group-hover:bg-zinc-800/50 border-l border-zinc-100 dark:border-zinc-800/80 shadow-[-4px_0_10px_-2px_rgba(0,0,0,0.05)] dark:shadow-[-4px_0_10px_-2px_rgba(0,0,0,0.3)] !px-2 text-center w-14 min-w-[56px] max-w-[56px]' => $isAction,
     ]) @style([
         'display:none' => data_get($column, 'hidden'),
         data_get($column, 'bodyStyle'),
+        'width: 56px !important' => $isAction,
     ])
         wire:key="row-{{ substr($rowId, 0, 6) }}-{{ $field }}-{{ $childIndex ?? 0 }}"
         data-column="{{ data_get($column, 'isAction') ? 'actions' : $field }}">

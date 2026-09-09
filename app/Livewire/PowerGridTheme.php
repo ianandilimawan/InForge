@@ -13,7 +13,7 @@ class PowerGridTheme extends Theme
         return [
             'layout' => [
                 'base' => 'w-full bg-white dark:bg-zinc-900 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-zinc-200/80 dark:border-zinc-800 p-4 sm:p-5 space-y-4',
-                'div' => 'rounded-xl relative border border-zinc-200/80 dark:border-zinc-800 overflow-x-auto min-h-[260px]',
+                'div' => 'rounded-xl relative border border-zinc-200/80 dark:border-zinc-800 overflow-x-auto',
                 'table' => 'w-full text-left border-collapse text-xs sm:text-sm bg-white dark:bg-zinc-900',
                 'container' => 'overflow-x-auto',
                 'actions' => 'flex items-center gap-2',
@@ -23,13 +23,13 @@ class PowerGridTheme extends Theme
                 'thead' => 'bg-zinc-50/80 dark:bg-zinc-800/60 border-b border-zinc-200/80 dark:border-zinc-800 text-[11px] font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400',
                 'tr' => '',
                 'th' => 'py-3.5 px-4 font-bold text-left text-[11px] text-zinc-500 dark:text-zinc-400 uppercase tracking-wider whitespace-nowrap',
-                'thAction' => 'py-3.5 px-4 font-bold text-right text-[11px] text-zinc-500 dark:text-zinc-400 uppercase tracking-wider whitespace-nowrap',
+                'thAction' => 'py-3.5 px-2 font-bold text-center text-[11px] text-zinc-500 dark:text-zinc-400 uppercase tracking-wider whitespace-nowrap sticky right-0 z-20 bg-zinc-50/95 dark:bg-zinc-800/95 backdrop-blur-xs border-l border-zinc-200/80 dark:border-zinc-700/80 shadow-[-4px_0_10px_-2px_rgba(0,0,0,0.05)] dark:shadow-[-4px_0_10px_-2px_rgba(0,0,0,0.3)] w-14 min-w-[56px] max-w-[56px]',
             ],
 
             'body' => [
                 'tbody' => 'divide-y divide-zinc-100 dark:divide-zinc-800/80 text-zinc-700 dark:text-zinc-300',
                 'tbodyEmpty' => 'p-8 text-center text-xs text-zinc-400 dark:text-zinc-500',
-                'tr' => 'bg-white dark:bg-zinc-900 hover:bg-zinc-50/80 dark:hover:bg-zinc-800/50 transition-colors',
+                'tr' => 'group bg-white dark:bg-zinc-900 hover:bg-zinc-50/80 dark:hover:bg-zinc-800/50 transition-colors',
                 'td' => 'py-3.5 px-4 text-xs sm:text-sm text-zinc-800 dark:text-zinc-200 whitespace-nowrap',
                 'tdEmpty' => 'p-6 text-center text-xs text-zinc-400 dark:text-zinc-500',
                 'tdSummarize' => 'p-3 whitespace-nowrap text-xs text-zinc-500 dark:text-zinc-400 text-right space-y-2',
