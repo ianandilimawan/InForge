@@ -121,7 +121,7 @@
                                         <x-input type="text" name="search" value="{{ request('search') }}" placeholder="Search messages..." />
                                     </div>
 
-                                    <x-button type="submit" variant="primary" :solid="true" size="sm" x-bind:disabled="loading">
+                                    <x-button type="submit" variant="primary" :solid="true" size="xl" class="h-[42px] px-4 text-xs sm:text-sm font-bold" x-bind:disabled="loading">
                                         <span x-show="!loading">Filter</span>
                                         <span x-show="loading" style="display: none;" class="inline-flex items-center gap-1.5">
                                             <svg class="animate-spin h-3.5 w-3.5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -132,7 +132,7 @@
                                     </x-button>
 
                                     @if (request()->anyFilled(['level', 'search']))
-                                        <x-button href="{{ route('admin.laravel-logs.index', ['file' => $selectedFile]) }}" variant="secondary" size="sm">
+                                        <x-button href="{{ route('admin.laravel-logs.index', ['file' => $selectedFile]) }}" variant="secondary" size="xl" class="h-[42px] px-4 text-xs sm:text-sm font-bold">
                                             Clear
                                         </x-button>
                                     @endif

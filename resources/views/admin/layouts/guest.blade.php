@@ -17,6 +17,7 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600" rel="stylesheet" />
 
+    @livewireStyles
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <script>
@@ -48,6 +49,7 @@
 <body class="font-sans antialiased">
     @yield('content')
     <x-toast />
+    @livewireScripts
 </body>
 
 </html>

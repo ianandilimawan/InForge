@@ -73,20 +73,17 @@
             </div>
 
             <!-- Dark Mode Toggle -->
-            <button id="themeToggle"
-                class="p-2 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white bg-zinc-100/80 dark:bg-zinc-800/80 border border-zinc-200/60 dark:border-zinc-700/60 hover:border-zinc-300 dark:hover:border-zinc-600 rounded-xl transition-all cursor-pointer"
-                title="Toggle Theme Mode">
+            <x-button id="themeToggle" variant="secondary" class="p-2" title="Toggle Theme Mode">
                 <x-heroicon-s-sun id="sunIcon" class="w-4 h-4" style="display: block;" />
                 <x-heroicon-s-moon id="moonIcon" class="w-4 h-4" style="display: none;" />
-            </button>
+            </x-button>
 
             <!-- Desktop Logout Button -->
             <form method="POST" action="{{ route('admin.logout') }}" class="hidden sm:inline">
                 @csrf
-                <button type="submit"
-                    class="px-3 py-1.5 text-xs font-bold text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 bg-rose-50 dark:bg-rose-950/60 hover:bg-rose-100 dark:hover:bg-rose-900/60 border border-rose-200/60 dark:border-rose-800/60 rounded-xl transition-all cursor-pointer shadow-2xs">
+                <x-button type="submit" variant="danger">
                     Logout
-                </button>
+                </x-button>
             </form>
         </div>
     </div>

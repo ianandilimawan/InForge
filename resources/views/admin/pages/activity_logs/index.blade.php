@@ -33,19 +33,24 @@
                 <div>
                     <x-input type="text" name="search" label="Search Keyword" value="{{ request('search') }}" placeholder="Search description..." />
                 </div>
-                <div class="flex items-center gap-2 pb-0.5">
-                    <x-button type="submit" variant="primary" :solid="true" class="flex-1 justify-center" x-bind:disabled="loading">
-                        <span x-show="!loading">Filter Logs</span>
+                <div class="flex items-center gap-2 w-full">
+                    <x-button type="submit" variant="primary" :solid="true" size="xl" class="flex-1 justify-center h-[42px] text-xs sm:text-sm font-bold" x-bind:disabled="loading">
+                        <span x-show="!loading" class="inline-flex items-center gap-1.5">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                            </svg>
+                            <span>Filter Logs</span>
+                        </span>
                         <span x-show="loading" style="display: none;" class="inline-flex items-center gap-1.5">
-                            <svg class="animate-spin h-3.5 w-3.5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <svg class="animate-spin h-4 w-4 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                             </svg>
-                            Filtering...
+                            <span>Filtering...</span>
                         </span>
                     </x-button>
                     @if (request()->anyFilled(['action', 'model_type', 'search']))
-                        <x-button href="{{ route('admin.activity-logs.index') }}" variant="secondary">
+                        <x-button href="{{ route('admin.activity-logs.index') }}" variant="secondary" size="xl" class="h-[42px] px-4 text-xs sm:text-sm font-bold">
                             Clear
                         </x-button>
                     @endif
