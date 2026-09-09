@@ -4,43 +4,27 @@
 
 @section('content')
     <div class="space-y-6">
-        <!-- Page Header & Breadcrumbs -->
-        <div class="flex items-center gap-3 mb-6">
-            <a href="{{ route('{{ROUTE_NAME}}.index') }}" class="p-1.5 rounded-xl text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white bg-zinc-100/80 dark:bg-zinc-800/80 border border-zinc-200/60 dark:border-zinc-700/60 transition-all cursor-pointer shadow-2xs">
-                <svg class="w-4 h-4" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                </svg>
-            </a>
+        <!-- Page Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-                <nav class="flex text-xs text-zinc-500 font-medium mb-0.5" aria-label="Breadcrumb">
-                    <ol class="inline-flex items-center space-x-1">
-                        <li class="inline-flex items-center">
-                            <a href="{{ route('{{ROUTE_NAME}}.index') }}" class="hover:text-emerald-600 transition-colors">{{MODEL_NAME_PLURAL}}</a>
-                        </li>
-                        <li>
-                            <div class="flex items-center">
-                                <svg class="w-3.5 h-3.5 text-zinc-400 mx-1" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                </svg>
-                                <span class="text-zinc-400">Import</span>
-                            </div>
-                        </li>
-                    </ol>
-                </nav>
                 <h1 class="text-base sm:text-lg md:text-xl font-bold tracking-tight text-zinc-900 dark:text-white">Import {{MODEL_NAME_PLURAL}}</h1>
+                <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Upload a CSV or Excel spreadsheet to bulk import records</p>
             </div>
+            <x-button href="{{ route('{{ROUTE_NAME}}.index') }}" variant="secondary" icon="arrow-left">
+                Back to {{MODEL_NAME_PLURAL}}
+            </x-button>
         </div>
 
-@if (session('import_errors'))
-            <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl p-4">
+        @if (session('import_errors'))
+            <div class="p-4 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200/80 dark:border-amber-800/60">
                 <div class="flex items-start">
-                    <svg class="w-5 h-5 text-yellow-600 dark:text-yellow-400 mt-0.5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                    <svg class="w-5 h-5 text-amber-600 dark:text-amber-400 mt-0.5 mr-3 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
                     </svg>
                     <div class="flex-1">
-                        <p class="text-sm text-yellow-600 dark:text-yellow-400 font-semibold mb-2">Import Errors ({{ count(session('import_errors')) }} error{{ count(session('import_errors')) > 1 ? 's' : '' }}):</p>
+                        <p class="text-xs text-amber-800 dark:text-amber-300 font-bold mb-2">Import Errors ({{ count(session('import_errors')) }} error{{ count(session('import_errors')) > 1 ? 's' : '' }}):</p>
                         <div class="max-h-60 overflow-y-auto">
-                            <ul class="list-disc list-inside space-y-1 text-sm text-yellow-700 dark:text-yellow-300">
+                            <ul class="list-disc list-inside space-y-1 text-xs text-amber-700 dark:text-amber-400">
                                 @foreach (session('import_errors') as $error)
                                     <li>{{ $error }}</li>
                                 @endforeach
@@ -52,96 +36,91 @@
         @endif
 
         <!-- Import Form -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 overflow-hidden">
-            <form x-data="ajaxForm" @submit.prevent="submit" action="{{ route('{{ROUTE_NAME}}.import') }}" method="POST" enctype="multipart/form-data" class="lg:p-8 px-4 py-4 space-y-6">
+        <x-card title="Import {{MODEL_NAME_PLURAL}}" subtitle="Upload a CSV or Excel spreadsheet to bulk import records.">
+            <form x-data="ajaxForm" @submit.prevent="submit" action="{{ route('{{ROUTE_NAME}}.import') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                 @csrf
 
                 <!-- File Upload -->
-                <div>
-                    <label for="file" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                        File (CSV or Excel)
-                    </label>
-                    <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file" type="file" name="file" accept=".csv,.txt,.xlsx,.xls" required>
-                    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                        Upload a CSV or Excel file (.csv, .xlsx, .xls) with the following columns:
-                    </p>
-                    <div class="mt-2 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-                        <p class="text-xs font-semibold text-blue-800 dark:text-blue-200 mb-1">
-                            <svg class="w-4 h-4 inline mr-1" fill="currentColor" viewBox="0 0 20 20">
+                <div class="space-y-3">
+                    <div>
+                        <label for="file" class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
+                            File (CSV or Excel) <span class="text-rose-500">*</span>
+                        </label>
+                        <input class="block w-full text-xs text-zinc-900 dark:text-zinc-100 border border-zinc-200/80 dark:border-zinc-700 rounded-xl cursor-pointer bg-zinc-50/50 dark:bg-zinc-800 focus:outline-none file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 dark:file:bg-emerald-950/60 file:text-emerald-700 dark:file:text-emerald-300 hover:file:bg-emerald-100" id="file" type="file" name="file" accept=".csv,.txt,.xlsx,.xls" required>
+                    </div>
+
+                    <div class="p-3 bg-blue-50/60 dark:bg-blue-950/40 border border-blue-200/60 dark:border-blue-800/60 rounded-xl">
+                        <p class="text-xs font-semibold text-blue-800 dark:text-blue-300 flex items-center gap-1.5">
+                            <svg class="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
                             </svg>
-                            Info: Data will be processed in batches of 100 rows for optimal performance
+                            <span>Info: Data will be processed in batches of 100 rows for optimal performance.</span>
                         </p>
                     </div>
-                    <ul class="mt-2 list-disc list-inside text-sm text-gray-600 dark:text-gray-400 space-y-1">
-                        @php
-                            $model = new \{{NAMESPACE}}\{{MODEL_NAME}}();
-                            $fillableFields = $model->getFillable();
-                        @endphp
-                        @foreach($fillableFields as $field)
-                            <li>{{ ucfirst(str_replace('_', ' ', $field)) }}</li>
-                        @endforeach
-                    </ul>
+
+                    <div>
+                        <p class="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-2">
+                            Accepted columns:
+                        </p>
+                        <ul class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 text-xs text-zinc-600 dark:text-zinc-400">
+                            @php
+                                $model = new \{{NAMESPACE}}\{{MODEL_NAME}}();
+                                $fillableFields = $model->getFillable();
+                            @endphp
+                            @foreach($fillableFields as $field)
+                                <li class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-zinc-50 dark:bg-zinc-800 border border-zinc-200/60 dark:border-zinc-700/60 font-mono text-[11px]">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                    {{ ucfirst(str_replace('_', ' ', $field)) }}
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
                 </div>
 
                 @error('file')
-                    <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-4">
-                        <p class="text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                    <div class="p-3 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200/80 dark:border-rose-800/60 text-xs font-semibold text-rose-600 dark:text-rose-400">
+                        {{ $message }}
                     </div>
                 @enderror
 
                 <!-- Sample CSV Format -->
-                <div class="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
-                    <div class="flex items-center justify-between mb-2">
-                        <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">Sample Format (CSV/Excel):</p>
-                        <div class="flex gap-2">
-                            <a href="{{ route('{{ROUTE_NAME}}.downloadSample', ['format' => 'csv']) }}"
-                                class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-blue-700 dark:text-blue-300 hover:text-blue-800 dark:hover:text-blue-200 bg-blue-50 dark:bg-blue-950/60 hover:bg-blue-100 dark:hover:bg-blue-900/60 border border-blue-200/60 dark:border-blue-800/60 rounded-xl transition-all cursor-pointer shadow-2xs">
-                                <svg class="w-3.5 h-3.5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                </svg>
+                <div class="bg-zinc-50/50 dark:bg-zinc-800/40 rounded-xl p-4 border border-zinc-200/80 dark:border-zinc-800">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                        <p class="text-xs font-bold text-zinc-700 dark:text-zinc-300">Sample Format Preview:</p>
+                        <div class="flex items-center gap-2">
+                            <x-button href="{{ route('{{ROUTE_NAME}}.downloadSample', ['format' => 'csv']) }}" variant="secondary" size="sm" icon="download">
                                 Download CSV
-                            </a>
-                            <a href="{{ route('{{ROUTE_NAME}}.downloadSample', ['format' => 'xlsx']) }}"
-                                class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-emerald-700 dark:text-emerald-300 hover:text-emerald-800 dark:hover:text-emerald-200 bg-emerald-50 dark:bg-emerald-950/60 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 border border-emerald-200/60 dark:border-emerald-800/60 rounded-xl transition-all cursor-pointer shadow-2xs">
-                                <svg class="w-3.5 h-3.5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                </svg>
+                            </x-button>
+                            <x-button href="{{ route('{{ROUTE_NAME}}.downloadSample', ['format' => 'xlsx']) }}" variant="secondary" size="sm" icon="download">
                                 Download Excel
-                            </a>
+                            </x-button>
                         </div>
                     </div>
-                    <div class="overflow-x-auto">
-                        <pre class="text-xs text-gray-600 dark:text-gray-400 font-mono">{{CSV_SAMPLE}}</pre>
+                    <div class="overflow-x-auto p-3 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800">
+                        <pre class="text-[11px] text-zinc-600 dark:text-zinc-400 font-mono">{{CSV_SAMPLE}}</pre>
                     </div>
                 </div>
 
                 <!-- Actions -->
-                <div class="flex items-center justify-end gap-3 pt-6 border-t border-zinc-100 dark:border-zinc-800 mt-6">
-                    <a href="{{ route('{{ROUTE_NAME}}.index') }}"
-                        class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white bg-zinc-100/80 dark:bg-zinc-800/80 hover:bg-zinc-200/80 dark:hover:bg-zinc-700/80 border border-zinc-200/60 dark:border-zinc-700/60 rounded-xl transition-all cursor-pointer shadow-2xs">
+                <div class="flex items-center justify-end gap-3 pt-6 border-t border-zinc-100 dark:border-zinc-800">
+                    <x-button href="{{ route('{{ROUTE_NAME}}.index') }}" variant="secondary">
                         Cancel
-                    </a>
-                    <button type="submit" x-bind:disabled="loading"
-                        class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-emerald-700 dark:text-emerald-300 hover:text-emerald-800 dark:hover:text-emerald-200 bg-emerald-50 dark:bg-emerald-950/60 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 border border-emerald-200/60 dark:border-emerald-800/60 rounded-xl transition-all cursor-pointer shadow-2xs disabled:opacity-50">
+                    </x-button>
+                    <x-button type="submit" variant="primary" :solid="true" x-bind:disabled="loading">
                         <span x-show="!loading" class="inline-flex items-center gap-1.5">
-                            <svg class="w-4 h-4" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
-                            </svg>
-                            Import Data
+                            {!! \App\Helpers\MenuHelper::renderIcon('upload', 'w-3.5 h-3.5') !!}
+                            <span>Import Data</span>
                         </span>
                         <span x-show="loading" style="display: none;" class="inline-flex items-center gap-1.5">
-                            <svg class="animate-spin h-3.5 w-3.5 text-emerald-700 dark:text-emerald-300 inline" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <svg class="animate-spin h-3.5 w-3.5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                             </svg>
-                            Processing Import...
+                            <span>Processing Import...</span>
                         </span>
-                    </button>
+                    </x-button>
                 </div>
             </form>
-        </div>
+        </x-card>
     </div>
-
-
 @endsection

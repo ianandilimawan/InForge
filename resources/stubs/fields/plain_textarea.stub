@@ -1,0 +1,1 @@
+<x-textarea name="{{ name }}" label="{{ label }}" :value="{{ value }}" />

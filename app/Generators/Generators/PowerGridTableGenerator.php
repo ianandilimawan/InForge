@@ -62,9 +62,9 @@ class PowerGridTableGenerator extends BaseGenerator
                 $modelClass = $this->commandData->modelName;
                 $fields[] = "            ->add('{$fieldName}_display', function ({$modelClass} \$row) {";
                 $fields[] = "                if (\$row->{$fieldName}) {";
-                $fields[] = "                    return '<span class=\"px-2 py-0.5 text-xs font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300\">Active</span>';";
+                $fields[] = "                    return '<span class=\"inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60\"><span class=\"w-1.5 h-1.5 rounded-full bg-emerald-500\"></span> Active</span>';";
                 $fields[] = "                }";
-                $fields[] = "                return '<span class=\"px-2 py-0.5 text-xs font-semibold rounded-full bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300\">Inactive</span>';";
+                $fields[] = "                return '<span class=\"inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 border border-zinc-200/60 dark:border-zinc-700\"><span class=\"w-1.5 h-1.5 rounded-full bg-zinc-400\"></span> Inactive</span>';";
                 $fields[] = "            })";
             } elseif ($field->htmlType === 'date' || $field->dbType === 'date') {
                 $fields[] = "            ->add('{$fieldName}_formatted', fn (\$model) => \$model->{$fieldName} ? \Carbon\Carbon::parse(\$model->{$fieldName})->format('d/m/Y') : '-')";

@@ -3,67 +3,45 @@
 @section('title', '{{MODEL_NAME_TITLE}} Details')
 
 @section('content')
-<div class="space-y-6">
-    <!-- Page Header & Breadcrumbs -->
-    <div class="flex items-center justify-between mb-6">
-        <div class="flex items-center gap-3">
-            <a href="{{ route('{{ROUTE_NAME}}.index') }}" class="p-1.5 rounded-xl text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white bg-zinc-100/80 dark:bg-zinc-800/80 border border-zinc-200/60 dark:border-zinc-700/60 transition-all cursor-pointer shadow-2xs">
-                <svg class="w-4 h-4" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                </svg>
-            </a>
+    <div class="space-y-6">
+        <!-- Page Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-                <nav class="flex text-xs text-zinc-500 font-medium mb-0.5" aria-label="Breadcrumb">
-                    <ol class="inline-flex items-center space-x-1">
-                        <li class="inline-flex items-center">
-                            <a href="{{ route('{{ROUTE_NAME}}.index') }}" class="hover:text-emerald-600 transition-colors">{{MODEL_NAME_PLURAL}}</a>
-                        </li>
-                        <li>
-                            <div class="flex items-center">
-                                <svg class="w-3.5 h-3.5 text-zinc-400 mx-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                </svg>
-                                <span class="text-zinc-400">Details</span>
-                            </div>
-                        </li>
-                    </ol>
-                </nav>
                 <h1 class="text-base sm:text-lg md:text-xl font-bold tracking-tight text-zinc-900 dark:text-white">{{MODEL_NAME_TITLE}} Details</h1>
+                <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Detailed view and properties of this {{MODEL_NAME_LOWER}} entry</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <x-button href="{{ route('{{ROUTE_NAME}}.index') }}" variant="secondary" icon="arrow-left">
+                    Back to {{MODEL_NAME_PLURAL}}
+                </x-button>
+                @if (auth()->user() && auth()->user()->hasPermission('edit-{{MODEL_NAME_SNAKE_PLURAL}}'))
+                    <x-button href="{{ route('{{ROUTE_NAME}}.edit', ${{MODEL_NAME_CAMEL}}) }}" variant="primary" :solid="true" icon="edit">
+                        Edit {{MODEL_NAME_TITLE}}
+                    </x-button>
+                @endif
             </div>
         </div>
 
-        @if (auth()->user() && auth()->user()->hasPermission('edit-{{MODEL_NAME_SNAKE_PLURAL}}'))
-            <a href="{{ route('{{ROUTE_NAME}}.edit', ${{MODEL_NAME_CAMEL}}) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-emerald-700 dark:text-emerald-300 hover:text-emerald-800 dark:hover:text-emerald-200 bg-emerald-50 dark:bg-emerald-950/60 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 border border-emerald-200/60 dark:border-emerald-800/60 rounded-xl transition-all cursor-pointer shadow-2xs">
-                <svg class="w-3.5 h-3.5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                Edit {{MODEL_NAME_TITLE}}
-            </a>
-        @endif
-    </div>
-
-    <!-- Content Card -->
-    <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100/50 dark:border-gray-800 overflow-hidden">
-        <div class="lg:p-8 px-4 py-4">
-            <h3 class="lg:text-lg text-base font-semibold text-gray-900 dark:text-white mb-6">Information</h3>
-
-            <div class="border border-gray-100 dark:border-gray-800 rounded-xl overflow-hidden divide-y divide-gray-100 dark:divide-gray-800">
+        <!-- Content Card -->
+        <x-card title="{{MODEL_NAME_TITLE}} Information" subtitle="Full attributes and timestamp records.">
+            <div class="border border-zinc-200/80 dark:border-zinc-800 rounded-xl overflow-hidden divide-y divide-zinc-200/80 dark:divide-zinc-800">
                 <dl class="mb-0">
 {{SHOW_FIELDS}}
-                    <div class="lg:px-6 px-4 lg:py-4 py-3 flex flex-col lg:flex-row lg:items-center hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-                        <dt class="lg:w-1/3 text-sm font-medium text-gray-500 dark:text-gray-400">Created At</dt>
-                        <dd class="mt-1 lg:mt-0 lg:w-2/3 text-sm text-gray-900 dark:text-white font-medium">
+                    <div class="lg:px-6 px-4 lg:py-4 py-3 flex flex-col lg:flex-row lg:items-center hover:bg-zinc-50/80 dark:hover:bg-zinc-800/50 transition-colors">
+                        <dt class="lg:w-1/3 text-xs font-semibold text-zinc-500 dark:text-zinc-400">Created At</dt>
+                        <dd class="mt-1 lg:mt-0 lg:w-2/3 text-xs font-medium text-zinc-800 dark:text-zinc-200">
                             {{ ${{MODEL_NAME_CAMEL}}->created_at->format('M d, Y H:i') }}
                         </dd>
                     </div>
 
-                    <div class="lg:px-6 px-4 lg:py-4 py-3 flex flex-col lg:flex-row lg:items-center hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-                        <dt class="lg:w-1/3 text-sm font-medium text-gray-500 dark:text-gray-400">Updated At</dt>
-                        <dd class="mt-1 lg:mt-0 lg:w-2/3 text-sm text-gray-900 dark:text-white font-medium">
+                    <div class="lg:px-6 px-4 lg:py-4 py-3 flex flex-col lg:flex-row lg:items-center hover:bg-zinc-50/80 dark:hover:bg-zinc-800/50 transition-colors">
+                        <dt class="lg:w-1/3 text-xs font-semibold text-zinc-500 dark:text-zinc-400">Updated At</dt>
+                        <dd class="mt-1 lg:mt-0 lg:w-2/3 text-xs font-medium text-zinc-800 dark:text-zinc-200">
                             {{ ${{MODEL_NAME_CAMEL}}->updated_at->format('M d, Y H:i') }}
                         </dd>
                     </div>
                 </dl>
             </div>
-        </div>
+        </x-card>
     </div>
-</div>
 @endsection

@@ -8,7 +8,10 @@ import tinymce from 'tinymce/tinymce';
 import 'tinymce/themes/silver';
 import 'tinymce/icons/default';
 import 'tinymce/models/dom';
-window.tinymce = tinymce;
+if (typeof window !== 'undefined') {
+    tinymce.baseURL = '/tinymce';
+    window.tinymce = tinymce;
+}
 
 // TinyMCE Free Plugins
 import 'tinymce/plugins/anchor';

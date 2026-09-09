@@ -33,10 +33,10 @@ HTML;
         $modelVar = $this->commandData->modelNameCamel;
         $html = <<<HTML
         <div>
-            <label for="{$fieldName}" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">{$fieldLabel}</label>
-            <input name="{$fieldName}" id="{$fieldName}" value="{{ \${$modelVar}->{$fieldName} ?? '' }}" placeholder="Add tags..." class="block w-full rounded-lg border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-sm dark:shadow-md focus:border-blue-500 focus:ring-2 focus:ring-blue-500 px-4 py-4 transition-colors items-center">
+            <label for="{$fieldName}" class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">{$fieldLabel}</label>
+            <input name="{$fieldName}" id="{$fieldName}" value="{{ \${$modelVar}->{$fieldName} ?? '' }}" placeholder="Add tags..." class="block w-full rounded-xl border border-zinc-200/80 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-800 text-zinc-900 dark:text-white focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 px-3.5 py-2.5 text-xs transition-colors">
             @error('{$fieldName}')
-                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ \$message }}</p>
+                <p class="mt-1 text-xs text-rose-500 font-medium">{{ \$message }}</p>
             @enderror
         </div>
 HTML;
@@ -52,38 +52,8 @@ HTML;
     public function getPasswordFieldWithStrength($field, string $fieldLabel): string
     {
         $fieldName = $field->name;
-        $strengthId = $fieldName . 'Strength';
-        $strengthBar1 = 'strengthBar1' . ucfirst($fieldName);
-        $strengthBar2 = 'strengthBar2' . ucfirst($fieldName);
-        $strengthBar3 = 'strengthBar3' . ucfirst($fieldName);
-        $strengthBar4 = 'strengthBar4' . ucfirst($fieldName);
-        $strengthText = 'strengthText' . ucfirst($fieldName);
-
-        $html = <<<HTML
-        <div>
-            <x-input-floating type="password" name="{$fieldName}" label="{$fieldLabel}" />
-            <div id="{$strengthId}" class="mt-2 hidden">
-                <div class="flex gap-2 mb-2">
-                    <div id="{$strengthBar1}" class="h-2 flex-1 rounded-full bg-gray-200 dark:bg-gray-700 transition-colors"></div>
-                    <div id="{$strengthBar2}" class="h-2 flex-1 rounded-full bg-gray-200 dark:bg-gray-700 transition-colors"></div>
-                    <div id="{$strengthBar3}" class="h-2 flex-1 rounded-full bg-gray-200 dark:bg-gray-700 transition-colors"></div>
-                    <div id="{$strengthBar4}" class="h-2 flex-1 rounded-full bg-gray-200 dark:bg-gray-700 transition-colors"></div>
-                </div>
-                <p id="{$strengthText}" class="text-xs font-medium"></p>
-            </div>
-        </div>
+        return <<<HTML
+        <x-password name="{$fieldName}" label="{$fieldLabel}" :strength="true" />
 HTML;
-
-        try {
-            $scriptTemplate = FileUtil::getStubContents('js/password-strength.js');
-            $scriptTemplate = str_replace(
-                ['{{fieldName}}', '{{strengthId}}', '{{strengthBar1}}', '{{strengthBar2}}', '{{strengthBar3}}', '{{strengthBar4}}', '{{strengthText}}'],
-                [$fieldName, $strengthId, $strengthBar1, $strengthBar2, $strengthBar3, $strengthBar4, $strengthText],
-                $scriptTemplate
-            );
-            return $html . "\n@push('scripts')\n<script>\n" . $scriptTemplate . "\n</script>\n@endpush";
-        } catch (\Exception $e) {
-            return $html; // Fallback to just HTML if stub not found
-        }
     }
 }

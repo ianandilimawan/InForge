@@ -182,8 +182,23 @@ class FormFieldRenderer
         }
 
         switch ($field->htmlType) {
+            case 'tinymce':
+            case 'editor':
+                return \App\Generators\Utils\FileUtil::replaceStub('fields/tinymce', [
+                    '{{ name }}' => $fieldName,
+                    '{{ label }}' => $fieldLabel,
+                    '{{ value }}' => "\${$modelVar}->{$fieldName} ?? ''"
+                ]);
+
+            case 'plain_textarea':
+            case 'simple_textarea':
+                return \App\Generators\Utils\FileUtil::replaceStub('fields/plain_textarea', [
+                    '{{ name }}' => $fieldName,
+                    '{{ label }}' => $fieldLabel,
+                    '{{ value }}' => "\${$modelVar}->{$fieldName} ?? ''"
+                ]);
+
             case 'textarea':
-                $scriptsAndStyles[] = ['type' => 'textarea', 'id' => $fieldName];
                 return \App\Generators\Utils\FileUtil::replaceStub('fields/textarea', [
                     '{{ name }}' => $fieldName,
                     '{{ label }}' => $fieldLabel,

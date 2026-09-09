@@ -21,10 +21,15 @@
 
 <div class="space-y-1.5">
     @if ($label)
-        <label for="{{ $id }}"
-            class="block text-xs uppercase tracking-wider font-bold text-zinc-500 dark:text-zinc-400">
-            {{ $label }}
-        </label>
+        <div class="flex items-center gap-1.5 mb-1.5">
+            <label for="{{ $id }}"
+                class="block text-[11px] uppercase tracking-wider font-bold text-zinc-500 dark:text-zinc-400">
+                {{ $label }}
+            </label>
+            @if ($required)
+                <span class="text-rose-500 font-bold text-[11px]" title="Required">*</span>
+            @endif
+        </div>
     @endif
 
     <div wire:ignore class="rounded-xl overflow-hidden shadow-2xs border border-zinc-200/80 dark:border-zinc-700/80">
@@ -56,6 +61,8 @@
 
         tinymce.init({
             selector: '#' + editorId,
+            base_url: '{{ asset('tinymce') }}',
+            suffix: '.min',
             license_key: 'gpl',
             height: {{ $height }},
             menubar: false,

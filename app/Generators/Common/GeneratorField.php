@@ -206,13 +206,13 @@ class GeneratorField
 
     public function getTableHeader(): string
     {
-        return "<th class=\"px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider\">" .
+        return "<th class=\"py-3.5 px-4 text-left font-bold text-[11px] text-zinc-500 dark:text-zinc-400 uppercase tracking-wider\">" .
             ucfirst(str_replace('_', ' ', $this->name)) .
             "</th>";
     }
 
     public function getTableCell(): string
     {
-        return "<td class=\"px-6 py-4 whitespace-nowrap text-sm text-gray-900\">{{\$item->{$this->name}}}</td>";
+        return "<td class=\"py-3.5 px-4 whitespace-nowrap text-xs font-medium text-zinc-800 dark:text-zinc-200\">{{\$item->{$this->name}}}</td>";
     }
 }

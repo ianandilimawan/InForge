@@ -3,6 +3,12 @@
     @vite('resources/js/form-libs.js')
 @endonce
 
+@if (isset($textareaFields) && !empty($textareaFields))
+    @once
+        <script src="{{ asset('tinymce/tinymce.min.js') }}"></script>
+    @endonce
+@endif
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         @if (isset($hasSlugField) && $hasSlugField && isset($slugSourceField) && $slugSourceField)
@@ -108,21 +114,37 @@
         @if (isset($textareaFields) && !empty($textareaFields))
             // TinyMCE initialization function
             function initTinyMCE(selector) {
-                var isDark = document.documentElement.classList.contains('dark');
+                if (typeof tinymce === 'undefined') {
+                    setTimeout(function() {
+                        initTinyMCE(selector);
+                    }, 100);
+                    return;
+                }
+
+                if (!tinymce.baseURL) {
+                    tinymce.baseURL = '{{ asset('tinymce') }}';
+                }
+
+                var editorId = selector.replace('#', '');
 
                 // Remove existing TinyMCE instance if any
-                if (tinymce.get(selector.replace('#', ''))) {
-                    tinymce.remove(selector.replace('#', ''));
+                if (tinymce.get(editorId)) {
+                    tinymce.remove('#' + editorId);
                 }
+
+                var isDark = document.documentElement.classList.contains('dark');
 
                 tinymce.init({
                     selector: selector,
+                    base_url: '{{ asset('tinymce') }}',
+                    suffix: '.min',
+                    license_key: 'gpl',
                     plugins: [
                         // Free plugins only
                         'anchor', 'autolink', 'charmap', 'code', 'codesample', 'directionality',
                         'emoticons', 'fullscreen', 'help', 'image', 'insertdatetime', 'link',
                         'lists', 'media', 'nonbreaking', 'pagebreak', 'preview', 'searchreplace',
-                        'table', 'template', 'visualblocks', 'visualchars', 'wordcount'
+                        'table', 'visualblocks', 'visualchars', 'wordcount'
                     ],
                     toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent | link image media table | code codesample | charmap emoticons | preview fullscreen | removeformat',
                     height: 400,
@@ -131,64 +153,12 @@
                     promotion: false,
                     skin: isDark ? 'oxide-dark' : 'oxide',
                     content_css: isDark ? 'dark' : 'default',
-                    content_style: 'body { font-family: "Instrument Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-size: 14px; ' +
-                        (isDark ? 'background-color: #1f2937; color: #fff;' : '') + ' }',
+                    content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 14px; ' +
+                        (isDark ? 'background-color: #18181b; color: #f4f4f5;' : 'background-color: #ffffff; color: #18181b;') + ' }',
                     placeholder: 'Start typing...',
                     setup: function(editor) {
-                        editor.on('init', function() {
-                            // Content is already set from textarea value
-                            // Force set border after TinyMCE is fully initialized
-                            function setTinyMCEBorder() {
-                                var tinymceElement = editor.getContainer();
-                                if (tinymceElement) {
-                                    var isDark = document.documentElement.classList
-                                        .contains('dark');
-                                    var borderColor = isDark ?
-                                        'var(--color-gray-700, oklch(37.3% 0.034 259.733))' :
-                                        'rgb(229, 231, 235)';
-                                    var borderValue = isDark ?
-                                        'oklch(37.3% 0.034 259.733)' : 'rgb(229, 231, 235)';
-                                    tinymceElement.style.border = '2px solid ' +
-                                        borderValue;
-                                    tinymceElement.style.borderColor = borderColor;
-                                    tinymceElement.style.borderRadius = '0.5rem';
-                                    tinymceElement.style.setProperty('border',
-                                        '2px solid ' + borderValue, 'important');
-                                    tinymceElement.style.setProperty('border-color',
-                                        borderColor, 'important');
-                                    tinymceElement.style.setProperty('border-radius',
-                                        '0.5rem', 'important');
-                                }
-                            }
-
-                            // Try multiple times to ensure border is set
-                            setTinyMCEBorder();
-                            setTimeout(setTinyMCEBorder, 100);
-                            setTimeout(setTinyMCEBorder, 300);
-                            setTimeout(setTinyMCEBorder, 500);
-                        });
-
-                        // Also set border when editor is fully loaded
-                        editor.on('loadedmetadata', function() {
-                            setTimeout(function() {
-                                var tinymceElement = editor.getContainer();
-                                if (tinymceElement) {
-                                    var isDark = document.documentElement.classList
-                                        .contains('dark');
-                                    var borderColor = isDark ?
-                                        'var(--color-gray-700, oklch(37.3% 0.034 259.733))' :
-                                        'rgb(229, 231, 235)';
-                                    var borderValue = isDark ?
-                                        'oklch(37.3% 0.034 259.733)' :
-                                        'rgb(229, 231, 235)';
-                                    tinymceElement.style.setProperty('border',
-                                        '2px solid ' + borderValue, 'important');
-                                    tinymceElement.style.setProperty('border-color',
-                                        borderColor, 'important');
-                                    tinymceElement.style.setProperty(
-                                        'border-radius', '0.5rem', 'important');
-                                }
-                            }, 100);
+                        editor.on('change keyup', function() {
+                            editor.save();
                         });
                     }
                 });
