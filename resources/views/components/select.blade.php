@@ -24,8 +24,8 @@
     $placeholderText = $placeholder ?? ($label ? 'Select ' . $label : 'Select Option');
     $isDisabled = $disabled || $readonly || $attributes->has('disabled') || $attributes->has('readonly');
 
-    $baseClasses = 'block w-full rounded-xl border border-zinc-200/80 dark:border-zinc-700/80 bg-zinc-50 dark:bg-zinc-800/80 text-zinc-900 dark:text-white shadow-2xs focus:bg-white dark:focus:bg-zinc-800 focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all duration-200 text-sm ' .
-        ($multiple ? 'py-2 px-3 min-h-[135px]' : 'py-3 px-4 appearance-none cursor-pointer pr-10 ') .
+    $baseClasses = 'block w-full rounded-xl border border-zinc-200/80 dark:border-zinc-700/80 bg-zinc-50 dark:bg-zinc-800/80 text-zinc-900 dark:text-white shadow-2xs focus:bg-white dark:focus:bg-zinc-800 focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all duration-200 text-xs sm:text-sm ' .
+        ($multiple ? 'py-2 px-3 min-h-[120px]' : 'py-2.5 px-3.5 appearance-none cursor-pointer pr-9 ') .
         ($isDisabled ? 'opacity-60 cursor-not-allowed bg-zinc-100 dark:bg-zinc-800/50 ' : '') .
         ($searchable ? 'select2' : '');
 @endphp
@@ -40,16 +40,16 @@
 
 <div>
     @if ($label || $corner || $tooltip)
-        <div class="flex items-center justify-between mb-2">
+        <div class="flex items-center justify-between mb-1.5">
             <div class="flex items-center gap-1.5">
                 @if ($label)
                     <label for="{{ $id }}"
-                        class="block text-xs uppercase tracking-wider font-bold text-zinc-500 dark:text-zinc-400">
+                        class="block text-[11px] uppercase tracking-wider font-bold text-zinc-500 dark:text-zinc-400">
                         {{ $label }}
                     </label>
                 @endif
                 @if ($required)
-                    <span class="text-rose-500 font-bold text-xs" title="Required">*</span>
+                    <span class="text-rose-500 font-bold text-[11px]" title="Required">*</span>
                 @endif
                 @if ($tooltip)
                     <x-tooltip :text="$tooltip" position="top">

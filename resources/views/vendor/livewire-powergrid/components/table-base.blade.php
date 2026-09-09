@@ -9,7 +9,7 @@
     <div x-data="{ expandedId: null }">
         <table
             id="table_base_{{ $tableName }}"
-            class="table power-grid-table {{ theme_style($theme, 'table.layout.table') }} !bg-white dark:!bg-gray-900"
+            class="w-full text-left border-collapse text-xs sm:text-sm bg-white dark:bg-zinc-900 {{ theme_style($theme, 'table.layout.table') }}"
         >
             <thead
                 class="{{ theme_style($theme, 'table.header.thead') }}"

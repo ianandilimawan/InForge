@@ -270,19 +270,6 @@ div[wire\:key*="perPage"] select,
     margin: 4px !important;
 }
 
-/* Table Even/Odd Rows */
-.admin-panel:not(.dark) table tbody tr:nth-child(even) {
-    background-color: var(--color-zinc-50);
-}
-.admin-panel.dark table tbody tr:nth-child(even) {
-    background-color: var(--color-zinc-900);
-}
-.admin-panel:not(.dark) table tbody tr:hover {
-    background-color: var(--color-zinc-100);
-}
-.admin-panel.dark table tbody tr:hover {
-    background-color: var(--color-zinc-800);
-}
 
 /* Global Micro-Animations */
 @keyframes fadeInUp {

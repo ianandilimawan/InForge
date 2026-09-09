@@ -68,12 +68,14 @@
 
             <th
                 @if ($isActionFixedOnResponsive) fixed @endif
-                class="{{ theme_style($theme, 'table.header.th') . ' ' . theme_style($theme, 'table.header.thAction') }}"
+                class="{{ theme_style($theme, 'table.header.thAction') }}"
                 scope="col"
                 colspan="999"
                 wire:key="{{ md5('actions') }}"
             >
-                {{ trans('livewire-powergrid::datatable.labels.action') }}
+                <div class="{{ theme_style($theme, 'cols.div') }} justify-end text-right" style="justify-content: flex-end;">
+                    {{ trans('livewire-powergrid::datatable.labels.action') }}
+                </div>
             </th>
         @endif
     @endif

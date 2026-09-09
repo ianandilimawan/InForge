@@ -24,7 +24,7 @@
     $hasError = $state === 'error' || (isset($errors) && $errors->has($name)) || !empty($errorMessage);
     $isSuccess = $state === 'success' && !$hasError;
 
-    $baseClasses = 'block w-full rounded-xl text-sm transition-all duration-200 shadow-2xs py-3.5 px-4 ';
+    $baseClasses = 'block w-full rounded-xl text-xs sm:text-sm transition-all duration-200 shadow-2xs py-2.5 px-3.5 ';
 
     if ($isDisabled) {
         $stateClasses = 'bg-zinc-100 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 text-zinc-400 dark:text-zinc-500 cursor-not-allowed';
@@ -45,15 +45,15 @@
     @endif
 >
     @if ($label || $corner || $tooltip)
-        <div class="flex items-center justify-between mb-2">
+        <div class="flex items-center justify-between mb-1.5">
             <div class="flex items-center gap-1.5">
                 @if ($label)
-                    <label for="{{ $id }}" class="block text-xs uppercase tracking-wider font-bold text-zinc-500 dark:text-zinc-400">
+                    <label for="{{ $id }}" class="block text-[11px] uppercase tracking-wider font-bold text-zinc-500 dark:text-zinc-400">
                         {{ $label }}
                     </label>
                 @endif
                 @if ($required)
-                    <span class="text-rose-500 font-bold text-xs" title="Required">*</span>
+                    <span class="text-rose-500 font-bold text-[11px]" title="Required">*</span>
                 @endif
                 @if ($tooltip)
                     <x-tooltip :text="$tooltip" position="top">

@@ -39,8 +39,18 @@
     @if ($isFixedOnResponsive) fixed @endif
     @if (data_get($column, 'enableSort')) x-multisort-shift-click="{{ $this->getId() }}"
     wire:click="sortBy('{{ $field }}')" @endif
+    @php
+        $isRight = str_contains((string) data_get($column, 'headerClass'), 'text-right') || $field === 'action' || data_get($column, 'isAction');
+        $isCenter = str_contains((string) data_get($column, 'headerClass'), 'text-center');
+        $thClass = theme_style($theme, 'table.header.th');
+        if ($isRight) {
+            $thClass = str_replace('text-left', 'text-right', $thClass);
+        } elseif ($isCenter) {
+            $thClass = str_replace('text-left', 'text-center', $thClass);
+        }
+    @endphp
     @class([
-        theme_style($theme, 'table.header.th') => true,
+        $thClass => true,
         data_get($column, 'headerClass') => true,
     ]) @style([
         'display:none' => data_get($column, 'hidden') === true,
@@ -48,8 +58,9 @@
         data_get($column, 'headerStyle') => filled(data_get($column, 'headerStyle')),
         'width: max-content !important',
     ])>
-    <div class="{{ theme_style($theme, 'cols.div') }}"
-        @if(str_contains(data_get($column, 'headerClass'), 'text-center')) style="justify-content: center;" @endif>
+    <div class="{{ theme_style($theme, 'cols.div') }} {{ $isRight ? 'justify-end text-right' : ($isCenter ? 'justify-center text-center' : '') }}"
+        @if($isCenter) style="justify-content: center;"
+        @elseif($isRight) style="justify-content: flex-end;" @endif>
         <span data-value>{!! data_get($column, 'title') !!}</span>
 
         @if (data_get($column, 'enableSort'))

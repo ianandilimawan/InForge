@@ -42,16 +42,18 @@
     @endonce
 @endif
 
-<div class="relative {{ $class }}">
-    <input type="{{ $type }}" name="{{ $name }}" id="{{ $id }}" value="{{ $value }}"
-        {{ $required ? 'required' : '' }} placeholder=" " {{ $isCurrency ? 'data-currency' : '' }}
-        {{ $isReadonly ? 'readonly' : '' }} {{ $attributes->merge(['class' => $mergedClasses]) }} />
-    <label for="{{ $id }}" class="{{ $mergedLabelClasses }}">
-        {{ $label }}
-        @if ($required)
-            <span class="text-rose-500 font-bold">*</span>
-        @endif
-    </label>
+<div class="{{ $class }}">
+    <div class="relative">
+        <input type="{{ $type }}" name="{{ $name }}" id="{{ $id }}" value="{{ $value }}"
+            {{ $required ? 'required' : '' }} placeholder=" " {{ $isCurrency ? 'data-currency' : '' }}
+            {{ $isReadonly ? 'readonly' : '' }} {{ $attributes->merge(['class' => $mergedClasses]) }} />
+        <label for="{{ $id }}" class="{{ $mergedLabelClasses }}">
+            {{ $label }}
+            @if ($required)
+                <span class="text-rose-500 font-bold">*</span>
+            @endif
+        </label>
+    </div>
     @if ($showError && isset($errors) && $errors->has($name))
         <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $errors->first($name) }}</p>
     @endif

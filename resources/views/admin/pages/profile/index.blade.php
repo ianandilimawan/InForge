@@ -8,106 +8,93 @@
     <!-- Page Header -->
     <div>
         <h1 class="text-base sm:text-lg md:text-xl font-bold tracking-tight text-zinc-900 dark:text-white">Account Profile</h1>
-        <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Manage your personal profile and security credentials</p>
+        <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Manage your personal profile, contact information, and security credentials</p>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
         
         <!-- Profile Form -->
         <div class="lg:col-span-2">
-            <div class="bg-white dark:bg-zinc-800 rounded-3xl shadow-lg border border-zinc-100 dark:border-zinc-700 overflow-hidden transition-all duration-300 hover:shadow-xl">
-                <!-- Profile Form Content -->
-                <form x-data="ajaxForm" @submit.prevent="submit" action="{{ route('admin.profile.update') }}" method="POST" enctype="multipart/form-data" class="p-8 space-y-6">
+            <x-card title="Profile Information" subtitle="Update your profile photo, display name, and email address.">
+                <form x-data="ajaxForm" @submit.prevent="submit" action="{{ route('admin.profile.update') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                     @csrf
                     @method('PUT')
 
-                    <div class="grid grid-cols-1 gap-6">
+                    <div class="space-y-6">
                         <div>
-                            <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-2 uppercase tracking-wider">Profile Avatar</label>
-                            <div class="flex items-center gap-6">
-                                <div class="w-20 h-20 rounded-2xl overflow-hidden bg-zinc-100 dark:bg-zinc-800 border-2 border-dashed border-zinc-200 dark:border-zinc-700 shrink-0">
+                            <label class="block text-xs font-bold text-zinc-700 dark:text-zinc-300 mb-2 uppercase tracking-wider">Profile Avatar</label>
+                            <div class="flex items-center gap-5">
+                                <div class="w-20 h-20 rounded-2xl overflow-hidden bg-zinc-100 dark:bg-zinc-800 border border-zinc-200/80 dark:border-zinc-700 shadow-2xs shrink-0">
                                     @if($user->avatar)
                                         <img src="{{ Storage::url($user->avatar) }}" id="avatarPreview" alt="Preview" class="w-full h-full object-cover">
                                     @else
                                         <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&color=18181b&background=f4f4f5" id="avatarPreview" alt="Preview" class="w-full h-full object-cover">
                                     @endif
                                 </div>
-                                <div class="flex-1">
-                                    <input type="file" name="avatar" id="avatar" accept="image/*" class="block w-full text-xs text-zinc-500 dark:text-zinc-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-zinc-100 file:text-zinc-700 hover:file:bg-zinc-200 dark:file:bg-zinc-800 dark:file:text-zinc-300 dark:hover:file:bg-zinc-700 transition-all cursor-pointer" onchange="previewImage(event)">
-                                    <p class="text-[10px] text-zinc-500 dark:text-zinc-400 mt-2">JPG, GIF or PNG. Max size of 2MB.</p>
+                                <div class="flex-1 space-y-1.5">
+                                    <input type="file" name="avatar" id="avatar" accept="image/*" class="block w-full text-xs text-zinc-500 dark:text-zinc-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-zinc-100 file:text-zinc-700 hover:file:bg-zinc-200 dark:file:bg-zinc-800 dark:file:text-zinc-300 dark:hover:file:bg-zinc-700 transition-all cursor-pointer" onchange="previewImage(event)">
+                                    <p class="text-[11px] text-zinc-400 dark:text-zinc-500">JPG, GIF, or PNG format. Max file size: 2MB.</p>
                                 </div>
                             </div>
                         </div>
 
-                        <div>
-                            <x-input-floating type="text" name="name" label="Full Name" value="{{ old('name', $user->name) }}" required="true" />
-                        </div>
-
-                        <div>
-                            <x-input-floating type="email" name="email" label="Email Address" value="{{ old('email', $user->email) }}" required="true" />
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <x-input type="text" name="name" label="Full Name" value="{{ old('name', $user->name) }}" :required="true" placeholder="e.g. John Doe" hint="Your display name as shown across the administration panel." />
+                            <x-input type="email" name="email" label="Email Address" value="{{ old('email', $user->email) }}" :required="true" placeholder="john.doe@example.com" hint="Primary email address for system notifications and login." />
                         </div>
                     </div>
 
-                    <div class="pt-6 mt-6 border-t border-zinc-100 dark:border-zinc-800/80 flex justify-end">
-                        <button type="submit"
-                            class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-emerald-700 dark:text-emerald-300 hover:text-emerald-800 dark:hover:text-emerald-200 bg-emerald-50 dark:bg-emerald-950/60 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 border border-emerald-200/60 dark:border-emerald-800/60 rounded-xl transition-all cursor-pointer shadow-2xs"
-                            x-bind:disabled="loading">
-                            <span x-show="!loading">Save Changes</span>
+                    <div class="pt-6 border-t border-zinc-100 dark:border-zinc-800 flex justify-end">
+                        <x-button type="submit" variant="primary" :solid="true" x-bind:disabled="loading">
+                            <span x-show="!loading">Save Profile Changes</span>
                             <span x-show="loading" style="display: none;" class="inline-flex items-center gap-1.5">
-                                <svg class="animate-spin h-3.5 w-3.5 text-emerald-700 dark:text-emerald-300 inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <svg class="animate-spin h-3.5 w-3.5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                 </svg>
                                 Saving...
                             </span>
-                        </button>
+                        </x-button>
                     </div>
                 </form>
-            </div>
+            </x-card>
         </div>
 
         <!-- Security Form -->
-        <div class="lg:col-span-1 space-y-8">
-            <div class="bg-white dark:bg-zinc-800 rounded-3xl shadow-lg border border-zinc-100 dark:border-zinc-700 overflow-hidden transition-all duration-300 hover:shadow-xl">
-                <!-- Security Form Content -->
-                <form x-data="ajaxForm" @submit.prevent="submit" action="{{ route('admin.profile.password') }}" method="POST" class="p-6 space-y-5">
+        <div class="lg:col-span-1">
+            <x-card title="Change Password" subtitle="Ensure your account is protected with a secure password.">
+                <form x-data="ajaxForm" @submit.prevent="submit" action="{{ route('admin.profile.password') }}" method="POST" class="space-y-5">
                     @csrf
                     @method('PUT')
 
                     <div>
-                        <x-input-floating type="password" name="current_password" label="Current Password" required="true" />
+                        <x-password name="current_password" label="Current Password" :required="true" placeholder="••••••••" hint="Enter your existing password for verification." />
                         <p id="current_password_hint" class="text-xs mt-1.5 font-medium hidden"></p>
                     </div>
 
                     <div>
-                        <x-input-floating type="password" name="password" label="New Password" required="true" />
-                        <div class="mt-2 h-1.5 w-full bg-zinc-200 dark:bg-zinc-800 rounded-full overflow-hidden">
-                            <div id="password_strength_bar" class="h-full bg-zinc-400 w-0 transition-all duration-300"></div>
-                        </div>
-                        <p id="password_strength_text" class="text-[10px] text-zinc-500 mt-1.5 font-medium uppercase tracking-wider"></p>
+                        <x-password name="password" label="New Password" :strength="true" :required="true" placeholder="••••••••" hint="Minimum 8 characters with letters, numbers, and symbols." />
                     </div>
 
                     <div>
-                        <x-input-floating type="password" name="password_confirmation" label="Confirm New Password" required="true" />
+                        <x-password name="password_confirmation" label="Confirm New Password" :required="true" placeholder="••••••••" hint="Re-type your new password to verify." />
                         <p id="password_match_hint" class="text-xs mt-1.5 font-medium hidden"></p>
                     </div>
 
-                    <div class="pt-4 mt-4 border-t border-zinc-100 dark:border-zinc-800/80">
-                        <button type="submit"
-                            class="inline-flex items-center justify-center gap-1.5 w-full px-4 py-2 text-xs font-bold text-emerald-700 dark:text-emerald-300 hover:text-emerald-800 dark:hover:text-emerald-200 bg-emerald-50 dark:bg-emerald-950/60 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 border border-emerald-200/60 dark:border-emerald-800/60 rounded-xl transition-all cursor-pointer shadow-2xs"
-                            x-bind:disabled="loading">
+                    <div class="pt-4 border-t border-zinc-100 dark:border-zinc-800">
+                        <x-button type="submit" variant="primary" :solid="true" class="w-full justify-center" x-bind:disabled="loading">
                             <span x-show="!loading">Update Password</span>
                             <span x-show="loading" style="display: none;" class="inline-flex items-center gap-1.5">
-                                <svg class="animate-spin h-3.5 w-3.5 text-emerald-700 dark:text-emerald-300 inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <svg class="animate-spin h-3.5 w-3.5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                 </svg>
-                                Saving...
+                                Updating...
                             </span>
-                        </button>
+                        </x-button>
                     </div>
                 </form>
-            </div>
+            </x-card>
         </div>
 
     </div>
@@ -130,94 +117,47 @@
     const currentPasswordInput = document.getElementById('current_password');
     const currentPasswordHint = document.getElementById('current_password_hint');
     
-    currentPasswordInput.addEventListener('input', function() {
-        clearTimeout(currentPasswordTimeout);
-        const val = this.value;
-        if (!val) {
-            currentPasswordHint.classList.add('hidden');
-            return;
-        }
-        
-        currentPasswordTimeout = setTimeout(() => {
-            fetch('{{ route('admin.profile.check-password') }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify({ current_password: val })
-            })
-            .then(res => res.json())
-            .then(data => {
-                currentPasswordHint.classList.remove('hidden');
-                if (data.match) {
-                    currentPasswordHint.textContent = 'Current password is correct.';
-                    currentPasswordHint.className = 'text-xs mt-1.5 font-medium text-green-600 dark:text-green-400';
-                } else {
-                    currentPasswordHint.textContent = 'Current password does not match.';
-                    currentPasswordHint.className = 'text-xs mt-1.5 font-medium text-red-600 dark:text-red-400';
-                }
-            });
-        }, 500);
-    });
-
-    // Password Strength & Match Check
-    const passwordInput = document.getElementById('password');
-    const confirmInput = document.getElementById('password_confirmation');
-    const strengthBar = document.getElementById('password_strength_bar');
-    const strengthText = document.getElementById('password_strength_text');
-    const matchHint = document.getElementById('password_match_hint');
-
-    function checkStrength(password) {
-        let strength = 0;
-        if (password.length >= 8) strength++;
-        if (password.match(/[a-z]+/)) strength++;
-        if (password.match(/[A-Z]+/)) strength++;
-        if (password.match(/[0-9]+/)) strength++;
-        if (password.match(/[$@#&!%*?_.-]+/)) strength++;
-        
-        return strength;
+    if (currentPasswordInput) {
+        currentPasswordInput.addEventListener('input', function() {
+            clearTimeout(currentPasswordTimeout);
+            const val = this.value;
+            if (!val) {
+                currentPasswordHint.classList.add('hidden');
+                return;
+            }
+            
+            currentPasswordTimeout = setTimeout(() => {
+                fetch('{{ route('admin.profile.check-password') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ current_password: val })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    currentPasswordHint.classList.remove('hidden');
+                    if (data.match) {
+                        currentPasswordHint.textContent = 'Current password is correct.';
+                        currentPasswordHint.className = 'text-xs mt-1.5 font-medium text-emerald-600 dark:text-emerald-400';
+                    } else {
+                        currentPasswordHint.textContent = 'Current password does not match.';
+                        currentPasswordHint.className = 'text-xs mt-1.5 font-medium text-rose-600 dark:text-rose-400';
+                    }
+                });
+            }, 500);
+        });
     }
 
-    passwordInput.addEventListener('input', function() {
-        const val = this.value;
-        if (!val) {
-            strengthBar.style.width = '0%';
-            strengthText.textContent = '';
-            checkMatch();
-            return;
-        }
-
-        const strength = checkStrength(val);
-        let width = '0%';
-        let color = 'bg-red-500';
-        let text = 'Weak';
-        
-        if (strength <= 2) {
-            width = '33%';
-            color = 'bg-red-500';
-            text = 'Weak';
-        } else if (strength === 3 || strength === 4) {
-            width = '66%';
-            color = 'bg-yellow-500';
-            text = 'Medium';
-        } else if (strength >= 5) {
-            width = '100%';
-            color = 'bg-green-500';
-            text = 'Strong';
-        }
-        
-        strengthBar.style.width = width;
-        strengthBar.className = `h-full ${color} transition-all duration-300`;
-        strengthText.textContent = text;
-        
-        checkMatch();
-    });
-
-    confirmInput.addEventListener('input', checkMatch);
+    // Password Confirmation Match Check
+    const passwordInput = document.getElementById('password');
+    const confirmInput = document.getElementById('password_confirmation');
+    const matchHint = document.getElementById('password_match_hint');
 
     function checkMatch() {
+        if (!passwordInput || !confirmInput || !matchHint) return;
         const val1 = passwordInput.value;
         const val2 = confirmInput.value;
         
@@ -229,11 +169,16 @@
         matchHint.classList.remove('hidden');
         if (val1 === val2) {
             matchHint.textContent = 'Passwords match.';
-            matchHint.className = 'text-xs mt-1.5 font-medium text-green-600 dark:text-green-400';
+            matchHint.className = 'text-xs mt-1.5 font-medium text-emerald-600 dark:text-emerald-400';
         } else {
             matchHint.textContent = 'Passwords do not match.';
-            matchHint.className = 'text-xs mt-1.5 font-medium text-red-600 dark:text-red-400';
+            matchHint.className = 'text-xs mt-1.5 font-medium text-rose-600 dark:text-rose-400';
         }
+    }
+
+    if (passwordInput && confirmInput) {
+        passwordInput.addEventListener('input', checkMatch);
+        confirmInput.addEventListener('input', checkMatch);
     }
 </script>
 @endsection

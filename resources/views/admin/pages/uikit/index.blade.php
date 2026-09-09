@@ -350,58 +350,58 @@
         <!-- Card 2: Input Hints, Tooltips, Required & Validation States -->
         <x-card title="Input Hints, Tooltips, Required & Validation States" subtitle="Required asterisks, label tooltips, corner tags, helper hints, live character counters, one-click clear, and validation states.">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
-                <!-- 1. Required with Info Tooltip on Label -->
+                <!-- 1. Required + Tooltip + Hint -->
                 <div class="flex flex-col justify-start">
                     <div class="flex items-center justify-between mb-1">
-                        <span class="text-[11px] font-semibold text-zinc-400">Required & Tooltip</span>
-                        <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">:required :tooltip</span>
+                        <span class="text-[11px] font-semibold text-zinc-400">Required + Tooltip + Hint</span>
+                        <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">:required :tooltip :hint</span>
                     </div>
-                    <x-input name="demo_tax_id" label="NPWP / Tax ID" placeholder="00.000.000.0-000.000" :required="true" tooltip="Nomor Pokok Wajib Pajak 16 digit terdaftar resmi di DJP." hint="Format: 16 digit angka tanpa tanda baca." value="98.123.456.7-890.000" />
+                    <x-input name="demo_tax_id" label="NPWP / Tax ID" placeholder="00.000.000.0-000.000" :required="true" tooltip="16-digit official Tax Identification Number." hint="Format: 16 digits without punctuation." value="98.123.456.7-890.000" />
                 </div>
 
-                <!-- 2. Helper Hint & Corner Tag -->
+                <!-- 2. Corner Hint Text -->
                 <div class="flex flex-col justify-start">
                     <div class="flex items-center justify-between mb-1">
-                        <span class="text-[11px] font-semibold text-zinc-400">Hint & Corner Tag</span>
+                        <span class="text-[11px] font-semibold text-zinc-400">Corner Hint Text</span>
                         <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">corner="Optional"</span>
                     </div>
-                    <x-input name="demo_backup_email" label="Recovery Email" type="email" placeholder="backup@domain.com" corner="Optional" hint="Digunakan untuk pemulihan akun jika email utama bermasalah." />
+                    <x-input name="demo_backup_email" label="Recovery Email" type="email" placeholder="backup@domain.com" corner="Optional" hint="Used for account recovery if primary email is inaccessible." />
                 </div>
 
-                <!-- 3. Character Counter with MaxLength -->
+                <!-- 3. Character Counter -->
                 <div class="flex flex-col justify-start">
                     <div class="flex items-center justify-between mb-1">
                         <span class="text-[11px] font-semibold text-zinc-400">Character Counter</span>
-                        <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">:maxlength="60"</span>
+                        <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">:counter :maxlength="60"</span>
                     </div>
-                    <x-input name="demo_meta_title" label="SEO Meta Title" placeholder="Title for search engines..." :maxlength="60" :counter="true" value="Base Code Admin - Modern Dashboard UI Kit" hint="Panjang optimal antara 40 - 60 karakter untuk Google SERP." />
+                    <x-input name="demo_meta_title" label="SEO Meta Title" placeholder="Title for search engines..." :maxlength="60" :counter="true" value="Base Code Admin - Modern Dashboard UI Kit" hint="Optimal length between 40 - 60 characters for search engines." />
                 </div>
 
-                <!-- 4. One-Click Clear Button -->
+                <!-- 4. One-Click Clearable -->
                 <div class="flex flex-col justify-start">
                     <div class="flex items-center justify-between mb-1">
-                        <span class="text-[11px] font-semibold text-zinc-400">One-Click Clear Button</span>
+                        <span class="text-[11px] font-semibold text-zinc-400">One-Click Clearable</span>
                         <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">:clearable="true"</span>
                     </div>
-                    <x-input name="demo_filter_tag" label="Quick Filter Tag" placeholder="Type to filter..." value="active-subscribers-q3" :clearable="true" hint="Klik ikon silang (x) di sebelah kanan untuk membersihkan teks." />
+                    <x-input name="demo_filter_tag" label="Quick Filter Tag" placeholder="Type to filter..." value="active-subscribers-q3" :clearable="true" hint="Click the clear icon (x) on the right to reset input." />
                 </div>
 
-                <!-- 5. Validated Success State -->
+                <!-- 5. Success State -->
                 <div class="flex flex-col justify-start">
                     <div class="flex items-center justify-between mb-1">
                         <span class="text-[11px] font-semibold text-zinc-400">Success State</span>
                         <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">state="success"</span>
                     </div>
-                    <x-input name="demo_username_valid" label="Workspace Subdomain" value="acme-corp" state="success" hint="Subdomain tersedia dan siap digunakan." />
+                    <x-input name="demo_username_valid" label="Workspace Subdomain" value="acme-corp" state="success" hint="Subdomain is available and ready to use." />
                 </div>
 
-                <!-- 6. Validation Error State -->
+                <!-- 6. Error State -->
                 <div class="flex flex-col justify-start">
                     <div class="flex items-center justify-between mb-1">
                         <span class="text-[11px] font-semibold text-zinc-400">Error State</span>
                         <span class="text-[10px] font-mono text-rose-600 dark:text-rose-400">state="error"</span>
                     </div>
-                    <x-input name="demo_promo_code" label="Voucher Promo Code" value="DISCOUNT-EXPIRED" state="error" errorMessage="Kode voucher telah kedaluwarsa atau tidak valid." />
+                    <x-input name="demo_promo_code" label="Voucher Promo Code" value="DISCOUNT-EXPIRED" state="error" errorMessage="Coupon voucher has expired or is invalid." />
                 </div>
             </div>
         </x-card>
@@ -415,7 +415,7 @@
                         <span class="text-[11px] font-semibold text-zinc-400">Currency Mask + Icon</span>
                         <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">:isCurrency icon="currency"</span>
                     </div>
-                    <x-modern-input name="demo_modern_budget" label="Campaign Budget (IDR)" icon="currency" :isCurrency="true" value="25000000" hint="Format mata uang Rupiah otomatis dengan AutoNumeric." />
+                    <x-modern-input name="demo_modern_budget" label="Campaign Budget (IDR)" icon="currency" :isCurrency="true" value="25000000" hint="Automatic currency formatting with AutoNumeric." />
                 </div>
 
                 <!-- 2. Official Work Email -->
@@ -424,7 +424,7 @@
                         <span class="text-[11px] font-semibold text-zinc-400">Email + Required Tooltip</span>
                         <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">:required :tooltip</span>
                     </div>
-                    <x-modern-input name="demo_modern_email" label="Official Work Email" type="email" icon="email" :required="true" tooltip="Email resmi perusahaan yang digunakan untuk SSO dan notifikasi sistem." value="alexa.turner@enterprise.org" hint="Gunakan alamat email domain resmi kantor." />
+                    <x-modern-input name="demo_modern_email" label="Official Work Email" type="email" icon="email" :required="true" tooltip="Official corporate email used for SSO and notifications." value="alexa.turner@enterprise.org" hint="Use your organization's official email domain." />
                 </div>
 
                 <!-- 3. Global Filter / Search -->
@@ -433,7 +433,7 @@
                         <span class="text-[11px] font-semibold text-zinc-400">Search + Clear Button</span>
                         <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">:clearable icon="search"</span>
                     </div>
-                    <x-modern-input name="demo_modern_search" label="Global Filter Tag" icon="search" value="invoices_paid_2025" :clearable="true" hint="Klik ikon silang (x) untuk reset pencarian seketika." />
+                    <x-modern-input name="demo_modern_search" label="Global Filter Tag" icon="search" value="invoices_paid_2025" :clearable="true" hint="Click the clear icon (x) to instantly reset search." />
                 </div>
 
                 <!-- 4. Admin Username -->
@@ -442,7 +442,7 @@
                         <span class="text-[11px] font-semibold text-zinc-400">User Icon + Counter</span>
                         <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">:counter :maxlength</span>
                     </div>
-                    <x-modern-input name="demo_modern_user" label="Admin Identity" icon="user" corner="Alphanumeric" :maxlength="30" :counter="true" value="andreas.developer" hint="Maksimal 30 karakter tanpa spasi atau simbol khusus." />
+                    <x-modern-input name="demo_modern_user" label="Admin Identity" icon="user" corner="Alphanumeric" :maxlength="30" :counter="true" value="andreas.developer" hint="Maximum 30 characters without spaces or special symbols." />
                 </div>
 
                 <!-- 5. WhatsApp Hotline -->
@@ -451,7 +451,7 @@
                         <span class="text-[11px] font-semibold text-zinc-400">Phone Hotline</span>
                         <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">icon="phone"</span>
                     </div>
-                    <x-modern-input name="demo_modern_phone" label="WhatsApp Hotline" icon="phone" placeholder="+62 812-3456-7890" value="+62 812 8899 0011" hint="Nomor aktif untuk verifikasi OTP dan notifikasi darurat." />
+                    <x-modern-input name="demo_modern_phone" label="WhatsApp Hotline" icon="phone" placeholder="+62 812-3456-7890" value="+62 812 8899 0011" hint="Active mobile number for OTP and emergency notices." />
                 </div>
 
                 <!-- 6. Secure Server Endpoint -->
@@ -460,7 +460,7 @@
                         <span class="text-[11px] font-semibold text-zinc-400">Verified SSL Host</span>
                         <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">state="success" icon="lock"</span>
                     </div>
-                    <x-modern-input name="demo_modern_server" label="Encrypted Gateway Host" icon="lock" value="api.gateway.secure-corp.internal" state="success" hint="Koneksi TLS v1.3 terverifikasi aktif." />
+                    <x-modern-input name="demo_modern_server" label="Encrypted Gateway Host" icon="lock" value="api.gateway.secure-corp.internal" state="success" hint="TLS v1.3 encrypted connection verified active." />
                 </div>
             </div>
         </x-card>
@@ -490,7 +490,7 @@
                         <span class="text-[11px] font-semibold text-zinc-400">Text Floating</span>
                         <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">&lt;x-input-floating&gt;</span>
                     </div>
-                    <x-input-floating name="float_user" label="Username / Handle" value="andyian" :required="true" hint="Nama pengguna unik dalam sistem." />
+                    <x-input-floating name="float_user" label="Username / Handle" value="andyian" :required="true" hint="Unique username handle within the system." />
                 </div>
 
                 <!-- 2. Email Floating -->
@@ -499,7 +499,7 @@
                         <span class="text-[11px] font-semibold text-zinc-400">Email Floating</span>
                         <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">type="email"</span>
                     </div>
-                    <x-input-floating type="email" name="float_email" label="Contact Email" value="ian@basecode.dev" :required="true" hint="Alamat email aktif untuk korespondensi." />
+                    <x-input-floating type="email" name="float_email" label="Contact Email" value="ian@basecode.dev" :required="true" hint="Active email address for correspondence." />
                 </div>
 
                 <!-- 3. Currency Floating -->
@@ -508,7 +508,7 @@
                         <span class="text-[11px] font-semibold text-zinc-400">Floating Currency</span>
                         <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">:isCurrency="true"</span>
                     </div>
-                    <x-input-floating name="float_budget" label="Annual Budget (IDR)" value="75000000" :isCurrency="true" hint="Format angka Rupiah terformat otomatis." />
+                    <x-input-floating name="float_budget" label="Annual Budget (IDR)" value="75000000" :isCurrency="true" hint="Formatted numeric currency value." />
                 </div>
 
                 <!-- 4. Floating Select -->
@@ -517,7 +517,7 @@
                         <span class="text-[11px] font-semibold text-zinc-400">Floating Select</span>
                         <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">&lt;x-select-floating&gt;</span>
                     </div>
-                    <x-select-floating name="float_country_showcase" label="Country of Operation" :options="['id' => 'Indonesia', 'us' => 'United States', 'sg' => 'Singapore', 'jp' => 'Japan']" value="id" :required="true" hint="Pilih negara yurisdiksi utama kantor." />
+                    <x-select-floating name="float_country_showcase" label="Country of Operation" :options="['id' => 'Indonesia', 'us' => 'United States', 'sg' => 'Singapore', 'jp' => 'Japan']" value="id" :required="true" hint="Select primary office operational jurisdiction." />
                 </div>
 
                 <!-- 5. Password Floating (Standard) -->
@@ -526,7 +526,7 @@
                         <span class="text-[11px] font-semibold text-zinc-400">Password Floating</span>
                         <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">&lt;x-password-floating&gt;</span>
                     </div>
-                    <x-password-floating name="float_pwd_basic" label="Standard Password" value="SuperSecure123!" hint="Minimal 8 karakter kombinasi." />
+                    <x-password-floating name="float_pwd_basic" label="Standard Password" value="SuperSecure123!" hint="Minimum 8 characters combination." />
                 </div>
 
                 <!-- 6. Readonly / Locked Floating -->
@@ -535,7 +535,7 @@
                         <span class="text-[11px] font-semibold text-zinc-400">Readonly / Locked</span>
                         <span class="text-[10px] font-mono text-zinc-400">readonly</span>
                     </div>
-                    <x-input-floating name="float_locked_id" label="System ID (Immutable)" value="SYS-98421-V3" readonly hint="ID terproteksi yang di-generate otomatis." />
+                    <x-input-floating name="float_locked_id" label="System ID (Immutable)" value="SYS-98421-V3" readonly hint="Protected system-generated immutable identifier." />
                 </div>
             </div>
         </x-card>

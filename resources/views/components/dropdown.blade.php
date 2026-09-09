@@ -41,7 +41,7 @@
         x-transition:leave-end="transform opacity-0 scale-95"
         class="absolute z-50 mt-1.5 {{ $widthClass }} {{ $alignmentClasses }} rounded-xl shadow-lg ring-1 ring-black/5 focus:outline-none"
         style="display: none;">
-        <div class="{{ $contentClasses }}">
+        <div class="{{ $contentClasses }}" @click="open = false">
             {{ $slot }}
         </div>
     </div>

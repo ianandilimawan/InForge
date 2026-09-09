@@ -15,7 +15,7 @@
                     {{ $header }}
                 </thead>
             @endif
-            <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800/80 text-zinc-700 dark:text-zinc-300 {{ $striped ? '[&>tr:nth-child(even)]:bg-zinc-50/40 dark:[&>tr:nth-child(even)]:bg-zinc-800/20' : '' }} {{ $hoverable ? '[&>tr:hover]:bg-zinc-50/80 dark:[&>tr:hover]:bg-zinc-800/50 [&>tr]:transition-colors' : '' }}">
+            <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800/80 text-zinc-700 dark:text-zinc-300 {{ $hoverable ? '[&>tr:hover]:bg-zinc-50/80 dark:[&>tr:hover]:bg-zinc-800/50 [&>tr]:transition-colors' : '' }}">
                 {{ $slot }}
             </tbody>
         </table>

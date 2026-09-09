@@ -3,145 +3,135 @@
 @section('content')
     <div class="space-y-6">
         <!-- Page Header -->
-        <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
                 <h1 class="text-base sm:text-lg md:text-xl font-bold tracking-tight text-zinc-900 dark:text-white">Log Viewer</h1>
-                <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">View detailed log entries</p>
+                <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Inspecting file: <code class="font-mono text-zinc-800 dark:text-zinc-200">{{ $fileName }}</code></p>
             </div>
-            <a href="{{ route('admin.laravel-logs.index', ['file' => $fileName]) }}"
-                class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white bg-zinc-100/80 dark:bg-zinc-800/80 hover:bg-zinc-200/80 dark:hover:bg-zinc-700/80 border border-zinc-200/60 dark:border-zinc-700/60 rounded-xl transition-all cursor-pointer shadow-2xs">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18">
-                    </path>
-                </svg>
-                <span>Back to Logs</span>
-            </a>
+            <x-button href="{{ route('admin.laravel-logs.index', ['file' => $fileName]) }}" variant="secondary" icon="arrow-left">
+                Back to Logs
+            </x-button>
         </div>
 
         <!-- Filters -->
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-            <form x-data="ajaxForm" @submit.prevent="submit" method="GET" action="{{ route('admin.laravel-logs.show', $fileName) }}" class="flex flex-wrap gap-2">
-                <select name="level"
-                    class="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    <option value="">All Levels</option>
-                    @foreach ($levels as $logLevel)
-                        <option value="{{ $logLevel }}" {{ request('level') === $logLevel ? 'selected' : '' }}>
-                            {{ $logLevel }}
-                        </option>
-                    @endforeach
-                </select>
-
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search logs..."
-                    class="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 min-w-[200px]">
-
-                <button type="submit"
-                    class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-emerald-700 dark:text-emerald-300 hover:text-emerald-800 dark:hover:text-emerald-200 bg-emerald-50 dark:bg-emerald-950/60 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 border border-emerald-200/60 dark:border-emerald-800/60 rounded-xl transition-all cursor-pointer shadow-2xs"
-                    x-bind:disabled="loading">
-                    <span x-show="!loading">Filter</span>
-                    <span x-show="loading" style="display: none;" class="inline-flex items-center gap-1.5">
-                        <svg class="animate-spin h-3.5 w-3.5 text-emerald-700 dark:text-emerald-300 inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        Saving...
-                    </span>
-                </button>
-
-                @if (request()->anyFilled(['level', 'search']))
-                    <a href="{{ route('admin.laravel-logs.show', $fileName) }}"
-                        class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white bg-zinc-100/80 dark:bg-zinc-800/80 hover:bg-zinc-200/80 dark:hover:bg-zinc-700/80 border border-zinc-200/60 dark:border-zinc-700/60 rounded-xl transition-all cursor-pointer shadow-2xs">
-                        Clear
-                    </a>
-                @endif
-            </form>
-        </div>
-
-        <!-- Log Entries -->
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
-            <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-                <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
-                    Log Entries: {{ $fileName }}
-                </h2>
-            </div>
-
-            <div class="p-6">
-                @if (count($logData['entries']) > 0)
-                    <div class="space-y-4">
-                        @foreach ($logData['entries'] as $entry)
-                            <div
-                                class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                                <div class="flex items-start justify-between gap-4 mb-2">
-                                    <div class="flex items-center gap-3 flex-wrap">
-                                        <span
-                                            class="px-2 py-1 text-xs font-semibold rounded-full {{ \App\Services\LaravelLogService::getLevelColor($entry['level']) }}">
-                                            {{ $entry['level'] }}
-                                        </span>
-                                        <span class="text-xs text-gray-500 dark:text-gray-400">
-                                            {{ $entry['timestamp'] }}
-                                        </span>
-                                        @if ($entry['environment'])
-                                            <span class="text-xs text-gray-500 dark:text-gray-400">
-                                                {{ $entry['environment'] }}
-                                            </span>
-                                        @endif
-                                    </div>
-                                </div>
-
-                                <div class="mt-2">
-                                    <p class="text-sm text-gray-900 dark:text-white font-medium mb-2">
-                                        {{ $entry['message'] }}
-                                    </p>
-
-                                    @if (!empty($entry['stack']))
-                                        <details class="mt-2" open>
-                                            <summary
-                                                class="text-xs text-gray-500 dark:text-gray-400 cursor-pointer hover:text-gray-700 dark:hover:text-gray-300 mb-2">
-                                                Stack Trace
-                                            </summary>
-                                            <pre
-                                                class="mt-2 p-3 bg-gray-100 dark:bg-gray-900 rounded-lg overflow-x-auto text-xs text-gray-800 dark:text-gray-200 font-mono whitespace-pre-wrap">{{ $entry['stack'] }}</pre>
-                                        </details>
-                                    @endif
-                                </div>
-                            </div>
+        <x-card title="Filter Entries" subtitle="Filter log events in this file by severity level or message text.">
+            <form x-data="ajaxForm" @submit.prevent="submit" method="GET" action="{{ route('admin.laravel-logs.show', $fileName) }}" class="flex flex-wrap items-center gap-3">
+                <div class="w-full sm:w-44">
+                    <x-select name="level" placeholder="All Levels" :value="request('level')">
+                        @foreach ($levels as $logLevel)
+                            <option value="{{ $logLevel }}" {{ request('level') === $logLevel ? 'selected' : '' }}>
+                                {{ $logLevel }}
+                            </option>
                         @endforeach
-                    </div>
+                    </x-select>
+                </div>
 
-                    <!-- Pagination -->
-                    @if ($logData['last_page'] > 1)
-                        <div class="mt-6 flex items-center justify-between">
-                            <div class="text-sm text-gray-700 dark:text-gray-300">
-                                Showing {{ ($logData['current_page'] - 1) * $logData['per_page'] + 1 }} to
-                                {{ min($logData['current_page'] * $logData['per_page'], $logData['total']) }} of
-                                {{ $logData['total'] }} entries
-                            </div>
+                <div class="flex-1 min-w-[220px]">
+                    <x-input type="text" name="search" value="{{ request('search') }}" placeholder="Search log message..." />
+                </div>
 
-                            <div class="flex gap-2">
-                                @if ($logData['current_page'] > 1)
-                                    <a href="{{ route('admin.laravel_logs.show', array_merge(['fileName' => $fileName], request()->only(['level', 'search']), ['page' => $logData['current_page'] - 1])) }}"
-                                        class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm">
-                                        Previous
-                                    </a>
-                                @endif
+                <div class="flex items-center gap-2">
+                    <x-button type="submit" variant="primary" :solid="true" x-bind:disabled="loading">
+                        <span x-show="!loading">Filter</span>
+                        <span x-show="loading" style="display: none;" class="inline-flex items-center gap-1.5">
+                            <svg class="animate-spin h-3.5 w-3.5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                        </span>
+                    </x-button>
 
-                                @if ($logData['current_page'] < $logData['last_page'])
-                                    <a href="{{ route('admin.laravel_logs.show', array_merge(['fileName' => $fileName], request()->only(['level', 'search']), ['page' => $logData['current_page'] + 1])) }}"
-                                        class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm">
-                                        Next
-                                    </a>
-                                @endif
-                            </div>
-                        </div>
+                    @if (request()->anyFilled(['level', 'search']))
+                        <x-button href="{{ route('admin.laravel-logs.show', $fileName) }}" variant="secondary">
+                            Clear
+                        </x-button>
                     @endif
-                @else
-                    <p class="text-sm text-gray-500 dark:text-gray-400 text-center py-8">
+                </div>
+            </form>
+        </x-card>
+
+        <!-- Log Entries Card -->
+        <x-card :title="'Log Entries: ' . $fileName" subtitle="Viewing recent error traces and diagnostic payloads.">
+            @if (count($logData['entries']) > 0)
+                <div class="space-y-3">
+                    @foreach ($logData['entries'] as $index => $entry)
+                        @php
+                            $isError = in_array(strtoupper($entry['level']), ['ERROR', 'EMERGENCY', 'CRITICAL', 'ALERT']);
+                            $isWarning = strtoupper($entry['level']) === 'WARNING';
+                            $isInfo = in_array(strtoupper($entry['level']), ['INFO', 'NOTICE']);
+                            $variant = match(true) {
+                                $isError => 'rose',
+                                $isWarning => 'amber',
+                                $isInfo => 'blue',
+                                default => 'zinc',
+                            };
+                        @endphp
+                        <div class="border border-zinc-200/80 dark:border-zinc-800 rounded-xl p-4 bg-white dark:bg-zinc-900 hover:bg-zinc-50/80 dark:hover:bg-zinc-800/50 transition-colors">
+                            <div class="flex items-center gap-3 mb-2 flex-wrap">
+                                <x-badge :variant="$variant" size="sm" :dot="true">
+                                    {{ $entry['level'] }}
+                                </x-badge>
+                                <span class="text-xs text-zinc-400 dark:text-zinc-500 font-mono">
+                                    {{ $entry['timestamp'] }}
+                                </span>
+                                @if ($entry['environment'])
+                                    <span class="px-1.5 py-0.2 rounded text-[10px] font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-500 uppercase">
+                                        {{ $entry['environment'] }}
+                                    </span>
+                                @endif
+                            </div>
+
+                            <p class="text-xs text-zinc-900 dark:text-zinc-100 font-mono break-words leading-relaxed">
+                                {{ $entry['message'] }}
+                            </p>
+
+                            @if (!empty($entry['stack']))
+                                <details class="mt-3 group">
+                                    <summary class="text-xs font-semibold text-emerald-600 dark:text-emerald-400 cursor-pointer hover:underline list-none flex items-center gap-1">
+                                        <svg class="w-3 h-3 group-open:rotate-90 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                        <span>Stack Trace</span>
+                                    </summary>
+                                    <pre class="mt-2 p-3 bg-zinc-950 rounded-xl overflow-x-auto text-[11px] text-zinc-300 font-mono whitespace-pre-wrap border border-zinc-800 custom-scrollbar leading-relaxed">{{ $entry['stack'] }}</pre>
+                                </details>
+                            @endif
+                        </div>
+                    @endforeach
+                </div>
+
+                <!-- Pagination -->
+                @if ($logData['last_page'] > 1)
+                    <div class="mt-6 pt-4 border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between">
+                        <div class="text-xs text-zinc-500 dark:text-zinc-400">
+                            Showing {{ ($logData['current_page'] - 1) * $logData['per_page'] + 1 }} to
+                            {{ min($logData['current_page'] * $logData['per_page'], $logData['total']) }} of
+                            {{ $logData['total'] }} entries
+                        </div>
+
+                        <div class="flex gap-2">
+                            @if ($logData['current_page'] > 1)
+                                <x-button href="{{ route('admin.laravel-logs.show', array_merge(['fileName' => $fileName], request()->only(['level', 'search']), ['page' => $logData['current_page'] - 1])) }}" variant="secondary" size="sm">
+                                    &larr; Previous
+                                </x-button>
+                            @endif
+
+                            @if ($logData['current_page'] < $logData['last_page'])
+                                <x-button href="{{ route('admin.laravel-logs.show', array_merge(['fileName' => $fileName], request()->only(['level', 'search']), ['page' => $logData['current_page'] + 1])) }}" variant="secondary" size="sm">
+                                    Next &rarr;
+                                </x-button>
+                            @endif
+                        </div>
+                    </div>
+                @endif
+            @else
+                <div class="text-center py-8">
+                    <p class="text-xs text-zinc-400 dark:text-zinc-500">
                         No log entries found
                         @if (request()->anyFilled(['level', 'search']))
-                            with the current filters
+                            matching the active filter.
                         @endif
                     </p>
-                @endif
-            </div>
-        </div>
+                </div>
+            @endif
+        </x-card>
     </div>
 @endsection

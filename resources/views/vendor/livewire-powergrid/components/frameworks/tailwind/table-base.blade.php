@@ -37,7 +37,7 @@
                     'overflow-auto' => $readyToLoad,
                     'overflow-hidden' => !$readyToLoad,
                     theme_style($theme, 'table.layout.div'),
-                    'bg-white dark:bg-gray-800 dark:border-gray-700'
+                    'bg-white dark:bg-zinc-900 dark:border-zinc-800'
                 ])
             >
                 @include($table)

@@ -62,7 +62,7 @@ The generator is built with a highly modular, single-responsibility architecture
 - **Native Enum support (PHP 8.3+)** — generates Enum classes, `Rule::enum()` validation, and `<x-select>` dropdowns
 - **BelongsTo relationships** — auto-generates `belongsTo()` on models and injects foreign data into views
 - **Soft Deletes** — `--soft-deletes` flag adds trait and migration column automatically
-- **Glassmorphism UI** — generated views use floating input components (`x-input-floating`, `x-select-floating`, `x-textarea-floating`) with dark mode support
+- **Modern Design System** — unified input components (`<x-input>`, `<x-select>`, `<x-textarea>`), clean zero-striping data tables with subtle hover states, dropdown table actions, and zinc dark mode palette
 
 ### Built-in InForge Features
 
@@ -71,6 +71,7 @@ Beyond the CRUD Generator, this template comes pre-packaged with enterprise-grad
 | Module                 | Description                                                |
 | ---------------------- | ---------------------------------------------------------- |
 | **Dashboard**          | Admin overview dashboard                                   |
+| **UI Kit Showcase**    | Comprehensive live component catalog (`/admin/uikit`) with forms, tables, modals, badges, cards, charts |
 | **Users**              | Full user CRUD with avatar upload                          |
 | **Roles**              | Role management (Spatie)                                   |
 | **Permissions**        | Permission management (Spatie)                             |
@@ -99,27 +100,29 @@ Beyond the CRUD Generator, this template comes pre-packaged with enterprise-grad
 
 - `<x-toast>` Blade component handles all session success/error/warning flashes automatically
 
-### Blade Components
+### Blade Components & Design System
 
 Pre-built reusable Blade components:
 
-| Component                  | File                            |
-| -------------------------- | ------------------------------- |
-| `<x-input-floating>`       | Floating label text input       |
-| `<x-textarea-floating>`    | Floating label textarea         |
-| `<x-select-floating>`      | Floating label select dropdown  |
-| `<x-input>`                | Standard text input             |
-| `<x-textarea>`             | Standard textarea               |
-| `<x-select>`               | Standard select                 |
-| `<x-modern-input>`         | Modern styled input             |
-| `<x-modern-select>`        | Modern styled select            |
-| `<x-modern-textarea>`      | Modern styled textarea          |
-| `<x-toggle>`               | Toggle switch for booleans      |
-| `<x-button>`               | Styled button                   |
-| `<x-datetime>`             | Date/time picker                |
-| `<x-filepond>`             | FilePond file upload            |
-| `<x-toast>`                | Toast notification              |
-| `<x-confirm-delete-modal>` | SweetAlert2 delete confirmation |
+| Component                  | Description                                                |
+| -------------------------- | ---------------------------------------------------------- |
+| `<x-input>`                | Standard text input with label, hints, counters, tooltips  |
+| `<x-textarea>`             | Textarea with autogrow, character counter, and hints       |
+| `<x-select>`               | Modern select dropdown with search/TomSelect support       |
+| `<x-password>`             | Password input with show/hide toggle & strength meter      |
+| `<x-table>`                | Clean data table container with zero striping & hover      |
+| `<x-table-actions>`        | Compact dropdown action menu (View, Edit, Delete modal)    |
+| `<x-dropdown>`             | Reusable popover dropdown with auto-close on item click    |
+| `<x-card>`                 | Card container with title, subtitle, and action slots      |
+| `<x-badge>`                | Status pill badge with color variants & dot indicators     |
+| `<x-button>`               | Button component (primary, secondary, danger, warning, etc)|
+| `<x-avatar>`               | Avatar with initials fallback and presence status indicator|
+| `<x-modal>`                | Accessible Alpine.js modal dialog                          |
+| `<x-toggle>`               | Toggle switch for boolean configurations                   |
+| `<x-datetime>`             | Flatpickr date/time picker                                 |
+| `<x-filepond>`             | FilePond file and image upload                             |
+| `<x-toast>`                | Toast notification component                               |
+| `<x-confirm-delete-modal>` | SweetAlert2 delete confirmation modal                      |
 
 ## Tech Stack
 
